@@ -3,9 +3,9 @@ import Image from "next/image";
 import { joinCta, navLinks } from "@/content/site";
 import { Wrap } from "./section";
 
-export function Brand() {
+export function Brand({ href = "#" }: { href?: string }) {
   return (
-    <a href="#" className="flex items-center gap-2.5" aria-label="Still home">
+    <a href={href} className="flex items-center gap-2.5" aria-label="Still home">
       <Image src="/images/still-app-icon.svg" alt="" width={38} height={38} priority />
       <b className="font-display text-[30px] font-normal tracking-[1.5px] text-ink">STILL</b>
     </a>

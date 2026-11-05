@@ -1,18 +1,22 @@
 import { Icon } from "@still/ui";
+import Link from "next/link";
 import { Brand } from "./nav";
 import { Wrap } from "./section";
 import { SocialLinks } from "./social-links";
 
 const product = [
-  { href: "#reset", label: "The reset" },
-  { href: "#programme", label: "The 56 days" },
-  { href: "#blog", label: "Blog" },
-  { href: "#pricing", label: "Pricing" },
-  { href: "#faq", label: "FAQ" },
+  { href: "/#reset", label: "The reset" },
+  { href: "/#programme", label: "The 56 days" },
+  { href: "/#blog", label: "Blog" },
+  { href: "/#pricing", label: "Pricing" },
+  { href: "/#faq", label: "FAQ" },
 ];
 
-// Legal pages are not written yet; these links stay inert until they exist.
-const company = ["Contact", "Terms", "Privacy"];
+const company = [
+  { href: "/contact", label: "Contact" },
+  { href: "/terms", label: "Terms & Conditions" },
+  { href: "/privacy", label: "Privacy Policy" },
+];
 
 export function Footer() {
   return (
@@ -42,8 +46,16 @@ export function Footer() {
         <div>
           <h5 className="mb-3 text-sm font-bold text-ink">Company</h5>
           <ul className="flex flex-col gap-2">
-            {company.map((label) => (
-              <li key={label}>{label}</li>
+            {company.map((l) => (
+              <li key={l.label}>
+                {l.href ? (
+                  <Link href={l.href} className="hover:text-ink">
+                    {l.label}
+                  </Link>
+                ) : (
+                  l.label
+                )}
+              </li>
             ))}
           </ul>
         </div>
