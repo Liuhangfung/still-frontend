@@ -17,6 +17,18 @@ export const navLinks = [
   { href: "#faq", label: "FAQ" },
 ];
 
+/**
+ * Social accounts shown in the footer. Add each URL when the account exists;
+ * an icon with an empty URL is shown but not clickable yet.
+ */
+export const socials = [
+  { network: "x", label: "Still on X", url: "" },
+  { network: "instagram", label: "Still on Instagram", url: "" },
+  { network: "tiktok", label: "Still on TikTok", url: "" },
+  { network: "youtube", label: "Still on YouTube", url: "" },
+  { network: "discord", label: "Still's Discord community", url: "" },
+] as const;
+
 export const trust: { icon: IconName; text: string }[] = [
   { icon: "shield-check", text: "No signals, ever" },
   { icon: "lock", text: "No broker connection" },

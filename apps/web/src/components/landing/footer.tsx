@@ -1,6 +1,7 @@
 import { Icon } from "@still/ui";
 import { Brand } from "./nav";
 import { Wrap } from "./section";
+import { SocialLinks } from "./social-links";
 
 const product = [
   { href: "#reset", label: "The reset" },
@@ -21,7 +22,10 @@ export function Footer() {
           <div className="mb-3">
             <Brand />
           </div>
-          <p>By traders, for traders. 56 days, one quest a day.</p>
+          <p>By traders, for traders.</p>
+          <div className="mt-5">
+            <SocialLinks />
+          </div>
         </div>
         <div>
           <h5 className="mb-3 text-sm font-bold text-ink">Product</h5>
