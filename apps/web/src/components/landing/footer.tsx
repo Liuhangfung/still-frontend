@@ -21,7 +21,7 @@ export function Footer() {
           <div className="mb-3">
             <Brand />
           </div>
-          <p>Discipline training for retail traders. 56 days, one quest a day.</p>
+          <p>By traders, for traders. 56 days, one quest a day.</p>
         </div>
         <div>
           <h5 className="mb-3 text-sm font-bold text-ink">Product</h5>

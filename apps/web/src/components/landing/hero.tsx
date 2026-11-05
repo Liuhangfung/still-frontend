@@ -46,7 +46,7 @@ export function Hero() {
       <Wrap className="grid items-center gap-10 lg:grid-cols-[1.05fr_.95fr]">
         <div>
           <FadeUp delay={0}>
-            <Eyebrow>The 56-day trading reset</Eyebrow>
+            <Eyebrow>By traders, for traders</Eyebrow>
           </FadeUp>
           <HeroHeadline />
           <FadeUp delay={0.55}>
