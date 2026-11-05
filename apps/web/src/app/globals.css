@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-white font-sans leading-[1.6] text-ink antialiased;
+  }
+}
+
+@layer components {
+  /* Bangers display heading used for every section title. */
+  .display {
+    @apply font-display font-normal leading-[.95] tracking-[1.5px] text-ink;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
