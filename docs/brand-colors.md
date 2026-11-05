@@ -247,7 +247,46 @@ Line icons live in [`images/icons/`](../images/icons/) (106 icons, 24×24, 2px s
 | Context | Icon colour |
 |---|---|
 | Default on dark | White `#FFFFFF` or Muted `#8FB9BB` |
-| Active tab, reward, XP | Gold `#FFC300` |
+| Reward, XP | Gold `#FFC300` |
+| Bottom bar | See [section 13](#13-bottom-bar) |
 | Selected, progress, info | Teal `#0FA3A3` |
 | On gold, cream or teal | Ink `#111111` |
 | Warning, "Not today" | Coral `#FF5A4E` (with text, never alone) |
+
+---
+
+## 12. Day Log grades
+
+The Log tab grades each day **A to E** for how the user traded (rules kept or broken), never for money. Product rules: [still-day-log.md](https://github.com/Liuhangfung/still-backend/blob/main/docs/product-concept/still-day-log.md). Design: [`ui-design/still-ui-v6.html`](../ui-design/still-ui-v6.html).
+
+| Grade | Name | Hex | Symbol | Ink on it |
+|---|---|---|---|---|
+| **A** | Clean | Gold `#FFC300` | ★ | 11.7 ✅ |
+| **B** | Solid | Teal `#0FA3A3` | ✓ | 6.1 ✅ |
+| **C** | Mixed | Grey `#A9B6B9` | – | 9.1 ✅ |
+| **D** | Slipped | Violet `#9A7BE0` | ! | 5.7 ✅ |
+| **E** | Tilt | Coral `#FF5A4E` | ✕ | 6.1 ✅ |
+
+- Letters and symbols on grades are always **Ink**, and every grade shows its letter, so meaning never depends on colour alone.
+- These 5 colours are **fixed in every chapter theme**.
+- Grey and violet are used **only** for Day Log grades.
+- Still no green or red: the scale is about behaviour, not profit and loss.
+- **E · Tilt** screens switch to calm mode (section 6): no speed lines, sound effects or slant.
+
+---
+
+## 13. Bottom bar
+
+A floating capsule with **icons only**: Today · Path · **Still logo (Log)** · Inventory · Me (avatar). Design: [`ui-design/still-ui-v7.html`](../ui-design/still-ui-v7.html), option D.
+
+| Part | Value |
+|---|---|
+| Capsule | `rgba(14,14,18,.86)` with background blur, 1px border `rgba(255,255,255,.09)`, fully round, 16px from the screen sides and 18px from the bottom |
+| Icons | Drawn for Still, 25px, 2px stroke. Inactive: `#8A8F98` (5.9 : 1). Active: white `#FFFFFF`, filled |
+| Log (centre) | The Still logo in a soft pill `rgba(255,255,255,.07)`; brighter `rgba(255,255,255,.14)` when active |
+| Me | The user's avatar, 30px circle; white ring when active |
+| Quest waiting | 7px gold dot on the Today icon |
+
+- The bar is the one place that is **not** comic style: no ink outline, no slant, and the only soft shadow in the app (`0 10px 28px rgba(0,0,0,.45)`), so it floats above the content. It is furniture; the screens are the show.
+- **No gold** in the bar except the quest dot, so each screen's one gold button still stands out.
+- The floating **Urge** button also uses the pause bars, so it always keeps its "URGE?" label.
