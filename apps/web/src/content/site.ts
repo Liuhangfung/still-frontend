@@ -9,7 +9,7 @@ export const price = { founder: "US$49", regular: "US$79", membership: "US$39–
 
 export const navLinks = [
   { href: "#reset", label: "The reset" },
-  { href: "#programme", label: "Programme" },
+  { href: "#programme", label: "The 56 days" },
   { href: "#how", label: "How it works" },
   { href: "#blog", label: "Blog" },
   { href: "#coaches", label: "Coaches" },
@@ -84,34 +84,48 @@ export const compareRows = [
   },
 ];
 
+export const programme = {
+  eyebrow: "Four chapters, two weeks each",
+  lead: "Every two weeks you finish a chapter and walk away with something real. You rank up from E to S as you go.",
+  daily: "Plus 10 minutes a day to start and end your trading day with a clear head.",
+};
+
 export const chapters = [
   {
+    chapter: "Chapter 1",
+    name: "Know yourself",
     days: "Days 1–14",
     rank: "E → D",
-    title: "KNOW YOURSELF",
-    text: "Your starting point, your triggers and the leaks that cost you, without shame.",
-    output: "Trigger Map · Trader Code",
+    title: "KNOW WHY YOU LOSE",
+    text: "Spot what sets you off and what it really costs you. Honest, and without shame.",
+    output: "Your Trigger Map",
   },
   {
+    chapter: "Chapter 2",
+    name: "Build a method",
     days: "Days 15–28",
     rank: "D → C",
-    title: "BUILD A METHOD",
-    text: "Turn guesses into a written plan with entry, exit and size rules.",
-    output: "Pre-Trade Checklist",
+    title: "HAVE A PLAN YOU TRUST",
+    text: "Write down when you trade, when you don't, and how much you risk.",
+    output: "Your own trading plan",
   },
   {
+    chapter: "Chapter 3",
+    name: "Practice",
     days: "Days 29–42",
     rank: "C → B",
-    title: "PRACTICE",
-    text: "Drill your plan on historical charts, never with real money.",
-    output: "Practice journal",
+    title: "PRACTISE WITHOUT THE RISK",
+    text: "Test your plan on past charts until it feels natural. Zero real money.",
+    output: "A practice journal",
   },
   {
+    chapter: "Chapter 4",
+    name: "Self-sustain",
     days: "Days 43–56",
     rank: "B → S",
-    title: "SELF-SUSTAIN",
-    text: "Make it stick: your Rules Card, drawdown protocol and own routine.",
-    output: "Rules Card",
+    title: "MAKE IT LAST",
+    text: "Shrink it all into one card and a daily routine you keep long after day 56.",
+    output: "Your Rules Card",
   },
 ];
 
