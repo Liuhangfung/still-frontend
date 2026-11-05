@@ -1,13 +1,31 @@
-const words = [
-  "NO SIGNALS",
-  "NO HYPE",
-  "NO BROKER LOGIN",
-  "ONE QUEST A DAY",
-  "56 DAYS",
-  "RANK E → S",
+// Encouragement, not selling. Kept free of profit talk, per the brand rules.
+const front = [
+  "PAUSE. BREATHE. DECIDE.",
+  "PATIENCE IS A POSITION",
+  "PROGRESS, NOT PERFECTION",
+  "YOU ARE MORE THAN YOUR P&L",
+  "ONE CALM DECISION AT A TIME",
+  "DISCIPLINE IS FREEDOM",
 ];
 
-function Band({ className, reverse }: { className: string; reverse?: boolean }) {
+const back = [
+  "NO TRADE IS ALSO A CHOICE",
+  "EVERY SETBACK IS DATA",
+  "SLOW IS SMOOTH",
+  "TOMORROW IS A FRESH START",
+  "PROTECT YOUR PEACE",
+  "YOU'VE GOT THIS",
+];
+
+function Band({
+  words,
+  className,
+  reverse,
+}: {
+  words: string[];
+  className: string;
+  reverse?: boolean;
+}) {
   const row = [...words, ...words];
   return (
     <div
@@ -38,8 +56,11 @@ function Band({ className, reverse }: { className: string; reverse?: boolean }) 
 export function Marquee() {
   return (
     <div className="relative h-[150px] overflow-hidden" role="presentation">
-      <Band className="top-[44px] rotate-[2.5deg] bg-teal text-ink" reverse />
-      <Band className="top-[44px] -rotate-[2.5deg] bg-ink text-gold shadow-[0_8px_0_rgba(0,0,0,.12)]" />
+      <Band words={back} className="top-[44px] rotate-[2.5deg] bg-teal text-ink" reverse />
+      <Band
+        words={front}
+        className="top-[44px] -rotate-[2.5deg] bg-ink text-gold shadow-[0_8px_0_rgba(0,0,0,.12)]"
+      />
     </div>
   );
 }
