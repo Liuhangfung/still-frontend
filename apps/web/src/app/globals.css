@@ -158,8 +158,12 @@
 .draw-svg svg [fill]:not([fill="none"]) {
   fill-opacity: 0;
 }
+/* Filled shapes need both: draw the outline, then fade the fill in. A rule with
+   only fill-in would override "draw" and leave the outline invisible. */
 .draw-svg.is-drawn svg [fill]:not([fill="none"]) {
-  animation: fill-in 0.6s ease 0.7s forwards;
+  animation:
+    draw 1.6s cubic-bezier(0.4, 0, 0.2, 1) forwards,
+    fill-in 0.6s ease 0.7s forwards;
 }
 @keyframes draw {
   to {
