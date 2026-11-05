@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Still UI v5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#072B2F; --panel:#0D3B40; --panel2:#11494F;
+  --teal:#0FA3A3; --teal-dk:#064E4E; --gold:#FFC300; --gold-dk:#C99500;
+  --ink:#111111; --cream:#FFF6DC; --white:#FFFFFF; --muted:#8FB9BB;
+  --coral:#FF5A4E; --green:#2BD67B;
+  --page:#E9EEF0; --page-ink:#1B2B2E;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--page);color:var(--page-ink);padding:40px 24px 80px}
+header.doc{max-width:1500px;margin:0 auto 32px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+header.doc img{width:64px;height:64px}
+header.doc h1{font-family:Bangers,cursive;font-size:44px;letter-spacing:1px}
+header.doc p{color:#4A5F62;max-width:760px;line-height:1.5}
+.tokens{max-width:1500px;margin:0 auto 36px;display:flex;gap:12px;flex-wrap:wrap}
+.tok{display:flex;align-items:center;gap:8px;background:#fff;border-radius:10px;padding:8px 12px;font-size:12px;font-family:monospace}
+.tok i{width:22px;height:22px;border-radius:6px;border:2px solid var(--ink);display:block}
+.board{max-width:1500px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:44px 32px;justify-items:center}
+.shot{display:flex;flex-direction:column;align-items:center;gap:14px}
+.label{font-weight:800;font-size:15px}
+.label small{display:block;font-weight:500;color:#5B7074;font-size:12px;margin-top:2px;max-width:330px;text-align:center}
+
+/* phone */
+.phone{width:360px;height:760px;border-radius:46px;border:10px solid #0A0A0A;background:var(--bg);color:var(--white);position:relative;overflow:hidden;box-shadow:0 24px 50px rgba(0,0,0,.25)}
+.status{height:40px;display:flex;justify-content:space-between;align-items:center;padding:0 24px;font-size:12px;font-weight:700}
+.notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:96px;height:26px;background:#0A0A0A;border-radius:20px}
+.screen{padding:6px 18px 0;height:calc(100% - 40px);display:flex;flex-direction:column;gap:14px;position:relative}
+.halftone{background-image:radial-gradient(rgba(15,163,163,.18) 1.4px,transparent 1.6px);background-size:12px 12px}
+
+/* type */
+.comic{font-family:Bangers,cursive;letter-spacing:1px;font-weight:400}
+.slant{display:inline-block;transform:skewX(-8deg)}
+.h-gold{color:var(--gold);text-shadow:3px 3px 0 var(--ink),-1px -1px 0 var(--ink),1px -1px 0 var(--ink),-1px 1px 0 var(--ink)}
+.h-white{color:#fff;text-shadow:3px 3px 0 var(--teal-dk)}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--teal)}
+.muted{color:var(--muted)}
+.speed{position:relative;padding-left:30px}
+.speed::before{content:"";position:absolute;left:0;top:50%;width:22px;height:14px;transform:translateY(-50%);
+  background:linear-gradient(var(--teal),var(--teal)) 4px 0/18px 3px no-repeat,linear-gradient(var(--teal),var(--teal)) 0 6px/22px 3px no-repeat,linear-gradient(var(--teal),var(--teal)) 4px 12px/18px 3px no-repeat}
+
+/* comic surfaces */
+.card{background:var(--cream);color:var(--ink);border:3px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--teal-dk);padding:14px}
+.card.dark{background:var(--panel);color:#fff;box-shadow:5px 5px 0 #021416}
+.card.gold{background:var(--gold)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;font-family:Bangers,cursive;font-size:22px;letter-spacing:1.5px;
+  background:var(--gold);color:var(--ink);border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);padding:12px 16px;transform:skewX(-6deg)}
+.btn > span{transform:skewX(6deg);display:inline-block}
+.btn.teal{background:var(--teal);color:#fff}
+.btn.ghost{background:transparent;color:#fff;border-color:#fff;box-shadow:none;font-size:18px}
+.btn.sm{font-size:16px;padding:8px 10px;box-shadow:3px 3px 0 var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:6px 10px;border-radius:999px;border:2px solid var(--ink);background:#fff;color:var(--ink)}
+.chip.on{background:var(--teal);color:#fff}
+.pill{font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;background:var(--ink);color:var(--gold)}
+.bar{height:12px;border:2px solid var(--ink);border-radius:8px;background:#fff;overflow:hidden}
+.bar > i{display:block;height:100%;background:repeating-linear-gradient(-45deg,var(--gold) 0 8px,#FFD54A 8px 16px);border-right:2px solid var(--ink)}
+.bar.teal > i{background:repeating-linear-gradient(-45deg,var(--teal) 0 8px,#2BBDBD 8px 16px)}
+.row{display:flex;align-items:center;gap:10px}
+.between{justify-content:space-between}
+.grow{flex:1}
+
+/* tab bar */
+.tabs{position:absolute;left:0;right:0;bottom:0;height:78px;background:#05201F;border-top:3px solid var(--ink);display:flex;justify-content:space-around;align-items:center;padding-bottom:12px}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;font-weight:700;color:var(--muted)}
+.tab b{font-size:20px;line-height:1}
+.tab.on{color:var(--gold)}
+.fab{position:absolute;right:18px;bottom:92px;width:66px;height:66px;border-radius:18px;background:var(--gold);border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);display:flex;align-items:center;justify-content:center;flex-direction:column;transform:skewX(-6deg)}
+.fab svg{width:34px;height:34px}
+.fab small{font-family:Bangers;font-size:11px;color:var(--ink);letter-spacing:1px;margin-top:-2px}
+
+/* misc components */
+.check{width:20px;height:20px;border:2.5px solid var(--ink);border-radius:5px;background:#fff;flex:none;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900}
+.check.done{background:var(--teal);color:#fff}
+.task{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;padding:7px 0;border-bottom:1.5px dashed rgba(17,17,17,.18)}
+.task:last-child{border-bottom:0}
+.task .xp{margin-left:auto;font-size:11px;font-weight:800;color:var(--teal-dk)}
+.task.done span.t{text-decoration:line-through;opacity:.55}
+.opt{background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:12px;padding:13px 14px;font-weight:700;font-size:14px;box-shadow:4px 4px 0 var(--teal-dk);display:flex;gap:10px;align-items:center}
+.opt .k{width:26px;height:26px;border-radius:7px;border:2.5px solid var(--ink);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;flex:none}
+.opt.sel{background:var(--gold);box-shadow:4px 4px 0 var(--ink)}
+.opt.sel .k{background:var(--ink);color:var(--gold)}
+.burst{clip-path:polygon(50% 0,61% 18%,82% 8%,78% 30%,100% 36%,83% 52%,98% 70%,76% 72%,78% 95%,58% 82%,45% 100%,38% 80%,16% 92%,20% 70%,0 62%,16% 47%,3% 26%,25% 26%,22% 4%,40% 18%)}
+.ring{width:190px;height:190px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;flex-direction:column;
+  background:conic-gradient(var(--gold) 0 62%,rgba(255,255,255,.08) 62% 100%);position:relative}
+.ring::before{content:"";position:absolute;inset:14px;border-radius:50%;background:var(--bg);border:3px solid var(--ink)}
+.ring > *{position:relative}
+.stat{display:grid;grid-template-columns:92px 1fr 34px;gap:8px;align-items:center;font-size:12px;font-weight:700}
+.dots{display:grid;grid-template-columns:repeat(14,1fr);gap:4px}
+.dots i{aspect-ratio:1;border-radius:4px;border:2px solid var(--ink);background:#fff}
+.dots i.d{background:var(--teal)}
+.dots i.t{background:var(--gold)}
+.dots i.b{background:var(--ink)}
+.coach{border:3px solid var(--ink);border-radius:16px;padding:14px;box-shadow:5px 5px 0 var(--ink)}
+.bubble{background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:14px;padding:10px 12px;font-size:13px;font-weight:600;position:relative}
+.bubble::after{content:"";position:absolute;left:22px;bottom:-12px;width:16px;height:16px;background:#fff;border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:rotate(45deg)}
+.toggle{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;padding:10px 0;border-bottom:1.5px dashed rgba(17,17,17,.18)}
+.yn{display:flex;border:2.5px solid var(--ink);border-radius:8px;overflow:hidden}
+.yn b{padding:4px 10px;font-size:12px;background:#fff}
+.yn b.y{background:var(--teal);color:#fff}
+.yn b.n{background:var(--coral);color:#fff}
+.ic{width:1em;height:1em;flex:none;display:inline-block;vertical-align:-0.14em;fill:none;stroke:currentColor;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}.comic .ic{stroke-width:2.6}.sq{display:inline-block;width:9px;height:9px;border:1.5px solid #111;border-radius:2px;margin:0 3px 0 8px;vertical-align:-1px}.status .ic{width:15px;height:15px;margin-left:4px}
+
+/* v2: quest art */
+.art{position:relative;overflow:hidden;background:#021416;border:3px solid var(--ink);border-radius:12px}
+.art img{width:100%;height:100%;object-fit:cover;display:block}
+.sticker{position:absolute;font-family:Bangers,cursive;letter-spacing:1px;background:var(--gold);color:var(--ink);border:2.5px solid var(--ink);border-radius:8px;box-shadow:3px 3px 0 var(--ink);padding:3px 9px;transform:skewX(-8deg);font-size:15px;line-height:1.1;display:flex;align-items:center;gap:5px}
+.sticker.ink{background:var(--ink);color:var(--gold);box-shadow:3px 3px 0 var(--teal-dk)}
+.sfx{position:absolute;font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",sans-serif;font-weight:900;color:var(--gold);-webkit-text-stroke:1.6px var(--ink);paint-order:stroke fill;text-shadow:3px 3px 0 var(--ink);letter-spacing:-2px;line-height:.9;pointer-events:none}
+.thumb{width:28px;height:28px;border-radius:7px;border:2px solid var(--ink);overflow:hidden;flex:none;background:#021416}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.bleed{position:absolute;top:0;left:0;right:0;height:318px;border-bottom:3px solid var(--ink);overflow:hidden;background:#021416}
+.bleed img{width:100%;height:100%;object-fit:cover;object-position:center 22%;display:block}
+.bleed::after{content:"";position:absolute;inset:0 0 auto 0;height:70px;background:linear-gradient(rgba(2,20,22,.75),transparent)}
+.status.over,.screen.over{position:relative;z-index:2}
+.roundbtn{width:34px;height:34px;border-radius:50%;background:var(--ink);color:#fff;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:16px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.tile{aspect-ratio:1;border:2.5px solid var(--ink);border-radius:10px;overflow:hidden;position:relative;box-shadow:3px 3px 0 #021416;background:var(--panel)}
+.tile img{width:100%;height:100%;object-fit:cover;display:block}
+.tile b{position:absolute;left:3px;bottom:3px;font-family:Bangers,cursive;font-weight:400;font-size:13px;line-height:1;background:var(--ink);color:#fff;border-radius:5px;padding:2px 5px 1px}
+.tile .tick{position:absolute;right:3px;top:3px;width:16px;height:16px;border-radius:50%;background:var(--teal);border:2px solid var(--ink);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:10px}
+.tile.today{outline:3px solid var(--gold);outline-offset:2px}
+.tile.today b{background:var(--gold);color:var(--ink)}
+.tile.locked img{filter:grayscale(1) brightness(.22) contrast(1.2)}
+.tile.locked .lk{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:20px}
+.tile.boss{background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--gold);gap:2px}
+.tile.boss small{font-family:Bangers,cursive;font-size:14px;letter-spacing:1px}
+.tcard{background:var(--gold);border:3px solid var(--ink);border-radius:16px;padding:9px;box-shadow:6px 6px 0 var(--ink)}
+.tcard .art{border-radius:9px}
+.calm .card{background:var(--panel);color:#fff;border:2px solid var(--teal);box-shadow:none;border-radius:14px}
+.calm .opt2{display:flex;gap:12px;align-items:center;padding:13px 2px;border-bottom:1.5px solid rgba(143,185,187,.2);font-size:14px;font-weight:700}
+.calm .opt2:last-child{border:0}
+.calm .opt2 .ic{color:var(--teal);font-size:20px}
+.calm .opt2 small{display:block;font-weight:500;color:var(--muted);font-size:12px;margin-top:2px}
+.calmbtn{display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;background:var(--teal);color:var(--ink);border:2px solid var(--teal);border-radius:12px;padding:14px}
+.calmbtn.ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.5)}
+
+/* explainer below the board */
+.explain{max-width:1500px;margin:70px auto 0}
+.explain h2{font-family:Bangers,cursive;font-size:38px;letter-spacing:1px;margin-bottom:6px}
+.explain > p{color:#4A5F62;max-width:780px;line-height:1.55;margin-bottom:22px}
+.ex-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.ex{background:#fff;border:3px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--teal-dk);padding:18px 20px}
+.ex h3{font-family:Bangers,cursive;font-weight:400;font-size:22px;letter-spacing:1px;margin-bottom:8px;color:var(--teal-dk)}
+.ex p,.ex li{font-size:14px;line-height:1.55;color:#2C3D40}
+.ex ul{padding-left:18px;display:flex;flex-direction:column;gap:5px}
+.ex table{width:100%;border-collapse:collapse;font-size:13px}
+.ex td{padding:6px 0;border-bottom:1.5px dashed rgba(17,17,17,.15);vertical-align:top}
+.ex td:last-child{text-align:right;font-weight:800;white-space:nowrap;padding-left:10px}
+.ex code{font-size:12px;background:#EEF3F3;padding:1px 5px;border-radius:4px}
+@media (max-width:420px){body{padding:24px 16px 60px}.phone{transform:scale(.9);transform-origin:top center;margin-bottom:-70px}}
+
+/* v3: chapter themes. Each phone sets data-ch; the v1 tokens are re-pointed per chapter. */
+.card.dark{box-shadow:5px 5px 0 var(--deep,#021416)}
+.tabs{background:var(--tab,#05201F)}
+.halftone{background-image:radial-gradient(var(--half,rgba(15,163,163,.18)) 1.4px,transparent 1.6px)}
+.bar.teal > i{background:repeating-linear-gradient(-45deg,var(--teal) 0 8px,var(--stripe,#2BBDBD) 8px 16px)}
+.chip.on{color:var(--ink)}
+.check.done{color:var(--ink)}
+[data-ch="2"]{--bg:#1E1238;--panel:#2A1B4D;--panel2:#352263;--teal:#9B6BFF;--teal-dk:#3E2780;--muted:#B9A9DD;--deep:#0B0618;--tab:#150C28;--half:rgba(155,107,255,.2);--stripe:#B28DFF}
+[data-ch="3"]{--bg:#0A2340;--panel:#10325A;--panel2:#163F70;--teal:#3FB4FF;--teal-dk:#0E4A80;--muted:#9CC2E0;--deep:#030D1A;--tab:#071A30;--half:rgba(63,180,255,.18);--stripe:#7ACBFF}
+[data-ch="4"]{--bg:#2A1A0C;--panel:#3A2614;--panel2:#4A311A;--teal:#FFB870;--teal-dk:#7A4A12;--muted:#D9BFA0;--deep:#120A03;--tab:#1F1308;--half:rgba(255,184,112,.16);--stripe:#FFD2A1}
+[data-ch="2"] img.ph{filter:url(#tone-2)}
+[data-ch="3"] img.ph{filter:url(#tone-3)}
+[data-ch="4"] img.ph{filter:url(#tone-4)}
+
+.cover{position:absolute;inset:0;overflow:hidden;background:var(--bg)}
+.cover img{width:100%;height:100%;object-fit:cover;display:block}
+.cover::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.55) 0,transparent 16%,transparent 34%,var(--bg) 66%)}
+
+.chap{max-width:1560px;margin:0 auto 64px}
+.chap-head{display:flex;flex-wrap:wrap;gap:18px 28px;align-items:center;background:var(--bg);color:#fff;border:3px solid var(--ink);border-radius:16px;box-shadow:6px 6px 0 var(--ink);padding:18px 22px;margin-bottom:30px}
+.chap-head .num{font-family:Bangers,cursive;font-size:20px;letter-spacing:1px;color:var(--ink);background:var(--teal);border:3px solid var(--ink);border-radius:10px;padding:4px 12px;transform:skewX(-8deg);box-shadow:3px 3px 0 var(--ink)}
+.chap-head h2{font-family:Bangers,cursive;font-weight:400;font-size:36px;letter-spacing:1px;line-height:1}
+.chap-head h2 em{font-style:normal;color:var(--teal)}
+.chap-head p{color:var(--muted);font-size:14px;line-height:1.5;max-width:560px}
+.chap-head .sw{display:flex;gap:6px;margin-left:auto}
+.chap-head .sw i{width:30px;height:30px;border-radius:8px;border:2.5px solid var(--ink);display:block}
+.chap .board{max-width:1560px;grid-template-columns:repeat(auto-fill,minmax(360px,1fr))}
+.same{max-width:1560px;margin:0 auto}
+.same h2{font-family:Bangers,cursive;font-size:38px;letter-spacing:1px;margin-bottom:16px}
+.same pre{background:#0D1B1D;color:#D6ECEC;border-radius:12px;padding:16px 18px;font-size:12px;line-height:1.55;overflow-x:auto;margin-top:14px}
+
+/* custom tab glyphs: drawn for Still, filled when active */
+.tg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.on .tg .f{fill:currentColor}
+/* option D: capsule dock, icons only, Still logo in the centre (Log) */
+.cap{position:absolute;left:16px;right:16px;bottom:18px;height:62px;border-radius:999px;background:rgba(14,14,18,.86);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.09);box-shadow:0 10px 28px rgba(0,0,0,.45);display:grid;grid-template-columns:1fr 1fr 96px 1fr 1fr;align-items:center;justify-items:center;padding:0 6px;z-index:4}
+.cap .ci{width:46px;height:46px;display:flex;align-items:center;justify-content:center;color:#8A8F98;position:relative;--tabcut:rgba(14,14,18,1)}
+.cap .ci .tg{width:25px;height:25px;stroke-width:2}
+.cap .ci.on{color:#fff}
+.cap .ci .dot{position:absolute;top:9px;right:9px;width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.cap .logo{width:88px;height:48px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center}
+.cap .logo.on{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.22)}
+.cap .logo svg{width:46px;height:46px}
+.cap .av{width:30px;height:30px;border-radius:50%;background:var(--teal);border:2px solid #8A8F98;display:flex;align-items:center;justify-content:center;font-family:Bangers,cursive;font-size:15px;color:var(--ink)}
+.cap .on .av{border-color:#fff}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="t-today" viewBox="0 0 24 24"><path class="f" d="M13 2 4.5 13.5H11l-1 8.5 8.5-11.5H12z"/></symbol><symbol id="t-path" viewBox="0 0 24 24"><path d="M4.5 20c4 0 3.5-6.5 7-6.5s3.5-3 6-3"/><circle class="f" cx="4.5" cy="20" r="2.3"/><path d="M17.5 13V3"/><path class="f" d="M17.5 3.5h4.5l-1.6 2.6 1.6 2.6h-4.5z"/></symbol><symbol id="t-bag" viewBox="0 0 24 24"><path d="M9 7V5.5a3 3 0 0 1 6 0V7"/><rect class="f" x="4.5" y="7" width="15" height="14" rx="3.5"/><path d="M4.5 13h15" style="stroke:var(--tabcut,currentColor)"/></symbol><symbol id="t-me" viewBox="0 0 24 24"><circle class="f" cx="12" cy="8" r="4"/><path d="M4.5 21c.8-4 3.8-6 7.5-6s6.7 2 7.5 6"/></symbol><symbol id="t-logo" viewBox="20 28 172 150"><g transform="translate(100 100) scale(0.74) translate(-84 -100)"><g stroke="#FFFFFF" stroke-width="7" stroke-linecap="round"><line x1="18" y1="72" x2="44" y2="72"/><line x1="10" y1="100" x2="44" y2="100"/><line x1="18" y1="128" x2="44" y2="128"/></g><g transform="translate(27 0) skewX(-15)"><rect x="76" y="58" width="28" height="96" rx="4" fill="#064E4E"/><rect x="120" y="58" width="28" height="96" rx="4" fill="#064E4E"/><rect x="68" y="50" width="28" height="96" rx="4" fill="#FFC300" stroke="#111111" stroke-width="8"/><rect x="112" y="50" width="28" height="96" rx="4" fill="#FFC300" stroke="#111111" stroke-width="8"/></g></g></symbol><symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol><symbol id="i-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></symbol><symbol id="i-scale" viewBox="0 0 24 24"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></symbol><symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M10 2h4"/></symbol><symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol><symbol id="i-snowflake" viewBox="0 0 24 24"><path d="M2 12h20"/><path d="M12 2v20"/><path d="m20 16-4-4 4-4"/><path d="m4 8 4 4-4 4"/><path d="m16 4-4 4-4-4"/><path d="m8 20 4-4 4 4"/></symbol><symbol id="i-activity" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></symbol><symbol id="i-newspaper" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8z"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></symbol><symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol><symbol id="i-map" viewBox="0 0 24 24"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15"/><path d="M15 6v15"/></symbol><symbol id="i-backpack" viewBox="0 0 24 24"><path d="M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M8 10h8"/><path d="M8 22v-6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6"/><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></symbol><symbol id="i-trending-up" viewBox="0 0 24 24"><path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></symbol><symbol id="i-trending-down" viewBox="0 0 24 24"><path d="m22 17-8.5-8.5-5 5L2 7"/><path d="M16 17h6v-6"/></symbol><symbol id="i-smartphone" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></symbol><symbol id="i-hourglass" viewBox="0 0 24 24"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.17a2 2 0 0 0-.59-1.42L12 12l-4.41 4.41A2 2 0 0 0 7 17.83V22"/><path d="M7 2v4.17a2 2 0 0 0 .59 1.42L12 12l4.41-4.41A2 2 0 0 0 17 6.17V2"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol><symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol><symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></symbol><symbol id="i-circle-slash" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></symbol><symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></symbol><symbol id="i-signal" viewBox="0 0 24 24"><path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/></symbol><symbol id="i-wifi" viewBox="0 0 24 24"><path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.86a10 10 0 0 1 14 0"/><path d="M8.5 16.43a5 5 0 0 1 7 0"/></symbol><symbol id="i-battery" viewBox="0 0 24 24"><rect x="2" y="7" width="16" height="10" rx="2"/><path d="M22 11v2"/><rect x="5" y="10" width="10" height="4" rx="1" fill="currentColor" stroke="none"/></symbol></defs></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="j-rules-card" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h10"/><path d="M7 13h10"/><path d="M7 17h6"/></symbol>
+<symbol id="j-checklist" viewBox="0 0 24 24"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></symbol>
+<symbol id="j-journal" viewBox="0 0 24 24"><path d="M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4"/><path d="M2 6h4"/><path d="M2 10h4"/><path d="M2 14h4"/><path d="M2 18h4"/><path d="M21.38 5.62a1 1 0 0 0-3-3l-5.01 5.02a2 2 0 0 0-.5.86l-.84 2.87a.5.5 0 0 0 .62.62l2.87-.84a2 2 0 0 0 .86-.5z"/></symbol>
+<symbol id="j-profile" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></symbol>
+<symbol id="j-market-map" viewBox="0 0 24 24"><path d="M9 5v4"/><rect x="7" y="9" width="4" height="6" rx="1"/><path d="M9 15v2"/><path d="M17 3v2"/><rect x="15" y="5" width="4" height="8" rx="1"/><path d="M17 13v3"/><path d="M3 3v16a2 2 0 0 0 2 2h16"/></symbol>
+<symbol id="j-warning" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+<symbol id="j-secure-base" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
+<symbol id="j-lesson" viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></symbol>
+<symbol id="j-email" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+<symbol id="j-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
+<symbol id="j-edit" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></symbol>
+<symbol id="j-star" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></symbol>
+<symbol id="j-gate" viewBox="0 0 24 24"><path d="M13 4h3a2 2 0 0 1 2 2v14"/><path d="M2 20h3"/><path d="M13 20h9"/><path d="M10 12v.01"/><path d="M13 4.56v16.01a.5.5 0 0 1-.68.47L5 18.7V5.83a1 1 0 0 1 .76-.97l6-1.5a1 1 0 0 1 1.24.97z"/></symbol>
+<symbol id="j-chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+<symbol id="j-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+<symbol id="j-rule-check" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></symbol>
+<symbol id="j-recovery" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></symbol>
+<symbol id="j-idea" viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></symbol>
+<symbol id="j-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+<symbol id="j-boss" viewBox="0 0 24 24"><path d="M14.5 17.5 3 6V3h3l11.5 11.5"/><path d="m13 19 6-6"/><path d="m16 16 4 4"/><path d="m19 21 2-2"/><path d="M9.5 17.5 21 6V3h-3L6.5 14.5"/><path d="m11 19-6-6"/><path d="m8 16-4 4"/><path d="m5 21-2-2"/></symbol>
+<symbol id="j-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+<symbol id="j-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98"/><path d="m15.41 6.51-6.82 3.98"/></symbol>
+<symbol id="j-calm-heart" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></symbol>
+<symbol id="j-path" viewBox="0 0 24 24"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15"/><path d="M15 6v15"/></symbol>
+<symbol id="i-pausebars" viewBox="0 0 24 24"><path d="M9 4 6 20"/><path d="M17 4l-3 16"/></symbol><symbol id="j-breathe" viewBox="0 0 24 24"><path d="M12.8 19.6A2 2 0 1 0 14 16H2"/><path d="M17.5 8a2.5 2.5 0 1 1 2 4H2"/><path d="M9.8 4.4A2 2 0 1 1 11 8H2"/></symbol><symbol id="j-helpline" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol></defs></svg>
+<style>
+:root{--l1:#FFC300;--l2:#0FA3A3;--l3:#A9B6B9;--l4:#9A7BE0;--l5:#FF5A4E}
+.tabs .tab{min-width:56px}
+.scale{max-width:1500px;margin:0 auto 40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.lv{background:#fff;border:3px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--teal-dk);padding:14px 16px;display:flex;gap:12px;align-items:flex-start}
+.lv .sq{width:44px;height:44px;font-size:22px}
+.lv b{font-family:Bangers,cursive;font-weight:400;font-size:24px;letter-spacing:1px;display:block;line-height:1}
+.lv p{font-size:13px;line-height:1.45;color:#2C3D40;margin-top:4px}
+.sq{border:2.5px solid var(--ink);border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--ink);flex:none;line-height:1}
+.L1{background:var(--l1)}.L2{background:var(--l2)}.L3{background:var(--l3)}.L4{background:var(--l4)}.L5{background:var(--l5)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal .h{font-size:10px;font-weight:800;color:var(--muted);text-align:center}
+.cal .d{aspect-ratio:1;border-radius:8px;border:2px solid var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--ink);position:relative}
+.cal .d i{font-style:normal;font-size:12px;line-height:1}
+.cal .d.e{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);color:var(--muted)}
+.cal .d.x{border:0;background:none}
+.cal .d.now{background:var(--panel);border:2.5px dashed var(--gold);color:var(--gold)}
+.pick{display:flex;align-items:center;gap:12px;background:#fff;color:var(--ink);border:2.5px solid var(--ink);border-radius:12px;padding:8px 10px;box-shadow:3px 3px 0 var(--teal-dk)}
+.pick .sq{width:34px;height:34px;font-size:16px}
+.pick b{font-size:14px;font-weight:800;display:block}
+.pick small{font-size:11px;color:#55605F;font-weight:600}
+.pick.sel{outline:3px solid var(--gold);outline-offset:2px;box-shadow:4px 4px 0 var(--ink)}
+.pick.sel::after{content:"suggested";margin-left:auto;font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;background:var(--ink);color:var(--gold);padding:3px 6px;border-radius:5px}
+.legend{display:flex;justify-content:space-between;gap:4px}
+.legend span{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9px;font-weight:800;color:var(--muted)}
+.legend .sq{width:22px;height:22px;font-size:11px;border-width:2px;border-radius:6px}
+.wk{display:flex;gap:5px}
+.wk .sq{flex:1;height:26px;font-size:12px;border-width:2px;border-radius:6px}
+.broke{display:flex;gap:9px;align-items:center;font-size:13px;font-weight:700;padding:7px 0;border-bottom:1.5px dashed rgba(17,17,17,.15)}
+.broke:last-child{border:0}
+.broke .x{width:20px;height:20px;border-radius:6px;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;font-size:11px;flex:none}
+</style>
+
+<header class="doc">
+  <img src="../images/still-app-icon.svg" alt="">
+  <div>
+    <h1>STILL: UI design v5 · Day Log</h1>
+    <p>A new <b>Log</b> tab in the bottom bar. Every evening the day gets one of 5 colours for <b>how well you traded</b>, from best to worst, never for how much you made. A day you sat out with your rules kept is a top day. No money, no percentages, no green/red. Logging honestly earns the <b>same XP whatever the colour</b>, so a bad day logged honestly still counts.</p>
+  </div>
+</header>
+
+<div class="scale">
+  <div class="lv"><span class="sq L1">★</span><div><b>1 · CLEAN</b><p>Every rule kept, whether you traded with your plan or chose not to trade.</p></div></div>
+  <div class="lv"><span class="sq L2">✓</span><div><b>2 · SOLID</b><p>Rules kept, one wobble. E.g. watched charts in bed but didn't trade.</p></div></div>
+  <div class="lv"><span class="sq L3">–</span><div><b>3 · MIXED</b><p>Broke 1 rule.</p></div></div>
+  <div class="lv"><span class="sq L4">!</span><div><b>4 · SLIPPED</b><p>Broke 2 or more rules.</p></div></div>
+  <div class="lv"><span class="sq L5">✕</span><div><b>5 · TILT</b><p>Lost control: revenge trading, chasing FOMO, trading to win it back.</p></div></div>
+</div>
+
+<div class="board">
+
+<!-- 1. LOG TAB -->
+<div class="shot">
+  <div class="phone" data-ch="3"><div class="notch"></div>
+    <div class="status"><span>9:41</span><span class="row" style="gap:0"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-battery"/></svg></span></div>
+    <div class="screen" style="gap:11px">
+      <div class="row between" style="align-items:flex-end">
+        <div><div class="eyebrow">How you traded · November</div><div class="comic h-gold slant speed" style="font-size:34px">DAY LOG</div></div>
+        <span class="muted" style="font-size:20px;margin-bottom:8px"><svg class="ic"><use href="#i-chevron-left"/></svg> <svg class="ic" style="transform:scaleX(-1)"><use href="#i-chevron-left"/></svg></span>
+      </div>
+      <div class="card dark" style="padding:10px 10px 12px">
+        <div class="cal" id="cal"></div>
+      </div>
+      <div class="legend" id="legend"></div>
+      <div class="card" style="padding:10px 14px">
+        <div class="row between"><span class="eyebrow" style="color:var(--teal-dk)">This month</span><span style="font-size:11px;font-weight:800">13 days logged</span></div>
+        <div style="font-size:13px;font-weight:700;margin-top:6px;line-height:1.5">6 clean or solid · 6 mixed or slipped · 1 tilt</div>
+        <div style="height:1.5px;background:rgba(0,0,0,.1);margin:8px 0"></div>
+        <div style="font-size:12.5px;line-height:1.45"><b style="color:var(--teal-dk)">Pattern:</b> 3 of your 4 slipped or tilt days started after 23:00. That matches your <b>Trigger Map</b>.</div>
+      </div>
+      <div class="cap"><div class="ci" aria-label="Today"><svg class="tg"><use href="#t-today"/></svg><i class="dot"></i></div><div class="ci" aria-label="Path"><svg class="tg"><use href="#t-path"/></svg></div><div class="logo on" aria-label="Log"><svg><use href="#t-logo"/></svg></div><div class="ci" aria-label="Inventory"><svg class="tg"><use href="#t-bag"/></svg></div><div class="ci" aria-label="Me"><span class="av">A</span></div></div>
+    </div>
+  </div>
+  <div class="label">1 · The Log tab<small>A month of colours at a glance. The insight links bad days to the user's own Trigger Map, not to the market.</small></div>
+</div>
+
+<!-- 2. EVENING LOG -->
+<div class="shot">
+  <div class="phone" data-ch="3"><div class="notch"></div>
+    <div class="status"><span>9:41</span><span class="row" style="gap:0"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-battery"/></svg></span></div>
+    <div class="screen" style="gap:10px">
+      <div class="row between"><span style="font-size:22px"><svg class="ic"><use href="#i-x"/></svg></span><span class="eyebrow">Session close · Sat 14 Nov</span><span></span></div>
+      <div class="comic h-gold slant" style="font-size:34px;line-height:1">HOW DID TODAY GO?</div>
+      <div class="muted" style="font-size:12px;line-height:1.45">From your Rule Check you broke 1 rule: <b style="color:#fff">"No trades after 23:00"</b>. Change it if that's wrong.</div>
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <div class="pick"><span class="sq L1">★</span><div><b>Clean</b><small>Every rule kept</small></div></div>
+        <div class="pick"><span class="sq L2">✓</span><div><b>Solid</b><small>Rules kept, one wobble</small></div></div>
+        <div class="pick sel"><span class="sq L3">–</span><div><b>Mixed</b><small>Broke 1 rule</small></div></div>
+        <div class="pick"><span class="sq L4">!</span><div><b>Slipped</b><small>Broke 2+ rules</small></div></div>
+        <div class="pick"><span class="sq L5">✕</span><div><b>Tilt</b><small>Lost control</small></div></div>
+      </div>
+      <div class="row" style="gap:6px;flex-wrap:wrap"><span class="muted" style="font-size:11px;font-weight:700">What happened?</span><span class="chip on">Late night</span><span class="chip">FOMO</span><span class="chip">Bored</span><span class="chip">+</span></div>
+      <div class="btn" style="margin-top:auto;margin-bottom:26px"><span>SAVE DAY · +5 XP</span></div>
+    </div>
+  </div>
+  <div class="label">2 · Logging the day<small>Part of the evening Session Close. The app suggests a colour from the Rule Check answers; the user confirms in one tap. Same +5 XP for any colour.</small></div>
+</div>
+
+<!-- 3. DAY DETAIL -->
+<div class="shot">
+  <div class="phone" data-ch="3"><div class="notch"></div>
+    <div class="status"><span>9:41</span><span class="row" style="gap:0"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-battery"/></svg></span></div>
+    <div class="screen" style="gap:12px">
+      <div class="row between"><span style="font-size:22px"><svg class="ic"><use href="#i-chevron-left"/></svg></span><span class="eyebrow">Day log · Fri 6 Nov</span><span></span></div>
+      <div class="row" style="gap:14px">
+        <span class="sq L4" style="width:64px;height:64px;font-size:30px;box-shadow:4px 4px 0 var(--ink);border-width:3px;border-radius:14px">!</span>
+        <div><div class="comic h-gold slant" style="font-size:36px;line-height:1">SLIPPED</div><div class="muted" style="font-size:12px;font-weight:700">Broke 2 rules · Day 24</div></div>
+      </div>
+      <div class="card" style="padding:6px 14px">
+        <div class="eyebrow" style="color:var(--teal-dk);margin-top:6px">Rules broken</div>
+        <div class="broke"><span class="x L5">✕</span>No trades after 23:00</div>
+        <div class="broke"><span class="x L5">✕</span>2 losses → close the app</div>
+        <div class="broke"><span class="x L2">✓</span>Stop goes in before entry</div>
+      </div>
+      <div class="row" style="gap:6px;flex-wrap:wrap"><span class="chip on">Late night</span><span class="chip on">After a loss</span></div>
+      <div class="card dark" style="padding:10px 12px;font-size:12.5px;line-height:1.5"><span class="muted" style="font-size:11px;font-weight:800">YOUR NOTE</span><br>"Couldn't sleep, opened the app 'just to look'."</div>
+      <div class="bubble">"You kept your stop even while tilting. That's the rule that saved you. Now let's guard the late night."</div>
+      <div class="muted" style="font-size:11px;font-weight:800;margin:6px 0 0 4px"><svg class="ic"><use href="#i-snowflake"/></svg> THE SYSTEM</div>
+      <div class="btn" style="margin-top:auto;margin-bottom:26px"><span>ADD A FIX TO MY RULES</span></div>
+    </div>
+  </div>
+  <div class="label">3 · Tapping a day<small>Shows which rules broke and which held, the user's tags and note, and one next step that feeds the Inventory.</small></div>
+</div>
+
+<!-- 4. WEEKLY REVIEW USE -->
+<div class="shot">
+  <div class="phone" data-ch="3"><div class="notch"></div>
+    <div class="status"><span>9:41</span><span class="row" style="gap:0"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-battery"/></svg></span></div>
+    <div class="screen halftone" style="gap:12px">
+      <div class="row between"><span style="font-size:22px"><svg class="ic"><use href="#i-x"/></svg></span><span class="eyebrow">Weekly review · Gate 5</span><span></span></div>
+      <div class="comic h-gold slant speed" style="font-size:34px">YOUR WEEK</div>
+      <div class="card dark" style="padding:12px">
+        <div class="row between" style="font-size:11px;font-weight:800;color:var(--muted);margin-bottom:6px"><span>Last week</span></div>
+        <div class="wk"><span class="sq L3">–</span><span class="sq L4">!</span><span class="sq L2">✓</span><span class="sq L5">✕</span><span class="sq L3">–</span><span class="sq L1">★</span><span class="sq L4">!</span></div>
+        <div class="row between" style="font-size:11px;font-weight:800;color:var(--muted);margin:12px 0 6px"><span>This week</span></div>
+        <div class="wk"><span class="sq L1">★</span><span class="sq L2">✓</span><span class="sq L1">★</span><span class="sq L3">–</span><span class="sq L1">★</span><span class="sq L1">★</span><span class="sq L2">✓</span></div>
+      </div>
+      <div class="row" style="justify-content:center;gap:10px">
+        <span class="card gold" style="padding:6px 12px;box-shadow:3px 3px 0 var(--ink)"><b class="comic" style="font-size:20px">6 OF 7 KEPT</b></span>
+        <span class="card" style="padding:6px 12px;box-shadow:3px 3px 0 var(--ink)"><b class="comic" style="font-size:20px;color:var(--teal-dk)">0 TILT</b></span>
+      </div>
+      <div class="bubble">"Last week looked like a bruise. This week looks like a plan. Same market, different you."</div>
+      <div class="muted" style="font-size:11px;font-weight:800;margin:6px 0 0 4px"><svg class="ic"><use href="#i-flame"/></svg> THE SERGEANT</div>
+      <div class="btn" style="margin-top:auto;margin-bottom:26px"><span>CONTINUE REVIEW</span></div>
+    </div>
+  </div>
+  <div class="label">4 · In the weekly review<small>Comparing two weeks of colours shows progress in behaviour, which is the only thing Still scores.</small></div>
+</div>
+
+<!-- 5. TILT DAY: CALM RESPONSE -->
+<div class="shot">
+  <div class="phone calm" data-ch="3"><div class="notch"></div>
+    <div class="status"><span>9:41</span><span class="row" style="gap:0"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-battery"/></svg></span></div>
+    <div class="screen" style="gap:14px">
+      <div class="row between"><span></span><span class="eyebrow" style="color:var(--l2)">Day log saved</span><span></span></div>
+      <div class="row" style="gap:12px;margin-top:14px"><span class="sq L5" style="width:44px;height:44px;font-size:20px">✕</span><div style="font-size:22px;font-weight:800;line-height:1.25">Tilt day logged.</div></div>
+      <div class="muted" style="font-size:14px;line-height:1.5">Writing it down honestly is the hard part, and you did it. One rough day doesn't undo your progress.</div>
+      <div class="card" style="padding:4px 14px;border-color:var(--l2)">
+        <div class="opt2"><svg class="ic" style="color:var(--l2)"><use href="#i-pausebars"/></svg><div>Recovery Quest tomorrow<small>A short, gentle quest instead of the normal one</small></div></div>
+        <div class="opt2"><svg class="ic" style="color:var(--l2)"><use href="#j-breathe"/></svg><div>Breathe for 2 minutes<small>Before you put the phone down</small></div></div>
+        <div class="opt2"><svg class="ic" style="color:var(--l2)"><use href="#j-helpline"/></svg><div>Talk to someone<small>Free, confidential helplines</small></div></div>
+      </div>
+      <div style="margin-top:auto;margin-bottom:26px"><div class="calmbtn" style="background:var(--l2);border-color:var(--l2)">Good night</div></div>
+    </div>
+  </div>
+  <div class="label">5 · After a tilt day<small>Calm mode: no comic effects, no slant, no gold. Offers a Recovery Quest and help, never shame.</small></div>
+</div>
+
+</div>
+
+<section class="explain">
+  <h2>Rules for the Day Log</h2>
+  <div class="ex-grid">
+    <div class="ex"><h3>What it never records</h3><ul><li>Money amounts, percentages, profit or loss.</li><li>Prices, coins or positions.</li><li>Anything from an exchange account.</li></ul></div>
+    <div class="ex"><h3>Where the colour comes from</h3><ul><li>The evening <b>Rule Check</b> answers suggest a colour automatically.</li><li>The user confirms or changes it in one tap.</li><li>Missed a day? It stays empty, never coloured as bad.</li></ul></div>
+    <div class="ex"><h3>Colour rules</h3><ul><li>The 5 colours are the same in every chapter theme.</li><li>Each colour also has a symbol (★ ✓ – ! ✕) so it never relies on colour alone.</li><li>No green or red. Coral is "stop and think", as everywhere else in Still.</li></ul></div>
+    <div class="ex"><h3>XP</h3><ul><li>+5 XP for logging, whatever the colour, so honesty is what earns points.</li><li>No streak for "clean days": a broken streak would push people to lie.</li></ul></div>
+  </div>
+</section>
+
+<script>
+const SYM={1:'★',2:'✓',3:'–',4:'!',5:'✕'};
+// Nov 2026 starts on a Sunday; Mon-first grid. Days 1–13 logged, 14 = tonight.
+const LOG=[1,3,4,2,5,4,3,1,4,2,1,2,3];
+let html=['M','T','W','T','F','S','S'].map(h=>`<span class="h">${h}</span>`).join('');
+html+='<span class="d x"></span>'.repeat(6);
+for(let d=1;d<=30;d++){
+  if(d<=LOG.length){const l=LOG[d-1];html+=`<span class="d L${l}"><i>${SYM[l]}</i>${d}</span>`}
+  else if(d===14) html+=`<span class="d now">${d}</span>`;
+  else html+=`<span class="d e">${d}</span>`;
+}
+document.getElementById('cal').innerHTML=html;
+document.getElementById('legend').innerHTML=[['1','Clean'],['2','Solid'],['3','Mixed'],['4','Slipped'],['5','Tilt']].map(([l,n])=>`<span><i class="sq L${l}">${SYM[l]}</i>${n}</span>`).join('');
+</script>
+</body>
+</html>

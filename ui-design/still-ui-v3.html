@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Still UI v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#072B2F; --panel:#0D3B40; --panel2:#11494F;
+  --teal:#0FA3A3; --teal-dk:#064E4E; --gold:#FFC300; --gold-dk:#C99500;
+  --ink:#111111; --cream:#FFF6DC; --white:#FFFFFF; --muted:#8FB9BB;
+  --coral:#FF5A4E; --green:#2BD67B;
+  --page:#E9EEF0; --page-ink:#1B2B2E;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--page);color:var(--page-ink);padding:40px 24px 80px}
+header.doc{max-width:1500px;margin:0 auto 32px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+header.doc img{width:64px;height:64px}
+header.doc h1{font-family:Bangers,cursive;font-size:44px;letter-spacing:1px}
+header.doc p{color:#4A5F62;max-width:760px;line-height:1.5}
+.tokens{max-width:1500px;margin:0 auto 36px;display:flex;gap:12px;flex-wrap:wrap}
+.tok{display:flex;align-items:center;gap:8px;background:#fff;border-radius:10px;padding:8px 12px;font-size:12px;font-family:monospace}
+.tok i{width:22px;height:22px;border-radius:6px;border:2px solid var(--ink);display:block}
+.board{max-width:1500px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:44px 32px;justify-items:center}
+.shot{display:flex;flex-direction:column;align-items:center;gap:14px}
+.label{font-weight:800;font-size:15px}
+.label small{display:block;font-weight:500;color:#5B7074;font-size:12px;margin-top:2px;max-width:330px;text-align:center}
+
+/* phone */
+.phone{width:360px;height:760px;border-radius:46px;border:10px solid #0A0A0A;background:var(--bg);color:var(--white);position:relative;overflow:hidden;box-shadow:0 24px 50px rgba(0,0,0,.25)}
+.status{height:40px;display:flex;justify-content:space-between;align-items:center;padding:0 24px;font-size:12px;font-weight:700}
+.notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:96px;height:26px;background:#0A0A0A;border-radius:20px}
+.screen{padding:6px 18px 0;height:calc(100% - 40px);display:flex;flex-direction:column;gap:14px;position:relative}
+.halftone{background-image:radial-gradient(rgba(15,163,163,.18) 1.4px,transparent 1.6px);background-size:12px 12px}
+
+/* type */
+.comic{font-family:Bangers,cursive;letter-spacing:1px;font-weight:400}
+.slant{display:inline-block;transform:skewX(-8deg)}
+.h-gold{color:var(--gold);text-shadow:3px 3px 0 var(--ink),-1px -1px 0 var(--ink),1px -1px 0 var(--ink),-1px 1px 0 var(--ink)}
+.h-white{color:#fff;text-shadow:3px 3px 0 var(--teal-dk)}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--teal)}
+.muted{color:var(--muted)}
+.speed{position:relative;padding-left:30px}
+.speed::before{content:"";position:absolute;left:0;top:50%;width:22px;height:14px;transform:translateY(-50%);
+  background:linear-gradient(var(--teal),var(--teal)) 4px 0/18px 3px no-repeat,linear-gradient(var(--teal),var(--teal)) 0 6px/22px 3px no-repeat,linear-gradient(var(--teal),var(--teal)) 4px 12px/18px 3px no-repeat}
+
+/* comic surfaces */
+.card{background:var(--cream);color:var(--ink);border:3px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--teal-dk);padding:14px}
+.card.dark{background:var(--panel);color:#fff;box-shadow:5px 5px 0 #021416}
+.card.gold{background:var(--gold)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;font-family:Bangers,cursive;font-size:22px;letter-spacing:1.5px;
+  background:var(--gold);color:var(--ink);border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);padding:12px 16px;transform:skewX(-6deg)}
+.btn > span{transform:skewX(6deg);display:inline-block}
+.btn.teal{background:var(--teal);color:#fff}
+.btn.ghost{background:transparent;color:#fff;border-color:#fff;box-shadow:none;font-size:18px}
+.btn.sm{font-size:16px;padding:8px 10px;box-shadow:3px 3px 0 var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:6px 10px;border-radius:999px;border:2px solid var(--ink);background:#fff;color:var(--ink)}
+.chip.on{background:var(--teal);color:#fff}
+.pill{font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;background:var(--ink);color:var(--gold)}
+.bar{height:12px;border:2px solid var(--ink);border-radius:8px;background:#fff;overflow:hidden}
+.bar > i{display:block;height:100%;background:repeating-linear-gradient(-45deg,var(--gold) 0 8px,#FFD54A 8px 16px);border-right:2px solid var(--ink)}
+.bar.teal > i{background:repeating-linear-gradient(-45deg,var(--teal) 0 8px,#2BBDBD 8px 16px)}
+.row{display:flex;align-items:center;gap:10px}
+.between{justify-content:space-between}
+.grow{flex:1}
+
+/* tab bar */
+.tabs{position:absolute;left:0;right:0;bottom:0;height:78px;background:#05201F;border-top:3px solid var(--ink);display:flex;justify-content:space-around;align-items:center;padding-bottom:12px}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;font-weight:700;color:var(--muted)}
+.tab b{font-size:20px;line-height:1}
+.tab.on{color:var(--gold)}
+.fab{position:absolute;right:18px;bottom:92px;width:66px;height:66px;border-radius:18px;background:var(--gold);border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);display:flex;align-items:center;justify-content:center;flex-direction:column;transform:skewX(-6deg)}
+.fab svg{width:34px;height:34px}
+.fab small{font-family:Bangers;font-size:11px;color:var(--ink);letter-spacing:1px;margin-top:-2px}
+
+/* misc components */
+.check{width:20px;height:20px;border:2.5px solid var(--ink);border-radius:5px;background:#fff;flex:none;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900}
+.check.done{background:var(--teal);color:#fff}
+.task{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;padding:7px 0;border-bottom:1.5px dashed rgba(17,17,17,.18)}
+.task:last-child{border-bottom:0}
+.task .xp{margin-left:auto;font-size:11px;font-weight:800;color:var(--teal-dk)}
+.task.done span.t{text-decoration:line-through;opacity:.55}
+.opt{background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:12px;padding:13px 14px;font-weight:700;font-size:14px;box-shadow:4px 4px 0 var(--teal-dk);display:flex;gap:10px;align-items:center}
+.opt .k{width:26px;height:26px;border-radius:7px;border:2.5px solid var(--ink);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;flex:none}
+.opt.sel{background:var(--gold);box-shadow:4px 4px 0 var(--ink)}
+.opt.sel .k{background:var(--ink);color:var(--gold)}
+.burst{clip-path:polygon(50% 0,61% 18%,82% 8%,78% 30%,100% 36%,83% 52%,98% 70%,76% 72%,78% 95%,58% 82%,45% 100%,38% 80%,16% 92%,20% 70%,0 62%,16% 47%,3% 26%,25% 26%,22% 4%,40% 18%)}
+.ring{width:190px;height:190px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;flex-direction:column;
+  background:conic-gradient(var(--gold) 0 62%,rgba(255,255,255,.08) 62% 100%);position:relative}
+.ring::before{content:"";position:absolute;inset:14px;border-radius:50%;background:var(--bg);border:3px solid var(--ink)}
+.ring > *{position:relative}
+.stat{display:grid;grid-template-columns:92px 1fr 34px;gap:8px;align-items:center;font-size:12px;font-weight:700}
+.dots{display:grid;grid-template-columns:repeat(14,1fr);gap:4px}
+.dots i{aspect-ratio:1;border-radius:4px;border:2px solid var(--ink);background:#fff}
+.dots i.d{background:var(--teal)}
+.dots i.t{background:var(--gold)}
+.dots i.b{background:var(--ink)}
+.coach{border:3px solid var(--ink);border-radius:16px;padding:14px;box-shadow:5px 5px 0 var(--ink)}
+.bubble{background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:14px;padding:10px 12px;font-size:13px;font-weight:600;position:relative}
+.bubble::after{content:"";position:absolute;left:22px;bottom:-12px;width:16px;height:16px;background:#fff;border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:rotate(45deg)}
+.toggle{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;padding:10px 0;border-bottom:1.5px dashed rgba(17,17,17,.18)}
+.yn{display:flex;border:2.5px solid var(--ink);border-radius:8px;overflow:hidden}
+.yn b{padding:4px 10px;font-size:12px;background:#fff}
+.yn b.y{background:var(--teal);color:#fff}
+.yn b.n{background:var(--coral);color:#fff}
+.ic{width:1em;height:1em;flex:none;display:inline-block;vertical-align:-0.14em;fill:none;stroke:currentColor;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}.comic .ic{stroke-width:2.6}.sq{display:inline-block;width:9px;height:9px;border:1.5px solid #111;border-radius:2px;margin:0 3px 0 8px;vertical-align:-1px}.status .ic{width:15px;height:15px;margin-left:4px}
+
+/* v2: quest art */
+.art{position:relative;overflow:hidden;background:#021416;border:3px solid var(--ink);border-radius:12px}
+.art img{width:100%;height:100%;object-fit:cover;display:block}
+.sticker{position:absolute;font-family:Bangers,cursive;letter-spacing:1px;background:var(--gold);color:var(--ink);border:2.5px solid var(--ink);border-radius:8px;box-shadow:3px 3px 0 var(--ink);padding:3px 9px;transform:skewX(-8deg);font-size:15px;line-height:1.1;display:flex;align-items:center;gap:5px}
+.sticker.ink{background:var(--ink);color:var(--gold);box-shadow:3px 3px 0 var(--teal-dk)}
+.sfx{position:absolute;font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",sans-serif;font-weight:900;color:var(--gold);-webkit-text-stroke:1.6px var(--ink);paint-order:stroke fill;text-shadow:3px 3px 0 var(--ink);letter-spacing:-2px;line-height:.9;pointer-events:none}
+.thumb{width:28px;height:28px;border-radius:7px;border:2px solid var(--ink);overflow:hidden;flex:none;background:#021416}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.bleed{position:absolute;top:0;left:0;right:0;height:318px;border-bottom:3px solid var(--ink);overflow:hidden;background:#021416}
+.bleed img{width:100%;height:100%;object-fit:cover;object-position:center 22%;display:block}
+.bleed::after{content:"";position:absolute;inset:0 0 auto 0;height:70px;background:linear-gradient(rgba(2,20,22,.75),transparent)}
+.status.over,.screen.over{position:relative;z-index:2}
+.roundbtn{width:34px;height:34px;border-radius:50%;background:var(--ink);color:#fff;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:16px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.tile{aspect-ratio:1;border:2.5px solid var(--ink);border-radius:10px;overflow:hidden;position:relative;box-shadow:3px 3px 0 #021416;background:var(--panel)}
+.tile img{width:100%;height:100%;object-fit:cover;display:block}
+.tile b{position:absolute;left:3px;bottom:3px;font-family:Bangers,cursive;font-weight:400;font-size:13px;line-height:1;background:var(--ink);color:#fff;border-radius:5px;padding:2px 5px 1px}
+.tile .tick{position:absolute;right:3px;top:3px;width:16px;height:16px;border-radius:50%;background:var(--teal);border:2px solid var(--ink);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:10px}
+.tile.today{outline:3px solid var(--gold);outline-offset:2px}
+.tile.today b{background:var(--gold);color:var(--ink)}
+.tile.locked img{filter:grayscale(1) brightness(.22) contrast(1.2)}
+.tile.locked .lk{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:20px}
+.tile.boss{background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--gold);gap:2px}
+.tile.boss small{font-family:Bangers,cursive;font-size:14px;letter-spacing:1px}
+.tcard{background:var(--gold);border:3px solid var(--ink);border-radius:16px;padding:9px;box-shadow:6px 6px 0 var(--ink)}
+.tcard .art{border-radius:9px}
+.calm .card{background:var(--panel);color:#fff;border:2px solid var(--teal);box-shadow:none;border-radius:14px}
+.calm .opt2{display:flex;gap:12px;align-items:center;padding:13px 2px;border-bottom:1.5px solid rgba(143,185,187,.2);font-size:14px;font-weight:700}
+.calm .opt2:last-child{border:0}
+.calm .opt2 .ic{color:var(--teal);font-size:20px}
+.calm .opt2 small{display:block;font-weight:500;color:var(--muted);font-size:12px;margin-top:2px}
+.calmbtn{display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;background:var(--teal);color:var(--ink);border:2px solid var(--teal);border-radius:12px;padding:14px}
+.calmbtn.ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.5)}
+
+/* explainer below the board */
+.explain{max-width:1500px;margin:70px auto 0}
+.explain h2{font-family:Bangers,cursive;font-size:38px;letter-spacing:1px;margin-bottom:6px}
+.explain > p{color:#4A5F62;max-width:780px;line-height:1.55;margin-bottom:22px}
+.ex-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.ex{background:#fff;border:3px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--teal-dk);padding:18px 20px}
+.ex h3{font-family:Bangers,cursive;font-weight:400;font-size:22px;letter-spacing:1px;margin-bottom:8px;color:var(--teal-dk)}
+.ex p,.ex li{font-size:14px;line-height:1.55;color:#2C3D40}
+.ex ul{padding-left:18px;display:flex;flex-direction:column;gap:5px}
+.ex table{width:100%;border-collapse:collapse;font-size:13px}
+.ex td{padding:6px 0;border-bottom:1.5px dashed rgba(17,17,17,.15);vertical-align:top}
+.ex td:last-child{text-align:right;font-weight:800;white-space:nowrap;padding-left:10px}
+.ex code{font-size:12px;background:#EEF3F3;padding:1px 5px;border-radius:4px}
+@media (max-width:420px){body{padding:24px 16px 60px}.phone{transform:scale(.9);transform-origin:top center;margin-bottom:-70px}}
+
+/* v3: chapter themes. Each phone sets data-ch; the v1 tokens are re-pointed per chapter. */
+.card.dark{box-shadow:5px 5px 0 var(--deep,#021416)}
+.tabs{background:var(--tab,#05201F)}
+.tabs .tab{min-width:56px}
+.halftone{background-image:radial-gradient(var(--half,rgba(15,163,163,.18)) 1.4px,transparent 1.6px)}
+.bar.teal > i{background:repeating-linear-gradient(-45deg,var(--teal) 0 8px,var(--stripe,#2BBDBD) 8px 16px)}
+.chip.on{color:var(--ink)}
+.check.done{color:var(--ink)}
+[data-ch="2"]{--bg:#1E1238;--panel:#2A1B4D;--panel2:#352263;--teal:#9B6BFF;--teal-dk:#3E2780;--muted:#B9A9DD;--deep:#0B0618;--tab:#150C28;--half:rgba(155,107,255,.2);--stripe:#B28DFF}
+[data-ch="3"]{--bg:#0A2340;--panel:#10325A;--panel2:#163F70;--teal:#3FB4FF;--teal-dk:#0E4A80;--muted:#9CC2E0;--deep:#030D1A;--tab:#071A30;--half:rgba(63,180,255,.18);--stripe:#7ACBFF}
+[data-ch="4"]{--bg:#2A1A0C;--panel:#3A2614;--panel2:#4A311A;--teal:#FFB870;--teal-dk:#7A4A12;--muted:#D9BFA0;--deep:#120A03;--tab:#1F1308;--half:rgba(255,184,112,.16);--stripe:#FFD2A1}
+[data-ch="2"] img.ph{filter:url(#tone-2)}
+[data-ch="3"] img.ph{filter:url(#tone-3)}
+[data-ch="4"] img.ph{filter:url(#tone-4)}
+
+.cover{position:absolute;inset:0;overflow:hidden;background:var(--bg)}
+.cover img{width:100%;height:100%;object-fit:cover;display:block}
+.cover::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.55) 0,transparent 16%,transparent 34%,var(--bg) 66%)}
+
+.tile.locked::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.72)}
+.tile.locked .lk,.tile.locked b{z-index:1}
+.chap{max-width:1560px;margin:0 auto 64px}
+.chap-head{display:flex;flex-wrap:wrap;gap:18px 28px;align-items:center;background:var(--bg);color:#fff;border:3px solid var(--ink);border-radius:16px;box-shadow:6px 6px 0 var(--ink);padding:18px 22px;margin-bottom:30px}
+.chap-head .num{font-family:Bangers,cursive;font-size:20px;letter-spacing:1px;color:var(--ink);background:var(--teal);border:3px solid var(--ink);border-radius:10px;padding:4px 12px;transform:skewX(-8deg);box-shadow:3px 3px 0 var(--ink)}
+.chap-head h2{font-family:Bangers,cursive;font-weight:400;font-size:36px;letter-spacing:1px;line-height:1}
+.chap-head h2 em{font-style:normal;color:var(--teal)}
+.chap-head p{color:var(--muted);font-size:14px;line-height:1.5;max-width:560px}
+.chap-head .sw{display:flex;gap:6px;margin-left:auto}
+.chap-head .sw i{width:30px;height:30px;border-radius:8px;border:2.5px solid var(--ink);display:block}
+.chap .board{max-width:1560px;grid-template-columns:repeat(auto-fill,minmax(360px,1fr))}
+.same{max-width:1560px;margin:0 auto}
+.same h2{font-family:Bangers,cursive;font-size:38px;letter-spacing:1px;margin-bottom:16px}
+.same pre{background:#0D1B1D;color:#D6ECEC;border-radius:12px;padding:16px 18px;font-size:12px;line-height:1.55;overflow-x:auto;margin-top:14px}
+
+/* custom tab glyphs: drawn for Still, filled when active */
+.tg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.on .tg .f{fill:currentColor}
+/* option D: capsule dock, icons only, Still logo in the centre (Log) */
+.cap{position:absolute;left:16px;right:16px;bottom:18px;height:62px;border-radius:999px;background:rgba(14,14,18,.86);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.09);box-shadow:0 10px 28px rgba(0,0,0,.45);display:grid;grid-template-columns:1fr 1fr 96px 1fr 1fr;align-items:center;justify-items:center;padding:0 6px;z-index:4}
+.cap .ci{width:46px;height:46px;display:flex;align-items:center;justify-content:center;color:#8A8F98;position:relative;--tabcut:rgba(14,14,18,1)}
+.cap .ci .tg{width:25px;height:25px;stroke-width:2}
+.cap .ci.on{color:#fff}
+.cap .ci .dot{position:absolute;top:9px;right:9px;width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.cap .logo{width:88px;height:48px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center}
+.cap .logo.on{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.22)}
+.cap .logo svg{width:46px;height:46px}
+.cap .av{width:30px;height:30px;border-radius:50%;background:var(--teal);border:2px solid #8A8F98;display:flex;align-items:center;justify-content:center;font-family:Bangers,cursive;font-size:15px;color:var(--ink)}
+.cap .on .av{border-color:#fff}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="t-today" viewBox="0 0 24 24"><path class="f" d="M13 2 4.5 13.5H11l-1 8.5 8.5-11.5H12z"/></symbol><symbol id="t-path" viewBox="0 0 24 24"><path d="M4.5 20c4 0 3.5-6.5 7-6.5s3.5-3 6-3"/><circle class="f" cx="4.5" cy="20" r="2.3"/><path d="M17.5 13V3"/><path class="f" d="M17.5 3.5h4.5l-1.6 2.6 1.6 2.6h-4.5z"/></symbol><symbol id="t-bag" viewBox="0 0 24 24"><path d="M9 7V5.5a3 3 0 0 1 6 0V7"/><rect class="f" x="4.5" y="7" width="15" height="14" rx="3.5"/><path d="M4.5 13h15" style="stroke:var(--tabcut,currentColor)"/></symbol><symbol id="t-me" viewBox="0 0 24 24"><circle class="f" cx="12" cy="8" r="4"/><path d="M4.5 21c.8-4 3.8-6 7.5-6s6.7 2 7.5 6"/></symbol><symbol id="t-logo" viewBox="20 28 172 150"><g transform="translate(100 100) scale(0.74) translate(-84 -100)"><g stroke="#FFFFFF" stroke-width="7" stroke-linecap="round"><line x1="18" y1="72" x2="44" y2="72"/><line x1="10" y1="100" x2="44" y2="100"/><line x1="18" y1="128" x2="44" y2="128"/></g><g transform="translate(27 0) skewX(-15)"><rect x="76" y="58" width="28" height="96" rx="4" fill="#064E4E"/><rect x="120" y="58" width="28" height="96" rx="4" fill="#064E4E"/><rect x="68" y="50" width="28" height="96" rx="4" fill="#FFC300" stroke="#111111" stroke-width="8"/><rect x="112" y="50" width="28" height="96" rx="4" fill="#FFC300" stroke="#111111" stroke-width="8"/></g></g></symbol><symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol><symbol id="i-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></symbol><symbol id="i-scale" viewBox="0 0 24 24"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></symbol><symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M10 2h4"/></symbol><symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol><symbol id="i-snowflake" viewBox="0 0 24 24"><path d="M2 12h20"/><path d="M12 2v20"/><path d="m20 16-4-4 4-4"/><path d="m4 8 4 4-4 4"/><path d="m16 4-4 4-4-4"/><path d="m8 20 4-4 4 4"/></symbol><symbol id="i-activity" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></symbol><symbol id="i-newspaper" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8z"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></symbol><symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol><symbol id="i-map" viewBox="0 0 24 24"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15"/><path d="M15 6v15"/></symbol><symbol id="i-backpack" viewBox="0 0 24 24"><path d="M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M8 10h8"/><path d="M8 22v-6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6"/><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></symbol><symbol id="i-trending-up" viewBox="0 0 24 24"><path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></symbol><symbol id="i-trending-down" viewBox="0 0 24 24"><path d="m22 17-8.5-8.5-5 5L2 7"/><path d="M16 17h6v-6"/></symbol><symbol id="i-smartphone" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></symbol><symbol id="i-hourglass" viewBox="0 0 24 24"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.17a2 2 0 0 0-.59-1.42L12 12l-4.41 4.41A2 2 0 0 0 7 17.83V22"/><path d="M7 2v4.17a2 2 0 0 0 .59 1.42L12 12l4.41-4.41A2 2 0 0 0 17 6.17V2"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol><symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol><symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></symbol><symbol id="i-circle-slash" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></symbol><symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></symbol><symbol id="i-signal" viewBox="0 0 24 24"><path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/></symbol><symbol id="i-wifi" viewBox="0 0 24 24"><path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.86a10 10 0 0 1 14 0"/><path d="M8.5 16.43a5 5 0 0 1 7 0"/></symbol><symbol id="i-battery" viewBox="0 0 24 24"><rect x="2" y="7" width="16" height="10" rx="2"/><path d="M22 11v2"/><rect x="5" y="10" width="10" height="4" rx="1" fill="currentColor" stroke="none"/></symbol></defs></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol><symbol id="i-boss" viewBox="0 0 24 24"><path d="M14.5 17.5 3 6V3h3l11.5 11.5"/><path d="m13 19 6-6"/><path d="m16 16 4 4"/><path d="m19 21 2-2"/><path d="M9.5 17.5 21 6V3h-3L6.5 14.5"/><path d="m11 19-6-6"/><path d="m8 16-4 4"/><path d="m5 21-2-2"/></symbol><symbol id="i-pausebars" viewBox="0 0 24 24"><path d="M9 4 6 20"/><path d="M17 4l-3 16"/></symbol>
+  <!-- Chapter colour grading for the art: luminance mapped to deep -> dark accent -> accent -> gold -> cream -->
+  <filter id="tone-2" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0  .3 .59 .11 0 0  .3 .59 .11 0 0  0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".043 .243 .608 1 1"/><feFuncG type="table" tableValues=".024 .153 .42 .765 .965"/><feFuncB type="table" tableValues=".094 .502 1 0 .863"/></feComponentTransfer></filter>
+  <filter id="tone-3" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0  .3 .59 .11 0 0  .3 .59 .11 0 0  0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".012 .055 .247 1 1"/><feFuncG type="table" tableValues=".051 .29 .706 .765 .965"/><feFuncB type="table" tableValues=".102 .502 1 0 .863"/></feComponentTransfer></filter>
+  <filter id="tone-4" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0  .3 .59 .11 0 0  .3 .59 .11 0 0  0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".071 .42 .878 1 1"/><feFuncG type="table" tableValues=".039 .18 .478 .765 .965"/><feFuncB type="table" tableValues=".012 .102 .227 0 .863"/></feComponentTransfer></filter>
+</defs></svg>
+
+<header class="doc" style="max-width:1560px">
+  <img src="../images/still-app-icon.svg" alt="">
+  <div>
+    <h1>STILL: UI design v3 · Chapter themes</h1>
+    <p>Each chapter is its own JoJo-style "part", with its own setting, time of day and colours, moving from midnight to golden hour as the user goes from chaos to calm. The theme changes the background, panels, accents, halftone and the colour grading of the art. <b>What never changes:</b> gold for the next action, black ink outlines, coral for "stop and think", and calm mode on safety screens. Art is still <b>placeholder</b> (the blog pieces, recoloured per chapter).</p>
+  </div>
+</header>
+
+<div id="chapters"></div>
+
+<section class="same">
+  <h2>What stays the same in every chapter</h2>
+  <div class="ex-grid">
+    <div class="ex"><h3>Fixed meaning colours</h3><ul>
+      <li><b>Gold</b> <code>#FFC300</code>: one main button per screen, XP and rewards. Same in all 4 chapters.</li>
+      <li><b>Ink</b> <code>#111111</code>: outlines and hard comic shadows.</li>
+      <li><b>Coral</b> <code>#FF5A4E</code>: only "Not today" and warnings. No chapter accent is red, green or coral.</li>
+      <li><b>Calm mode</b> (safety screens) stays teal and white in every chapter, with no art.</li>
+    </ul></div>
+    <div class="ex"><h3>What the chapter changes</h3><ul>
+      <li>Background, panels, tab bar and deep shadow.</li>
+      <li>Accent colour: eyebrows, progress bars, selected chips, speed lines, halftone dots, card shadows.</li>
+      <li>Art: setting, time of day and colour grading.</li>
+      <li>The JoJo sound effect used on that chapter's quest art.</li>
+    </ul></div>
+    <div class="ex"><h3>How the app does it</h3>
+      <p>The app keeps one set of colour names and swaps their values by chapter. Nothing else in the code needs to know which chapter it is in.</p>
+<pre>[data-chapter="2"] {        /* Violet Blueprint */
+  --still-bg:#1E1238; --still-panel:#2A1B4D;
+  --still-accent:#9B6BFF; --still-accent-dark:#3E2780;
+  --still-text-muted:#B9A9DD;
+  --still-gold:#FFC300;     /* never changes */
+}</pre>
+    </div>
+  </div>
+</section>
+
+<script>
+const CHAPTERS = [
+  {n:1, name:'KNOW YOURSELF', mood:'MIDNIGHT', days:'Days 1–14', rank:'RANK E → D', first:1,
+   setting:'Late night. Phone glow, the city outside, your own reflection. You see your habits clearly for the first time.',
+   sw:['#072B2F','#0D3B40','#0FA3A3','#064E4E'], cover:'art-04.jpg', coverPos:'center 30%',
+   builds:['Hunter Profile','Trigger Map','Trader Code'], sfx:'ゴゴゴ',
+   today:{day:10, lv:'LV. 3 · RANK E', streak:10, xp:[420,600]},
+   q:{title:'FACT OR GUESS?', name:'Separate Fact &amp; Guess', desc:'Tag 3 statements as fact, assumption or unknown.', time:'~8 min', xp:'+30 XP', stat:'RES',
+      art:'art-06.jpg', pos:'center 18%', coach:'THE SYSTEM', line:'Headlines mix facts and guesses. Today you learn to pull them apart.',
+      obj:['Read 3 statements from real posts','Tag each: fact, assumption or unknown','Say why in one line (optional)']}},
+  {n:2, name:'BUILD A METHOD', mood:'VIOLET BLUEPRINT', days:'Days 15–28', rank:'RANK D → C', first:15,
+   setting:'Dawn in the workshop. Plans on the wall, tools on the bench. Violet is JoJo\'s "menacing" colour: the calm before you act.',
+   sw:['#1E1238','#2A1B4D','#9B6BFF','#3E2780'], cover:'art-07.jpg', coverPos:'center 40%',
+   builds:['Risk rules','Trading Plan v1','Pre-Trade Checklist'], sfx:'ドドド',
+   today:{day:18, lv:'LV. 6 · RANK D', streak:18, xp:[310,800]},
+   q:{title:'LEVERAGE & LIQUIDATION', name:'Leverage &amp; Liquidation', desc:'See how leverage turns a small dip into a wipe-out, on a past chart.', time:'~12 min', xp:'+50 XP', stat:'RES',
+      art:'art-10.jpg', pos:'center 30%', coach:'THE SERGEANT', line:'10x isn\'t confidence. It\'s a countdown. Let\'s see how fast it runs out.',
+      obj:['Read 3 cards: margin, leverage, liquidation','Run the calculator on a past chart','Write your max-leverage rule']}},
+  {n:3, name:'PRACTICE', mood:'BLUE SKY ARENA', days:'Days 29–42', rank:'RANK C → B', first:29,
+   setting:'Broad daylight in the training ground. Drills, chart replays and boss fights, all on past charts and paper trades.',
+   sw:['#0A2340','#10325A','#3FB4FF','#0E4A80'], cover:'art-08.jpg', coverPos:'center 50%',
+   builds:['Replay log','Trading journal','Trading Plan v2'], sfx:'バーン',
+   today:{day:32, lv:'LV. 10 · RANK C', streak:21, xp:[540,1200]},
+   q:{title:'FOMO DRILL', name:'FOMO Drill', desc:'Replay a past pump and practise not chasing it.', time:'~10 min', xp:'+50 XP', stat:'DIS',
+      art:'art-01.jpg', pos:'center 40%', coach:'THE SYSTEM', line:'This chart already happened. You can\'t lose here. Practise the pause.',
+      obj:['Watch a past pump, candle by candle','Run your checklist at the peak','Log your urge and what you chose']}},
+  {n:4, name:'SELF-SUSTAIN', mood:'GOLDEN HORIZON', days:'Days 43–56', rank:'RANK B → A → S', first:43,
+   setting:'Golden hour on the rooftop. The fight is behind you; this is the system you keep after day 56.',
+   sw:['#2A1A0C','#3A2614','#FFB870','#7A4A12'], cover:'art-02.jpg', coverPos:'center 55%',
+   builds:['Rules Card','Reset Protocol','Hunter License'], sfx:'シーン',
+   today:{day:47, lv:'LV. 15 · RANK B', streak:47, xp:[880,1500]},
+   q:{title:'RESET PROTOCOL', name:'Reset Protocol', desc:'Write the steps you follow when trading starts to go wrong.', time:'~12 min', xp:'+50 XP', stat:'DIS',
+      art:'art-07.jpg', pos:'center 45%', coach:'THE SERGEANT', line:'Everyone tilts. The pros just have a plan for it. Write yours.',
+      obj:['List your 3 warning signs','Write the steps you take when they show up','Pick one person you\'ll tell']}},
+];
+const ART = n => `../images/quest-art-placeholders/${n}`;
+const TILE_ART = ['art-07.jpg','art-03.jpg','art-01.jpg','art-09.jpg','art-05.jpg','art-02.jpg','art-08.jpg','art-04.jpg','art-10.jpg','art-06.jpg','art-03.jpg','art-01.jpg','art-07.jpg'];
+const ic = id => `<svg class="ic"><use href="#i-${id}"/></svg>`;
+const status = (over) => `<div class="status${over?' over':''}"><span>9:41</span><span class="row" style="gap:0">${ic('signal')}${ic('wifi')}${ic('battery')}</span></div>`;
+const tabs = on => { const ic2=(n,i)=>`<div class="ci${n===on?' on':''}" aria-label="${n}"><svg class="tg"><use href="#t-${i}"/></svg>${n==='Today'&&on!=='Today'?'<i class="dot"></i>':''}</div>`; return `<div class="cap">${ic2('Today','today')}${ic2('Path','path')}<div class="logo${on==='Log'?' on':''}" aria-label="Log"><svg><use href="#t-logo"/></svg></div>${ic2('Inventory','bag')}<div class="ci${on==='Me'?' on':''}" aria-label="Me"><span class="av">A</span></div></div>`; };
+const shot = (c, inner, label, note) => `<div class="shot"><div class="phone" data-ch="${c.n}"><div class="notch"></div>${inner}</div><div class="label">${label}<small>${note}</small></div></div>`;
+
+function cover(c){
+  return shot(c, `
+    <div class="cover"><img class="ph" src="${ART(c.cover)}" style="object-position:${c.coverPos}" alt=""></div>
+    ${status(true)}
+    <span class="sfx" style="right:16px;top:70px;font-size:46px;transform:rotate(8deg);z-index:2">${[...c.sfx].join('<br>')}</span>
+    <div class="screen over" style="gap:12px;justify-content:flex-end;padding-bottom:26px">
+      <span class="sticker" style="position:static;align-self:flex-start">CHAPTER ${c.n} UNLOCKED</span>
+      <div class="eyebrow">${c.mood} · ${c.days}</div>
+      <div class="comic h-gold slant" style="font-size:50px;line-height:.92">${c.name}</div>
+      <div class="card dark" style="padding:10px 14px">
+        <div class="row between" style="margin-bottom:8px"><span class="eyebrow">You'll build</span><span class="pill">${c.rank}</span></div>
+        <div class="row" style="gap:6px;flex-wrap:wrap">${c.builds.map(b=>`<span class="chip">${b}</span>`).join('')}</div>
+      </div>
+      <div class="btn"><span>ENTER CHAPTER ${c.n}</span></div>
+    </div>`,
+    `${c.n}a · Chapter cover`, c.n===1 ? 'Shown right after Awakening. Sets the mood for the next 14 days.' : `Shown after beating the Chapter ${c.n-1} boss. The whole app takes on the new colours from here.`);
+}
+
+function today(c){
+  const t=c.today, q=c.q, pct=Math.round(t.xp[0]/t.xp[1]*100);
+  const stamp=(img,pos,name,xp,done)=>`<div class="task${done?' done':''}"><span class="check${done?' done':''}">${done?ic('check'):''}</span><span class="thumb"><img class="ph" src="${ART(img)}" style="object-position:${pos}" alt=""></span><span class="t">${name}</span><span class="xp">${xp}</span></div>`;
+  return shot(c, `${status()}
+    <div class="screen" style="gap:11px">
+      <div class="row between">
+        <div><div class="eyebrow">Day ${t.day} · Chapter ${c.n}</div><div class="comic h-white" style="font-size:26px">${t.lv}</div></div>
+        <div class="card gold" style="padding:6px 10px;box-shadow:3px 3px 0 var(--ink);text-align:center"><div class="comic" style="font-size:22px;line-height:1">${ic('flame')} ${t.streak}</div><div style="font-size:9px;font-weight:800">DAY STREAK</div></div>
+      </div>
+      <div class="row"><div class="bar grow"><i style="width:${pct}%"></i></div><span style="font-size:11px;font-weight:800">${t.xp[0]} / ${t.xp[1]} XP</span></div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <div class="art" style="height:132px;border:0;border-bottom:3px solid var(--ink);border-radius:0">
+          <img class="ph" src="${ART(q.art)}" style="object-position:${q.pos}" alt="">
+          <span class="sticker" style="left:10px;top:10px">${ic('zap')} DAILY QUEST HAS ARRIVED</span>
+          <span class="sfx" style="right:10px;bottom:6px;font-size:30px;transform:rotate(-8deg)">${c.sfx}</span>
+        </div>
+        <div style="padding:9px 14px 12px">
+          <div style="font-weight:800;font-size:17px">${q.name}</div>
+          <div style="font-size:12px;color:#55605F">${q.desc}</div>
+          <div class="row" style="margin:8px 0 7px;gap:6px"><span class="chip">${ic('timer')} ${q.time}</span><span class="chip">${q.xp}</span><span class="chip">${q.stat} ${ic('arrow-up')}</span></div>
+          <div class="btn sm" style="margin-top:4px"><span>START QUEST</span></div>
+        </div>
+      </div>
+      <div class="card" style="padding:6px 14px">
+        <div class="row between" style="margin:2px 0 0"><span class="eyebrow" style="color:var(--teal-dk)">Daily training</span><span style="font-size:11px;font-weight:800">2 / 7</span></div>
+        ${stamp('art-05.jpg','55% 22%','Mind Check','+5 EMO',true)}
+        ${stamp('art-01.jpg','80% 55%','News Scan','+5 RES',true)}
+        ${stamp('art-08.jpg','50% 70%','Fit-to-Trade Gate','+5 DIS',false)}
+      </div>
+      <div class="fab">${ic('pausebars').replace('class="ic"','class="ic" style="color:var(--ink);stroke-width:3.4"')}<small>URGE?</small></div>
+      ${tabs('Today')}
+    </div>`,
+    `${c.n}b · Today`, 'Same layout in every chapter. The background, accents and art take the chapter colours; the gold button and streak stay gold.');
+}
+
+function briefing(c){
+  const q=c.q;
+  return shot(c, `
+    <div class="bleed"><img class="ph" src="${ART(q.art)}" style="object-position:${q.pos}" alt="">
+      <span class="sfx" style="right:14px;top:96px;font-size:44px;transform:rotate(8deg)">${[...c.sfx].join('<br>')}</span></div>
+    ${status(true)}
+    <div class="screen over" style="gap:12px">
+      <div class="row between"><span class="roundbtn">${ic('x')}</span><span class="sticker ink" style="position:static">MAIN QUEST · DAY ${c.today.day}</span></div>
+      <div style="height:206px"></div>
+      <div class="comic h-gold slant" style="font-size:${q.title.length>16?34:42}px;line-height:.95">${q.title}</div>
+      <div class="bubble" style="margin-bottom:6px">"${q.line}"</div>
+      <div class="muted" style="font-size:11px;font-weight:800;margin:4px 0 0 4px">${ic(q.coach==='THE SYSTEM'?'snowflake':'flame')} ${q.coach}</div>
+      <div class="card dark" style="padding:10px 14px">
+        <div class="eyebrow" style="margin-bottom:6px">Objectives</div>
+        <div style="font-size:13px;font-weight:600;display:flex;flex-direction:column;gap:6px">${q.obj.map((o,i)=>`<span>${i+1} · ${o}</span>`).join('')}</div>
+      </div>
+      <div class="btn" style="margin-top:auto;margin-bottom:26px"><span>START QUEST</span></div>
+    </div>`,
+    `${c.n}c · Quest briefing`, `Day ${c.today.day}: ${q.name}. The art is drawn in the chapter's setting and graded in its colours.`);
+}
+
+function path(c){
+  const todayIdx=c.today.day-c.first;
+  const tiles=[...Array(14)].map((_,i)=>{
+    const d=c.first+i;
+    if(i===13) return `<div class="tile boss">${ic('boss').replace('class="ic"','class="ic" style="font-size:26px"')}<small>BOSS ${d}</small></div>`;
+    const img=`<img class="ph" src="${ART(TILE_ART[i])}" alt="">`;
+    if(i<todayIdx) return `<div class="tile">${img}<b>${d}</b><span class="tick">${ic('check')}</span></div>`;
+    if(i===todayIdx) return `<div class="tile today">${img}<b>TODAY</b></div>`;
+    return `<div class="tile locked">${img}<span class="lk">${ic('lock')}</span><b>${d}</b></div>`;
+  }).join('');
+  const chips=[1,2,3,4].map(k=> k<c.n?`<span class="chip">${ic('check')} CH ${k}</span>`: k===c.n?`<span class="chip on">CH ${k}</span>`:`<span class="chip">${ic('lock')} CH ${k}</span>`).join('');
+  return shot(c, `${status()}
+    <div class="screen halftone" style="gap:12px">
+      <div><div class="eyebrow">Chapter ${c.n} · ${c.mood}</div><div class="comic h-gold slant speed" style="font-size:34px">${c.name}</div></div>
+      <div class="row" style="gap:6px">${chips}</div>
+      <div class="row between" style="font-size:12px;font-weight:700"><span class="muted">${todayIdx} of 14 cards</span><span style="color:var(--gold)">Boss: Day ${c.first+13}</span></div>
+      <div class="grid">${tiles}</div>
+      ${tabs('Path')}
+    </div>`,
+    `${c.n}d · Path`, 'The card collection takes the chapter colours. Earlier chapters keep theirs, so flipping back shows the journey from night to golden hour.');
+}
+
+document.getElementById('chapters').innerHTML = CHAPTERS.map(c=>`
+  <section class="chap">
+    <div class="chap-head" data-ch="${c.n}">
+      <span class="num">CHAPTER ${c.n}</span>
+      <div><h2>${c.name} · <em>${c.mood}</em></h2><p>${c.setting}</p></div>
+      <div class="sw">${c.sw.map(s=>`<i style="background:${s}" title="${s}"></i>`).join('')}<i style="background:#FFC300" title="#FFC300 gold (fixed)"></i></div>
+    </div>
+    <div class="board">${cover(c)}${today(c)}${briefing(c)}${path(c)}</div>
+  </section>`).join('');
+</script>
+</body>
+</html>

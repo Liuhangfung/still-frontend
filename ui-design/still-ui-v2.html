@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Still UI v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#072B2F; --panel:#0D3B40; --panel2:#11494F;
+  --teal:#0FA3A3; --teal-dk:#064E4E; --gold:#FFC300; --gold-dk:#C99500;
+  --ink:#111111; --cream:#FFF6DC; --white:#FFFFFF; --muted:#8FB9BB;
+  --coral:#FF5A4E; --green:#2BD67B;
+  --page:#E9EEF0; --page-ink:#1B2B2E;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--page);color:var(--page-ink);padding:40px 24px 80px}
+header.doc{max-width:1500px;margin:0 auto 32px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+header.doc img{width:64px;height:64px}
+header.doc h1{font-family:Bangers,cursive;font-size:44px;letter-spacing:1px}
+header.doc p{color:#4A5F62;max-width:760px;line-height:1.5}
+.tokens{max-width:1500px;margin:0 auto 36px;display:flex;gap:12px;flex-wrap:wrap}
+.tok{display:flex;align-items:center;gap:8px;background:#fff;border-radius:10px;padding:8px 12px;font-size:12px;font-family:monospace}
+.tok i{width:22px;height:22px;border-radius:6px;border:2px solid var(--ink);display:block}
+.board{max-width:1500px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:44px 32px;justify-items:center}
+.shot{display:flex;flex-direction:column;align-items:center;gap:14px}
+.label{font-weight:800;font-size:15px}
+.label small{display:block;font-weight:500;color:#5B7074;font-size:12px;margin-top:2px;max-width:330px;text-align:center}
+
+/* phone */
+.phone{width:360px;height:760px;border-radius:46px;border:10px solid #0A0A0A;background:var(--bg);color:var(--white);position:relative;overflow:hidden;box-shadow:0 24px 50px rgba(0,0,0,.25)}
+.status{height:40px;display:flex;justify-content:space-between;align-items:center;padding:0 24px;font-size:12px;font-weight:700}
+.notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:96px;height:26px;background:#0A0A0A;border-radius:20px}
+.screen{padding:6px 18px 0;height:calc(100% - 40px);display:flex;flex-direction:column;gap:14px;position:relative}
+.halftone{background-image:radial-gradient(rgba(15,163,163,.18) 1.4px,transparent 1.6px);background-size:12px 12px}
+
+/* type */
+.comic{font-family:Bangers,cursive;letter-spacing:1px;font-weight:400}
+.slant{display:inline-block;transform:skewX(-8deg)}
+.h-gold{color:var(--gold);text-shadow:3px 3px 0 var(--ink),-1px -1px 0 var(--ink),1px -1px 0 var(--ink),-1px 1px 0 var(--ink)}
+.h-white{color:#fff;text-shadow:3px 3px 0 var(--teal-dk)}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--teal)}
+.muted{color:var(--muted)}
+.speed{position:relative;padding-left:30px}
+.speed::before{content:"";position:absolute;left:0;top:50%;width:22px;height:14px;transform:translateY(-50%);
+  background:linear-gradient(var(--teal),var(--teal)) 4px 0/18px 3px no-repeat,linear-gradient(var(--teal),var(--teal)) 0 6px/22px 3px no-repeat,linear-gradient(var(--teal),var(--teal)) 4px 12px/18px 3px no-repeat}
+
+/* comic surfaces */
+.card{background:var(--cream);color:var(--ink);border:3px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--teal-dk);padding:14px}
+.card.dark{background:var(--panel);color:#fff;box-shadow:5px 5px 0 #021416}
+.card.gold{background:var(--gold)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;font-family:Bangers,cursive;font-size:22px;letter-spacing:1.5px;
+  background:var(--gold);color:var(--ink);border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);padding:12px 16px;transform:skewX(-6deg)}
+.btn > span{transform:skewX(6deg);display:inline-block}
+.btn.teal{background:var(--teal);color:#fff}
+.btn.ghost{background:transparent;color:#fff;border-color:#fff;box-shadow:none;font-size:18px}
+.btn.sm{font-size:16px;padding:8px 10px;box-shadow:3px 3px 0 var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:6px 10px;border-radius:999px;border:2px solid var(--ink);background:#fff;color:var(--ink)}
+.chip.on{background:var(--teal);color:#fff}
+.pill{font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;background:var(--ink);color:var(--gold)}
+.bar{height:12px;border:2px solid var(--ink);border-radius:8px;background:#fff;overflow:hidden}
+.bar > i{display:block;height:100%;background:repeating-linear-gradient(-45deg,var(--gold) 0 8px,#FFD54A 8px 16px);border-right:2px solid var(--ink)}
+.bar.teal > i{background:repeating-linear-gradient(-45deg,var(--teal) 0 8px,#2BBDBD 8px 16px)}
+.row{display:flex;align-items:center;gap:10px}
+.between{justify-content:space-between}
+.grow{flex:1}
+
+/* tab bar */
+.tabs{position:absolute;left:0;right:0;bottom:0;height:78px;background:#05201F;border-top:3px solid var(--ink);display:flex;justify-content:space-around;align-items:center;padding-bottom:12px}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;font-weight:700;color:var(--muted)}
+.tab b{font-size:20px;line-height:1}
+.tab.on{color:var(--gold)}
+.fab{position:absolute;right:18px;bottom:92px;width:66px;height:66px;border-radius:18px;background:var(--gold);border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);display:flex;align-items:center;justify-content:center;flex-direction:column;transform:skewX(-6deg)}
+.fab svg{width:34px;height:34px}
+.fab small{font-family:Bangers;font-size:11px;color:var(--ink);letter-spacing:1px;margin-top:-2px}
+
+/* misc components */
+.check{width:20px;height:20px;border:2.5px solid var(--ink);border-radius:5px;background:#fff;flex:none;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900}
+.check.done{background:var(--teal);color:#fff}
+.task{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;padding:7px 0;border-bottom:1.5px dashed rgba(17,17,17,.18)}
+.task:last-child{border-bottom:0}
+.task .xp{margin-left:auto;font-size:11px;font-weight:800;color:var(--teal-dk)}
+.task.done span.t{text-decoration:line-through;opacity:.55}
+.opt{background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:12px;padding:13px 14px;font-weight:700;font-size:14px;box-shadow:4px 4px 0 var(--teal-dk);display:flex;gap:10px;align-items:center}
+.opt .k{width:26px;height:26px;border-radius:7px;border:2.5px solid var(--ink);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;flex:none}
+.opt.sel{background:var(--gold);box-shadow:4px 4px 0 var(--ink)}
+.opt.sel .k{background:var(--ink);color:var(--gold)}
+.burst{clip-path:polygon(50% 0,61% 18%,82% 8%,78% 30%,100% 36%,83% 52%,98% 70%,76% 72%,78% 95%,58% 82%,45% 100%,38% 80%,16% 92%,20% 70%,0 62%,16% 47%,3% 26%,25% 26%,22% 4%,40% 18%)}
+.ring{width:190px;height:190px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;flex-direction:column;
+  background:conic-gradient(var(--gold) 0 62%,rgba(255,255,255,.08) 62% 100%);position:relative}
+.ring::before{content:"";position:absolute;inset:14px;border-radius:50%;background:var(--bg);border:3px solid var(--ink)}
+.ring > *{position:relative}
+.stat{display:grid;grid-template-columns:92px 1fr 34px;gap:8px;align-items:center;font-size:12px;font-weight:700}
+.dots{display:grid;grid-template-columns:repeat(14,1fr);gap:4px}
+.dots i{aspect-ratio:1;border-radius:4px;border:2px solid var(--ink);background:#fff}
+.dots i.d{background:var(--teal)}
+.dots i.t{background:var(--gold)}
+.dots i.b{background:var(--ink)}
+.coach{border:3px solid var(--ink);border-radius:16px;padding:14px;box-shadow:5px 5px 0 var(--ink)}
+.bubble{background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:14px;padding:10px 12px;font-size:13px;font-weight:600;position:relative}
+.bubble::after{content:"";position:absolute;left:22px;bottom:-12px;width:16px;height:16px;background:#fff;border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:rotate(45deg)}
+.toggle{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;padding:10px 0;border-bottom:1.5px dashed rgba(17,17,17,.18)}
+.yn{display:flex;border:2.5px solid var(--ink);border-radius:8px;overflow:hidden}
+.yn b{padding:4px 10px;font-size:12px;background:#fff}
+.yn b.y{background:var(--teal);color:#fff}
+.yn b.n{background:var(--coral);color:#fff}
+.ic{width:1em;height:1em;flex:none;display:inline-block;vertical-align:-0.14em;fill:none;stroke:currentColor;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}.comic .ic{stroke-width:2.6}.sq{display:inline-block;width:9px;height:9px;border:1.5px solid #111;border-radius:2px;margin:0 3px 0 8px;vertical-align:-1px}.status .ic{width:15px;height:15px;margin-left:4px}
+
+/* v2: quest art */
+.art{position:relative;overflow:hidden;background:#021416;border:3px solid var(--ink);border-radius:12px}
+.art img{width:100%;height:100%;object-fit:cover;display:block}
+.sticker{position:absolute;font-family:Bangers,cursive;letter-spacing:1px;background:var(--gold);color:var(--ink);border:2.5px solid var(--ink);border-radius:8px;box-shadow:3px 3px 0 var(--ink);padding:3px 9px;transform:skewX(-8deg);font-size:15px;line-height:1.1;display:flex;align-items:center;gap:5px}
+.sticker.ink{background:var(--ink);color:var(--gold);box-shadow:3px 3px 0 var(--teal-dk)}
+.sfx{position:absolute;font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",sans-serif;font-weight:900;color:var(--gold);-webkit-text-stroke:1.6px var(--ink);paint-order:stroke fill;text-shadow:3px 3px 0 var(--ink);letter-spacing:-2px;line-height:.9;pointer-events:none}
+.thumb{width:28px;height:28px;border-radius:7px;border:2px solid var(--ink);overflow:hidden;flex:none;background:#021416}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.bleed{position:absolute;top:0;left:0;right:0;height:318px;border-bottom:3px solid var(--ink);overflow:hidden;background:#021416}
+.bleed img{width:100%;height:100%;object-fit:cover;object-position:center 22%;display:block}
+.bleed::after{content:"";position:absolute;inset:0 0 auto 0;height:70px;background:linear-gradient(rgba(2,20,22,.75),transparent)}
+.status.over,.screen.over{position:relative;z-index:2}
+.roundbtn{width:34px;height:34px;border-radius:50%;background:var(--ink);color:#fff;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:16px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.tile{aspect-ratio:1;border:2.5px solid var(--ink);border-radius:10px;overflow:hidden;position:relative;box-shadow:3px 3px 0 #021416;background:var(--panel)}
+.tile img{width:100%;height:100%;object-fit:cover;display:block}
+.tile b{position:absolute;left:3px;bottom:3px;font-family:Bangers,cursive;font-weight:400;font-size:13px;line-height:1;background:var(--ink);color:#fff;border-radius:5px;padding:2px 5px 1px}
+.tile .tick{position:absolute;right:3px;top:3px;width:16px;height:16px;border-radius:50%;background:var(--teal);border:2px solid var(--ink);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:10px}
+.tile.today{outline:3px solid var(--gold);outline-offset:2px}
+.tile.today b{background:var(--gold);color:var(--ink)}
+.tile.locked img{filter:grayscale(1) brightness(.22) contrast(1.2)}
+.tile.locked .lk{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:20px}
+.tile.boss{background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--gold);gap:2px}
+.tile.boss small{font-family:Bangers,cursive;font-size:14px;letter-spacing:1px}
+.tcard{background:var(--gold);border:3px solid var(--ink);border-radius:16px;padding:9px;box-shadow:6px 6px 0 var(--ink)}
+.tcard .art{border-radius:9px}
+.calm .card{background:var(--panel);color:#fff;border:2px solid var(--teal);box-shadow:none;border-radius:14px}
+.calm .opt2{display:flex;gap:12px;align-items:center;padding:13px 2px;border-bottom:1.5px solid rgba(143,185,187,.2);font-size:14px;font-weight:700}
+.calm .opt2:last-child{border:0}
+.calm .opt2 .ic{color:var(--teal);font-size:20px}
+.calm .opt2 small{display:block;font-weight:500;color:var(--muted);font-size:12px;margin-top:2px}
+.calmbtn{display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;background:var(--teal);color:var(--ink);border:2px solid var(--teal);border-radius:12px;padding:14px}
+.calmbtn.ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.5)}
+
+/* explainer below the board */
+.explain{max-width:1500px;margin:70px auto 0}
+.explain h2{font-family:Bangers,cursive;font-size:38px;letter-spacing:1px;margin-bottom:6px}
+.explain > p{color:#4A5F62;max-width:780px;line-height:1.55;margin-bottom:22px}
+.ex-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.ex{background:#fff;border:3px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--teal-dk);padding:18px 20px}
+.ex h3{font-family:Bangers,cursive;font-weight:400;font-size:22px;letter-spacing:1px;margin-bottom:8px;color:var(--teal-dk)}
+.ex p,.ex li{font-size:14px;line-height:1.55;color:#2C3D40}
+.ex ul{padding-left:18px;display:flex;flex-direction:column;gap:5px}
+.ex table{width:100%;border-collapse:collapse;font-size:13px}
+.ex td{padding:6px 0;border-bottom:1.5px dashed rgba(17,17,17,.15);vertical-align:top}
+.ex td:last-child{text-align:right;font-weight:800;white-space:nowrap;padding-left:10px}
+.ex code{font-size:12px;background:#EEF3F3;padding:1px 5px;border-radius:4px}
+@media (max-width:420px){body{padding:24px 16px 60px}.phone{transform:scale(.9);transform-origin:top center;margin-bottom:-70px}}
+.tabs .tab{min-width:56px}
+
+/* custom tab glyphs: drawn for Still, filled when active */
+.tg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.on .tg .f{fill:currentColor}
+/* option D: capsule dock, icons only, Still logo in the centre (Log) */
+.cap{position:absolute;left:16px;right:16px;bottom:18px;height:62px;border-radius:999px;background:rgba(14,14,18,.86);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.09);box-shadow:0 10px 28px rgba(0,0,0,.45);display:grid;grid-template-columns:1fr 1fr 96px 1fr 1fr;align-items:center;justify-items:center;padding:0 6px;z-index:4}
+.cap .ci{width:46px;height:46px;display:flex;align-items:center;justify-content:center;color:#8A8F98;position:relative;--tabcut:rgba(14,14,18,1)}
+.cap .ci .tg{width:25px;height:25px;stroke-width:2}
+.cap .ci.on{color:#fff}
+.cap .ci .dot{position:absolute;top:9px;right:9px;width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.cap .logo{width:88px;height:48px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center}
+.cap .logo.on{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.22)}
+.cap .logo svg{width:46px;height:46px}
+.cap .av{width:30px;height:30px;border-radius:50%;background:var(--teal);border:2px solid #8A8F98;display:flex;align-items:center;justify-content:center;font-family:Bangers,cursive;font-size:15px;color:var(--ink)}
+.cap .on .av{border-color:#fff}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="t-today" viewBox="0 0 24 24"><path class="f" d="M13 2 4.5 13.5H11l-1 8.5 8.5-11.5H12z"/></symbol><symbol id="t-path" viewBox="0 0 24 24"><path d="M4.5 20c4 0 3.5-6.5 7-6.5s3.5-3 6-3"/><circle class="f" cx="4.5" cy="20" r="2.3"/><path d="M17.5 13V3"/><path class="f" d="M17.5 3.5h4.5l-1.6 2.6 1.6 2.6h-4.5z"/></symbol><symbol id="t-bag" viewBox="0 0 24 24"><path d="M9 7V5.5a3 3 0 0 1 6 0V7"/><rect class="f" x="4.5" y="7" width="15" height="14" rx="3.5"/><path d="M4.5 13h15" style="stroke:var(--tabcut,currentColor)"/></symbol><symbol id="t-me" viewBox="0 0 24 24"><circle class="f" cx="12" cy="8" r="4"/><path d="M4.5 21c.8-4 3.8-6 7.5-6s6.7 2 7.5 6"/></symbol><symbol id="t-logo" viewBox="20 28 172 150"><g transform="translate(100 100) scale(0.74) translate(-84 -100)"><g stroke="#FFFFFF" stroke-width="7" stroke-linecap="round"><line x1="18" y1="72" x2="44" y2="72"/><line x1="10" y1="100" x2="44" y2="100"/><line x1="18" y1="128" x2="44" y2="128"/></g><g transform="translate(27 0) skewX(-15)"><rect x="76" y="58" width="28" height="96" rx="4" fill="#064E4E"/><rect x="120" y="58" width="28" height="96" rx="4" fill="#064E4E"/><rect x="68" y="50" width="28" height="96" rx="4" fill="#FFC300" stroke="#111111" stroke-width="8"/><rect x="112" y="50" width="28" height="96" rx="4" fill="#FFC300" stroke="#111111" stroke-width="8"/></g></g></symbol><symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol><symbol id="i-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></symbol><symbol id="i-scale" viewBox="0 0 24 24"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></symbol><symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M10 2h4"/></symbol><symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol><symbol id="i-snowflake" viewBox="0 0 24 24"><path d="M2 12h20"/><path d="M12 2v20"/><path d="m20 16-4-4 4-4"/><path d="m4 8 4 4-4 4"/><path d="m16 4-4 4-4-4"/><path d="m8 20 4-4 4 4"/></symbol><symbol id="i-activity" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></symbol><symbol id="i-newspaper" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8z"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></symbol><symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol><symbol id="i-map" viewBox="0 0 24 24"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15"/><path d="M15 6v15"/></symbol><symbol id="i-backpack" viewBox="0 0 24 24"><path d="M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M8 10h8"/><path d="M8 22v-6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6"/><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></symbol><symbol id="i-trending-up" viewBox="0 0 24 24"><path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></symbol><symbol id="i-trending-down" viewBox="0 0 24 24"><path d="m22 17-8.5-8.5-5 5L2 7"/><path d="M16 17h6v-6"/></symbol><symbol id="i-smartphone" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></symbol><symbol id="i-hourglass" viewBox="0 0 24 24"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.17a2 2 0 0 0-.59-1.42L12 12l-4.41 4.41A2 2 0 0 0 7 17.83V22"/><path d="M7 2v4.17a2 2 0 0 0 .59 1.42L12 12l4.41-4.41A2 2 0 0 0 17 6.17V2"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol><symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol><symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></symbol><symbol id="i-circle-slash" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></symbol><symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></symbol><symbol id="i-signal" viewBox="0 0 24 24"><path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/></symbol><symbol id="i-wifi" viewBox="0 0 24 24"><path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.86a10 10 0 0 1 14 0"/><path d="M8.5 16.43a5 5 0 0 1 7 0"/></symbol><symbol id="i-battery" viewBox="0 0 24 24"><rect x="2" y="7" width="16" height="10" rx="2"/><path d="M22 11v2"/><rect x="5" y="10" width="10" height="4" rx="1" fill="currentColor" stroke="none"/></symbol></defs></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol><symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98"/><path d="m15.41 6.51-6.82 3.98"/></symbol><symbol id="i-boss" viewBox="0 0 24 24"><path d="M14.5 17.5 3 6V3h3l11.5 11.5"/><path d="m13 19 6-6"/><path d="m16 16 4 4"/><path d="m19 21 2-2"/><path d="M9.5 17.5 21 6V3h-3L6.5 14.5"/><path d="m11 19-6-6"/><path d="m8 16-4 4"/><path d="m5 21-2-2"/></symbol><symbol id="i-trophy" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></symbol><symbol id="i-breathe" viewBox="0 0 24 24"><path d="M12.8 19.6A2 2 0 1 0 14 16H2"/><path d="M17.5 8a2.5 2.5 0 1 1 2 4H2"/><path d="M9.8 4.4A2 2 0 1 1 11 8H2"/></symbol><symbol id="i-helpline" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol><symbol id="i-pausebars" viewBox="0 0 24 24"><path d="M9 4 6 20"/><path d="M17 4l-3 16"/></symbol></defs></svg>
+
+<header class="doc">
+  <img src="../images/still-app-icon.svg" alt="">
+  <div>
+    <h1>STILL: UI design v2 · Quest art</h1>
+    <p>Every task gets its own JoJo-style illustration in Still's teal and gold. The art introduces the quest, becomes the reward when you clear it, and is collected as a card on your Path. Everything else follows <a href="still-ui-v1.html">v1</a> and the <a href="../docs/brand-colors.md">brand rules</a>. <b>Art shown here is placeholder</b>, cropped from the blog illustrations; the real set is drawn per quest.</p>
+  </div>
+</header>
+
+<div class="board">
+
+<!-- A. TODAY WITH QUEST ART -->
+<div class="shot">
+  <div class="phone"><div class="notch"></div>
+    <div class="status"><span>9:41</span><span class="row" style="gap:0"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-battery"/></svg></span></div>
+    <div class="screen" style="gap:11px">
+      <div class="row between">
+        <div>
+          <div class="eyebrow">Day 12 · Chapter 1</div>
+          <div class="comic h-white" style="font-size:26px">LV. 4 · RANK D</div>
+        </div>
+        <div class="card gold" style="padding:6px 10px;box-shadow:3px 3px 0 var(--ink);text-align:center">
+          <div class="comic" style="font-size:22px;line-height:1"><svg class="ic"><use href="#i-flame"/></svg> 12</div><div style="font-size:9px;font-weight:800">DAY STREAK</div>
+        </div>
+      </div>
+      <div class="row"><div class="bar grow"><i style="width:64%"></i></div><span style="font-size:11px;font-weight:800">640 / 1000 XP</span></div>
+
+      <div class="card" style="padding:0;overflow:hidden">
+        <div class="art" style="height:132px;border:0;border-bottom:3px solid var(--ink);border-radius:0">
+          <img src="../images/quest-art-placeholders/art-06.jpg" style="object-position:center 18%" alt="">
+          <span class="sticker" style="left:10px;top:10px"><svg class="ic"><use href="#i-zap"/></svg> DAILY QUEST HAS ARRIVED</span>
+          <span class="sfx" style="right:10px;bottom:6px;font-size:30px;transform:rotate(-8deg)">ゴゴゴ</span>
+        </div>
+        <div style="padding:9px 14px 12px">
+          <div style="font-weight:800;font-size:17px">Separate Fact &amp; Guess</div>
+          <div style="font-size:12px;color:#55605F">Tag 3 statements as fact, assumption or unknown.</div>
+          <div class="row" style="margin:8px 0 7px;gap:6px">
+            <span class="chip"><svg class="ic"><use href="#i-timer"/></svg> ~8 min</span><span class="chip">+30 XP</span><span class="chip">RES <svg class="ic"><use href="#i-arrow-up"/></svg></span>
+          </div>
+          <div class="row"><div class="bar teal grow"><i style="width:33%"></i></div><span style="font-size:11px;font-weight:800">1 / 3</span></div>
+          <div class="btn sm" style="margin-top:10px"><span>CONTINUE QUEST</span></div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:6px 14px">
+        <div class="row between" style="margin:2px 0 0"><span class="eyebrow" style="color:var(--teal-dk)">Daily training</span><span style="font-size:11px;font-weight:800">3 / 7</span></div>
+        <div class="task done"><span class="check done"><svg class="ic"><use href="#i-check"/></svg></span><span class="thumb"><img src="../images/quest-art-placeholders/art-05.jpg" style="object-position:55% 22%" alt=""></span><span class="t">Mind Check</span><span class="xp">+5 EMO</span></div>
+        <div class="task done"><span class="check done"><svg class="ic"><use href="#i-check"/></svg></span><span class="thumb"><img src="../images/quest-art-placeholders/art-01.jpg" style="object-position:80% 55%" alt=""></span><span class="t">News Scan</span><span class="xp">+5 RES</span></div>
+        <div class="task"><span class="check"></span><span class="thumb"><img src="../images/quest-art-placeholders/art-08.jpg" style="object-position:50% 70%" alt=""></span><span class="t">Fit-to-Trade Gate</span><span class="xp">+5 DIS</span></div>
+      </div>
+
+      <div class="fab" style="bottom:92px"><svg class="ic" style="color:var(--ink);stroke-width:3.4"><use href="#i-pausebars"/></svg><small>URGE?</small></div>
+      <div class="cap"><div class="ci on" aria-label="Today"><svg class="tg"><use href="#t-today"/></svg></div><div class="ci" aria-label="Path"><svg class="tg"><use href="#t-path"/></svg></div><div class="logo" aria-label="Log"><svg><use href="#t-logo"/></svg></div><div class="ci" aria-label="Inventory"><svg class="tg"><use href="#t-bag"/></svg></div><div class="ci" aria-label="Me"><span class="av">A</span></div></div>
+    </div>
+  </div>
+  <div class="label">A · Today, with quest art<small>The quest card opens with today's panel. Daily sub-tasks get small stamp images that stay the same every day, so they're easy to spot.</small></div>
+</div>
+
+<!-- B. QUEST BRIEFING -->
+<div class="shot">
+  <div class="phone"><div class="notch"></div>
+    <div class="bleed">
+      <img src="../images/quest-art-placeholders/art-06.jpg" alt="">
+      <span class="sfx" style="right:14px;top:96px;font-size:44px;transform:rotate(8deg)">ゴ<br>ゴ<br>ゴ</span>
+    </div>
+    <div class="status over"><span>9:41</span><span class="row" style="gap:0"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-battery"/></svg></span></div>
+    <div class="screen over" style="gap:12px">
+      <div class="row between"><span class="roundbtn"><svg class="ic"><use href="#i-x"/></svg></span><span class="sticker ink" style="position:static">MAIN QUEST · DAY 12</span></div>
+      <div style="height:206px"></div>
+      <div class="comic h-gold slant" style="font-size:42px;line-height:.95">FACT OR GUESS?</div>
+      <div class="bubble" style="margin-bottom:6px">"Headlines mix facts and guesses. Today you learn to pull them apart."</div>
+      <div class="muted" style="font-size:11px;font-weight:800;margin:4px 0 0 4px"><svg class="ic"><use href="#i-snowflake"/></svg> THE SYSTEM</div>
+      <div class="card dark" style="padding:10px 14px">
+        <div class="eyebrow" style="margin-bottom:6px">Objectives</div>
+        <div style="font-size:13px;font-weight:600;display:flex;flex-direction:column;gap:6px">
+          <span>1 · Read 3 statements from real posts</span>
+          <span>2 · Tag each: fact, assumption or unknown</span>
+          <span>3 · Say why in one line (optional)</span>
+        </div>
+      </div>
+      <div class="row" style="gap:6px">
+        <span class="chip"><svg class="ic"><use href="#i-timer"/></svg> ~8 min</span><span class="chip">+30 XP</span><span class="chip">RES <svg class="ic"><use href="#i-arrow-up"/></svg></span>
+      </div>
+      <div class="btn" style="margin-top:auto;margin-bottom:26px"><span>START QUEST</span></div>
+    </div>
+  </div>
+  <div class="label">B · Quest briefing (new)<small>Full-bleed panel and the coach's one-line setup. The art sets the scene; once the quest starts, the art steps back so you can focus (screen 5 in v1 is unchanged).</small></div>
+</div>
+
+<!-- C. QUEST CLEAR WITH CARD -->
+<div class="shot">
+  <div class="phone"><div class="notch"></div>
+    <div class="status"><span>9:41</span><span class="row" style="gap:0"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-battery"/></svg></span></div>
+    <div class="screen halftone" style="text-align:center;gap:12px">
+      <div style="position:relative;height:300px;margin-top:4px">
+        <div class="tcard" style="position:absolute;left:50%;top:22px;width:198px;transform:translateX(-50%) rotate(-3deg)">
+          <div class="art" style="height:236px"><img src="../images/quest-art-placeholders/art-06.jpg" style="object-position:center 25%" alt=""></div>
+          <div class="comic" style="font-size:17px;color:var(--ink);margin-top:5px;line-height:1">No. 012 · FACT OR GUESS?</div>
+        </div>
+        <div style="position:absolute;left:-4px;top:0;width:150px;height:112px">
+          <div class="burst" style="position:absolute;inset:0;background:var(--ink)"></div>
+          <div class="burst" style="position:absolute;inset:6px;background:var(--gold)"></div>
+          <div class="comic slant" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:27px;color:var(--ink);line-height:.9">QUEST<br>CLEAR!</div>
+        </div>
+        <span class="sfx" style="right:0;top:92px;font-size:32px;transform:rotate(10deg)">ド<br>ド<br>ド</span>
+      </div>
+      <div class="row" style="justify-content:center;gap:8px;flex-wrap:wrap">
+        <span class="card gold" style="padding:5px 10px;box-shadow:3px 3px 0 var(--ink)"><b class="comic" style="font-size:19px">+30 XP</b></span>
+        <span class="card" style="padding:5px 10px;box-shadow:3px 3px 0 var(--ink)"><b class="comic" style="font-size:19px;color:var(--teal-dk)">RESEARCH <svg class="ic"><use href="#i-arrow-up"/></svg></b></span>
+      </div>
+      <div class="muted" style="font-size:12px;font-weight:700">Card added to your Path · 12 / 56 collected</div>
+      <div style="text-align:left">
+        <div class="bubble">Not bad. You caught the guess hiding in a headline. Most people buy that shit. <svg class="ic"><use href="#i-flame"/></svg></div>
+        <div style="font-size:11px;font-weight:800;margin:16px 0 0 4px" class="muted"><svg class="ic"><use href="#i-flame"/></svg> THE SERGEANT</div>
+      </div>
+      <div class="btn" style="margin-top:auto;margin-bottom:26px"><span>BACK TO TODAY</span></div>
+    </div>
+  </div>
+  <div class="label">C · Quest clear: the art is the reward<small>The panel turns into a numbered card. The difficulty feedback from v1 moves to the next sheet so this moment stays clean.</small></div>
+</div>
+
+<!-- D. PATH: CARD COLLECTION -->
+<div class="shot">
+  <div class="phone"><div class="notch"></div>
+    <div class="status"><span>9:41</span><span class="row" style="gap:0"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-battery"/></svg></span></div>
+    <div class="screen" style="gap:12px">
+      <div>
+        <div class="eyebrow">Chapter 1 · Know yourself</div>
+        <div class="comic h-gold slant speed" style="font-size:36px">YOUR PATH</div>
+      </div>
+      <div class="row" style="gap:6px">
+        <span class="chip on">CH 1</span><span class="chip"><svg class="ic"><use href="#i-lock"/></svg> CH 2</span><span class="chip"><svg class="ic"><use href="#i-lock"/></svg> CH 3</span><span class="chip"><svg class="ic"><use href="#i-lock"/></svg> CH 4</span>
+      </div>
+      <div class="row between" style="font-size:12px;font-weight:700"><span class="muted">11 of 14 cards</span><span style="color:var(--gold)">Boss: Day 14</span></div>
+      <div class="grid">
+        <div class="tile"><img src="../images/quest-art-placeholders/art-07.jpg" alt=""><b>1</b><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span></div>
+        <div class="tile"><img src="../images/quest-art-placeholders/art-03.jpg" style="object-position:30% 50%" alt=""><b>2</b><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span></div>
+        <div class="tile"><img src="../images/quest-art-placeholders/art-01.jpg" style="object-position:50% 45%" alt=""><b>3</b><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span></div>
+        <div class="tile"><img src="../images/quest-art-placeholders/art-09.jpg" alt=""><b>4</b><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span></div>
+        <div class="tile"><img src="../images/quest-art-placeholders/art-05.jpg" alt=""><b>5</b><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span></div>
+        <div class="tile"><img src="../images/quest-art-placeholders/art-02.jpg" style="object-position:50% 60%" alt=""><b>6</b><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span></div>
+        <div class="tile"><img src="../images/quest-art-placeholders/art-08.jpg" alt=""><b>7</b><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span></div>
+        <div class="tile"><img src="../images/quest-art-placeholders/art-04.jpg" alt=""><b>8</b><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span></div>
+        <div class="tile"><img src="../images/quest-art-placeholders/art-10.jpg" alt=""><b>9</b><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span></div>
+        <div class="tile"><img src="../images/quest-art-placeholders/art-02.jpg" style="object-position:20% 20%" alt=""><b>10</b><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span></div>
+        <div class="tile"><img src="../images/quest-art-placeholders/art-03.jpg" style="object-position:85% 70%" alt=""><b>11</b><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span></div>
+        <div class="tile today"><img src="../images/quest-art-placeholders/art-06.jpg" style="object-position:center 20%" alt=""><b>TODAY</b></div>
+        <div class="tile locked"><img src="../images/quest-art-placeholders/art-07.jpg" alt=""><span class="lk"><svg class="ic"><use href="#i-lock"/></svg></span><b>13</b></div>
+        <div class="tile boss"><svg class="ic" style="font-size:26px"><use href="#i-boss"/></svg><small>BOSS 14</small></div>
+      </div>
+      <div class="card dark" style="padding:10px 12px;font-size:12px;line-height:1.45">Locked days show only a dark silhouette. <b style="color:var(--gold)">Beat the Day 14 boss</b> to reveal the Chapter 2 cover.</div>
+      <div class="cap"><div class="ci" aria-label="Today"><svg class="tg"><use href="#t-today"/></svg><i class="dot"></i></div><div class="ci on" aria-label="Path"><svg class="tg"><use href="#t-path"/></svg></div><div class="logo" aria-label="Log"><svg><use href="#t-logo"/></svg></div><div class="ci" aria-label="Inventory"><svg class="tg"><use href="#t-bag"/></svg></div><div class="ci" aria-label="Me"><span class="av">A</span></div></div>
+    </div>
+  </div>
+  <div class="label">D · Path: your card collection (new)<small>One panel per day. Cleared days show their art, upcoming days stay dark. A missed day shows a Recovery stamp, never a gap.</small></div>
+</div>
+
+<!-- E. CARD DETAIL -->
+<div class="shot">
+  <div class="phone"><div class="notch"></div>
+    <div class="status"><span>9:41</span><span class="row" style="gap:0"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-battery"/></svg></span></div>
+    <div class="screen halftone" style="gap:14px">
+      <div class="row between"><span style="font-size:22px"><svg class="ic"><use href="#i-chevron-left"/></svg></span><span class="eyebrow">Card 12 of 56</span><span></span></div>
+      <div class="tcard" style="margin:4px 8px 0">
+        <div class="art" style="height:340px"><img src="../images/quest-art-placeholders/art-06.jpg" alt=""></div>
+        <div class="row between" style="margin-top:7px;color:var(--ink)">
+          <span class="comic" style="font-size:22px;line-height:1">FACT OR GUESS?</span>
+          <span class="pill">No. 012</span>
+        </div>
+        <div style="font-size:11px;font-weight:700;color:var(--ink);margin-top:2px">Chapter 1 · Research · Cleared 5 Nov</div>
+      </div>
+      <div class="muted" style="font-size:12px;text-align:center;line-height:1.45;padding:0 10px">Sharing shows the card only. Your answers stay private.</div>
+      <div style="margin-top:auto;display:flex;flex-direction:column;gap:12px;margin-bottom:26px">
+        <div class="btn"><span><svg class="ic"><use href="#i-share"/></svg> SHARE CARD</span></div>
+        <div class="btn ghost sm"><span>REPLAY THIS QUEST</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="label">E · Card detail<small>Tap any tile on the Path. Shareable story-size image: the art, title and day, never answers, money or stats.</small></div>
+</div>
+
+<!-- F. CALM MODE -->
+<div class="shot">
+  <div class="phone calm"><div class="notch"></div>
+    <div class="status"><span>9:41</span><span class="row" style="gap:0"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-battery"/></svg></span></div>
+    <div class="screen" style="gap:14px">
+      <div class="row between"><span style="font-size:22px"><svg class="ic"><use href="#i-chevron-left"/></svg></span><span class="eyebrow">Check-in</span><span></span></div>
+      <div style="font-size:24px;font-weight:800;line-height:1.25;margin-top:14px">That sounds really hard.</div>
+      <div class="muted" style="font-size:14px;line-height:1.5">Today's quest can wait. Your streak and progress are safe. What would help right now?</div>
+      <div class="card" style="padding:4px 14px">
+        <div class="opt2"><svg class="ic"><use href="#i-helpline"/></svg><div>Talk to someone now<small>Free, confidential helplines</small></div></div>
+        <div class="opt2"><svg class="ic"><use href="#i-breathe"/></svg><div>Breathe for 2 minutes<small>Guided, no timer pressure</small></div></div>
+        <div class="opt2"><svg class="ic"><use href="#i-pausebars"/></svg><div>Pause the programme<small>Come back whenever you're ready</small></div></div>
+      </div>
+      <div style="margin-top:auto;display:flex;flex-direction:column;gap:12px;margin-bottom:26px">
+        <div class="calmbtn">I'm OK for now</div>
+      </div>
+    </div>
+  </div>
+  <div class="label">F · Calm mode: no art<small>Safety paths (big loss, distress, "can't stop") hide all quest art, bursts and sound effects. Teal and white only, no slant.</small></div>
+</div>
+
+</div>
+
+<section class="explain">
+  <h2>Can every task have its own art? Yes.</h2>
+  <p>Still's content is fixed and versioned: the same 56 quests in the same order for everyone, with only the coach's voice changing. So we can draw the whole set once, check every image before release and ship it like any other content. Nothing is generated while the user is in the app.</p>
+  <div class="ex-grid">
+    <div class="ex">
+      <h3>What gets art</h3>
+      <table>
+        <tr><td>Main quests (Days 1–56, incl. gates and 4 chapter bosses)</td><td>56</td></tr>
+        <tr><td>Daily sub-task stamps (same image every day)</td><td>7</td></tr>
+        <tr><td>Chapter covers (shown when a chapter unlocks)</td><td>4</td></tr>
+        <tr><td>Recovery Quest stamp (after a missed day)</td><td>1</td></tr>
+        <tr><td><b>Total to draw</b></td><td>~68</td></tr>
+      </table>
+      <p style="margin-top:10px">Plan 3–4 drafts each to choose from, so about 250 generations. Lines from the Sergeant and the System share the same art.</p>
+    </div>
+    <div class="ex">
+      <h3>Keeping the style consistent</h3>
+      <ul>
+        <li><b>One style guide prompt</b> for every image: Araki-style heavy inking, cross-hatching, speed lines, dramatic low angles, palette locked to teal <code>#0FA3A3</code> / dark teal / gold <code>#FFC300</code> / ink.</li>
+        <li><b>Reference images:</b> the 3 approved blog pieces go into every generation as style references.</li>
+        <li><b>A recurring cast:</b> "the Hunter" (the user, often seen from behind so anyone can picture themselves), plus the System and the Sergeant. The same faces across 56 days make it feel like one story.</li>
+        <li><b>One composition rule:</b> keep the subject in the centre 60%, so one 4:5 master crops cleanly to the 16:9 card, the square tile and the share card.</li>
+      </ul>
+    </div>
+    <div class="ex">
+      <h3>How it ships</h3>
+      <ul>
+        <li>Each quest's content gets an <code>art_key</code> (e.g. <code>q-c1-10</code>). The API returns it with the quest. The art is part of the content, not user data.</li>
+        <li>Stored as WebP at 2 sizes (~640px and ~1080px), around 100–200 KB each. The full set is ~20 MB on a CDN, not inside the app download.</li>
+        <li>The app downloads the next 2 days' art ahead of time, so the briefing never shows an empty panel. Locked days use a tiny blurred preview.</li>
+        <li>Changing a quest's art = new image + new <code>art_key</code>. Nothing about the user's progress changes.</li>
+      </ul>
+    </div>
+    <div class="ex">
+      <h3>Rules for the art</h3>
+      <ul>
+        <li>No green "up" charts as a reward, no piles of money, no lambos. Gold means discipline, not profit.</li>
+        <li>Charts in the art show the <i>trap</i> (FOMO, revenge) and never a coin logo or ticker.</li>
+        <li>No real people, no real exchange branding, no copies of actual JoJo characters or poses. Same <i>style</i>, our own characters.</li>
+        <li>Calm mode hides all art (screen F). The art should also never make a loss look exciting.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+</body>
+</html>

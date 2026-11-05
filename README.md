@@ -6,7 +6,7 @@ Design assets and UI prototypes for **Still**, the 56-day programme that resets 
 |---|---|
 | [`docs/`](docs/) | [Brand colours](docs/brand-colors.md): palette, contrast, comic style rules, code tokens |
 | [`images/`](images/) | Logo and app icons (teal Pause pose), [`icons/`](images/icons/) 106-icon set, [`screens/`](images/screens/) app screenshots, [`blog/`](images/blog/) blog illustrations |
-| [`ui-design/`](ui-design/) | `still-ui-v1.html` (10 app screens), `landing-v2.html` (pre-sale landing page) |
+| [`ui-design/`](ui-design/) | `still-ui-v1.html` (10 app screens), `still-ui-v2.html` (quest art), `still-ui-v3.html` (chapter themes), `still-ui-v4.html` (inventory), `still-ui-v5.html` (day log), `still-ui-v6.html` (day log, JoJo style), `still-ui-v7.html` (bottom bar), `landing-v2.html` (pre-sale landing page) |
 
 ## Editing the landing page
 
