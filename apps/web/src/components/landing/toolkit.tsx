@@ -34,7 +34,7 @@ export function Toolkit() {
             </h2>
             <p className="mb-7 text-lg text-muted">
               By day 56 you don&apos;t just have new habits. You have tools you built yourself, and
-              they keep working after the programme ends.
+              they keep working long after day 56.
             </p>
           </Reveal>
           <Stagger className="grid gap-[18px] sm:grid-cols-2" gap={0.08}>

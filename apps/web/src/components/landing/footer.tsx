@@ -4,7 +4,7 @@ import { Wrap } from "./section";
 
 const product = [
   { href: "#reset", label: "The reset" },
-  { href: "#programme", label: "Programme" },
+  { href: "#programme", label: "The 56 days" },
   { href: "#blog", label: "Blog" },
   { href: "#pricing", label: "Pricing" },
   { href: "#faq", label: "FAQ" },

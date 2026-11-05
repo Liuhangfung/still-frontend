@@ -152,7 +152,7 @@ export function HeroArt() {
           <Device width={250}>
             <Image
               src="/images/screens/path.png"
-              alt="Your Path: one illustrated card for every day of the programme"
+              alt="Your Path: one illustrated card for each of the 56 days"
               fill
               sizes="250px"
               className="object-cover"

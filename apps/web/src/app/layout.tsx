@@ -9,7 +9,7 @@ const bangers = Bangers({ weight: "400", subsets: ["latin"], variable: "--font-b
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 const description =
-  "Still is a 56-day programme that resets your whole trading behaviour: how you think, plan, practise and review. One quest a day.";
+  "Still is a 56-day reset for the way you trade: how you think, plan, practise and review. One short quest a day.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
