@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Still UI v1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#072B2F; --panel:#0D3B40; --panel2:#11494F;
+  --teal:#0FA3A3; --teal-dk:#064E4E; --gold:#FFC300; --gold-dk:#C99500;
+  --ink:#111111; --cream:#FFF6DC; --white:#FFFFFF; --muted:#8FB9BB;
+  --coral:#FF5A4E; --green:#2BD67B;
+  --page:#E9EEF0; --page-ink:#1B2B2E;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--page);color:var(--page-ink);padding:40px 24px 80px}
+header.doc{max-width:1500px;margin:0 auto 32px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+header.doc img{width:64px;height:64px}
+header.doc h1{font-family:Bangers,cursive;font-size:44px;letter-spacing:1px}
+header.doc p{color:#4A5F62;max-width:760px;line-height:1.5}
+.tokens{max-width:1500px;margin:0 auto 36px;display:flex;gap:12px;flex-wrap:wrap}
+.tok{display:flex;align-items:center;gap:8px;background:#fff;border-radius:10px;padding:8px 12px;font-size:12px;font-family:monospace}
+.tok i{width:22px;height:22px;border-radius:6px;border:2px solid var(--ink);display:block}
+.board{max-width:1500px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:44px 32px;justify-items:center}
+.shot{display:flex;flex-direction:column;align-items:center;gap:14px}
+.label{font-weight:800;font-size:15px}
+.label small{display:block;font-weight:500;color:#5B7074;font-size:12px;margin-top:2px;max-width:330px;text-align:center}
+
+/* phone */
+.phone{width:360px;height:760px;border-radius:46px;border:10px solid #0A0A0A;background:var(--bg);color:var(--white);position:relative;overflow:hidden;box-shadow:0 24px 50px rgba(0,0,0,.25)}
+.status{height:40px;display:flex;justify-content:space-between;align-items:center;padding:0 24px;font-size:12px;font-weight:700}
+.notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:96px;height:26px;background:#0A0A0A;border-radius:20px}
+.screen{padding:6px 18px 0;height:calc(100% - 40px);display:flex;flex-direction:column;gap:14px;position:relative}
+.halftone{background-image:radial-gradient(rgba(15,163,163,.18) 1.4px,transparent 1.6px);background-size:12px 12px}
+
+/* type */
+.comic{font-family:Bangers,cursive;letter-spacing:1px;font-weight:400}
+.slant{display:inline-block;transform:skewX(-8deg)}
+.h-gold{color:var(--gold);text-shadow:3px 3px 0 var(--ink),-1px -1px 0 var(--ink),1px -1px 0 var(--ink),-1px 1px 0 var(--ink)}
+.h-white{color:#fff;text-shadow:3px 3px 0 var(--teal-dk)}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--teal)}
+.muted{color:var(--muted)}
+.speed{position:relative;padding-left:30px}
+.speed::before{content:"";position:absolute;left:0;top:50%;width:22px;height:14px;transform:translateY(-50%);
+  background:linear-gradient(var(--teal),var(--teal)) 4px 0/18px 3px no-repeat,linear-gradient(var(--teal),var(--teal)) 0 6px/22px 3px no-repeat,linear-gradient(var(--teal),var(--teal)) 4px 12px/18px 3px no-repeat}
+
+/* comic surfaces */
+.card{background:var(--cream);color:var(--ink);border:3px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--teal-dk);padding:14px}
+.card.dark{background:var(--panel);color:#fff;box-shadow:5px 5px 0 #021416}
+.card.gold{background:var(--gold)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;font-family:Bangers,cursive;font-size:22px;letter-spacing:1.5px;
+  background:var(--gold);color:var(--ink);border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);padding:12px 16px;transform:skewX(-6deg)}
+.btn > span{transform:skewX(6deg);display:inline-block}
+.btn.teal{background:var(--teal);color:#fff}
+.btn.ghost{background:transparent;color:#fff;border-color:#fff;box-shadow:none;font-size:18px}
+.btn.sm{font-size:16px;padding:8px 10px;box-shadow:3px 3px 0 var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:6px 10px;border-radius:999px;border:2px solid var(--ink);background:#fff;color:var(--ink)}
+.chip.on{background:var(--teal);color:#fff}
+.pill{font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;background:var(--ink);color:var(--gold)}
+.bar{height:12px;border:2px solid var(--ink);border-radius:8px;background:#fff;overflow:hidden}
+.bar > i{display:block;height:100%;background:repeating-linear-gradient(-45deg,var(--gold) 0 8px,#FFD54A 8px 16px);border-right:2px solid var(--ink)}
+.bar.teal > i{background:repeating-linear-gradient(-45deg,var(--teal) 0 8px,#2BBDBD 8px 16px)}
+.row{display:flex;align-items:center;gap:10px}
+.between{justify-content:space-between}
+.grow{flex:1}
+
+/* tab bar */
+.tabs{position:absolute;left:0;right:0;bottom:0;height:78px;background:#05201F;border-top:3px solid var(--ink);display:flex;justify-content:space-around;align-items:center;padding-bottom:12px}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;font-weight:700;color:var(--muted)}
+.tab b{font-size:20px;line-height:1}
+.tab.on{color:var(--gold)}
+.fab{position:absolute;right:18px;bottom:92px;width:66px;height:66px;border-radius:18px;background:var(--gold);border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);display:flex;align-items:center;justify-content:center;flex-direction:column;transform:skewX(-6deg)}
+.fab svg{width:34px;height:34px}
+.fab small{font-family:Bangers;font-size:11px;color:var(--ink);letter-spacing:1px;margin-top:-2px}
+
+/* misc components */
+.check{width:20px;height:20px;border:2.5px solid var(--ink);border-radius:5px;background:#fff;flex:none;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900}
+.check.done{background:var(--teal);color:#fff}
+.task{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;padding:7px 0;border-bottom:1.5px dashed rgba(17,17,17,.18)}
+.task:last-child{border-bottom:0}
+.task .xp{margin-left:auto;font-size:11px;font-weight:800;color:var(--teal-dk)}
+.task.done span.t{text-decoration:line-through;opacity:.55}
+.opt{background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:12px;padding:13px 14px;font-weight:700;font-size:14px;box-shadow:4px 4px 0 var(--teal-dk);display:flex;gap:10px;align-items:center}
+.opt .k{width:26px;height:26px;border-radius:7px;border:2.5px solid var(--ink);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;flex:none}
+.opt.sel{background:var(--gold);box-shadow:4px 4px 0 var(--ink)}
+.opt.sel .k{background:var(--ink);color:var(--gold)}
+.burst{clip-path:polygon(50% 0,61% 18%,82% 8%,78% 30%,100% 36%,83% 52%,98% 70%,76% 72%,78% 95%,58% 82%,45% 100%,38% 80%,16% 92%,20% 70%,0 62%,16% 47%,3% 26%,25% 26%,22% 4%,40% 18%)}
+.ring{width:190px;height:190px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;flex-direction:column;
+  background:conic-gradient(var(--gold) 0 62%,rgba(255,255,255,.08) 62% 100%);position:relative}
+.ring::before{content:"";position:absolute;inset:14px;border-radius:50%;background:var(--bg);border:3px solid var(--ink)}
+.ring > *{position:relative}
+.stat{display:grid;grid-template-columns:92px 1fr 34px;gap:8px;align-items:center;font-size:12px;font-weight:700}
+.dots{display:grid;grid-template-columns:repeat(14,1fr);gap:4px}
+.dots i{aspect-ratio:1;border-radius:4px;border:2px solid var(--ink);background:#fff}
+.dots i.d{background:var(--teal)}
+.dots i.t{background:var(--gold)}
+.dots i.b{background:var(--ink)}
+.coach{border:3px solid var(--ink);border-radius:16px;padding:14px;box-shadow:5px 5px 0 var(--ink)}
+.bubble{background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:14px;padding:10px 12px;font-size:13px;font-weight:600;position:relative}
+.bubble::after{content:"";position:absolute;left:22px;bottom:-12px;width:16px;height:16px;background:#fff;border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:rotate(45deg)}
+.toggle{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;padding:10px 0;border-bottom:1.5px dashed rgba(17,17,17,.18)}
+.yn{display:flex;border:2.5px solid var(--ink);border-radius:8px;overflow:hidden}
+.yn b{padding:4px 10px;font-size:12px;background:#fff}
+.yn b.y{background:var(--teal);color:#fff}
+.yn b.n{background:var(--coral);color:#fff}
+.ic{width:1em;height:1em;flex:none;display:inline-block;vertical-align:-0.14em;fill:none;stroke:currentColor;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}.comic .ic{stroke-width:2.6}.sq{display:inline-block;width:9px;height:9px;border:1.5px solid #111;border-radius:2px;margin:0 3px 0 8px;vertical-align:-1px}.status .ic{width:15px;height:15px;margin-left:4px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol><symbol id="i-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></symbol><symbol id="i-scale" viewBox="0 0 24 24"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></symbol><symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M10 2h4"/></symbol><symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol><symbol id="i-snowflake" viewBox="0 0 24 24"><path d="M2 12h20"/><path d="M12 2v20"/><path d="m20 16-4-4 4-4"/><path d="m4 8 4 4-4 4"/><path d="m16 4-4 4-4-4"/><path d="m8 20 4-4 4 4"/></symbol><symbol id="i-activity" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></symbol><symbol id="i-newspaper" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8z"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></symbol><symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol><symbol id="i-map" viewBox="0 0 24 24"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15"/><path d="M15 6v15"/></symbol><symbol id="i-backpack" viewBox="0 0 24 24"><path d="M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M8 10h8"/><path d="M8 22v-6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6"/><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></symbol><symbol id="i-trending-up" viewBox="0 0 24 24"><path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></symbol><symbol id="i-trending-down" viewBox="0 0 24 24"><path d="m22 17-8.5-8.5-5 5L2 7"/><path d="M16 17h6v-6"/></symbol><symbol id="i-smartphone" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></symbol><symbol id="i-hourglass" viewBox="0 0 24 24"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.17a2 2 0 0 0-.59-1.42L12 12l-4.41 4.41A2 2 0 0 0 7 17.83V22"/><path d="M7 2v4.17a2 2 0 0 0 .59 1.42L12 12l4.41-4.41A2 2 0 0 0 17 6.17V2"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol><symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol><symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></symbol><symbol id="i-circle-slash" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></symbol><symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></symbol><symbol id="i-signal" viewBox="0 0 24 24"><path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/></symbol><symbol id="i-wifi" viewBox="0 0 24 24"><path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.86a10 10 0 0 1 14 0"/><path d="M8.5 16.43a5 5 0 0 1 7 0"/></symbol><symbol id="i-battery" viewBox="0 0 24 24"><rect x="2" y="7" width="16" height="10" rx="2"/><path d="M22 11v2"/><rect x="5" y="10" width="10" height="4" rx="1" fill="currentColor" stroke="none"/></symbol></defs></svg>
+
+<header class="doc">
+  <img src="../images/still-app-icon.svg" alt="">
+  <div>
+    <h1>STILL: UI design v1</h1>
+    <p>Ten key screens for the MVP. Style comes from the Pause-pose logo: teal + gold, thick black outlines, offset comic shadows, slanted <span class="comic">BANGERS</span> headings and speed lines. Game layer from the concept: daily quests, XP, stats, ranks E→S, coaches. No prices, no signals, no profit talk anywhere.</p>
+  </div>
+</header>
+
+<div class="tokens">
+  <div class="tok"><i style="background:#072B2F"></i>bg #072B2F</div>
+  <div class="tok"><i style="background:#0D3B40"></i>panel #0D3B40</div>
+  <div class="tok"><i style="background:#0FA3A3"></i>teal #0FA3A3</div>
+  <div class="tok"><i style="background:#064E4E"></i>teal-dk #064E4E</div>
+  <div class="tok"><i style="background:#FFC300"></i>gold #FFC300</div>
+  <div class="tok"><i style="background:#FFF6DC"></i>cream #FFF6DC</div>
+  <div class="tok"><i style="background:#111"></i>ink #111111</div>
+  <div class="tok"><i style="background:#FF5A4E"></i>coral #FF5A4E (warnings only)</div>
+  <div class="tok">Headings: Bangers · Body: Inter</div>
+</div>
+
+<div class="board">
+
+<!-- 1. AWAKENING -->
+<div class="shot">
+  <div class="phone"><div class="notch"></div>
+    <div class="status"><span>9:41</span><span class="row" style="gap:0"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-battery"/></svg></span></div>
+    <div class="screen halftone" style="justify-content:center;text-align:center;gap:22px;padding-bottom:40px">
+      <img src="../images/still-logo-on-dark.svg" style="width:190px;margin:0 auto" alt="">
+      <div>
+        <div class="comic h-gold slant" style="font-size:52px;line-height:.95">YOUR SYSTEM<br>HAS AWAKENED</div>
+      </div>
+      <p class="muted" style="font-size:15px;line-height:1.5;padding:0 8px">Lost money? Reset your trading habits.<br>56 days. One quest a day.</p>
+      <div style="display:flex;flex-direction:column;gap:14px;margin-top:10px">
+        <div class="btn"><span>BEGIN AWAKENING</span></div>
+        <div class="btn ghost"><span>I ALREADY HAVE AN ACCOUNT</span></div>
+      </div>
+      <p style="font-size:10px;color:#5E8A8C">Training only. No signals. No financial advice. 18+.</p>
+    </div>
+  </div>
+  <div class="label">1 · Awakening (welcome)<small>First screen. Logo, the hook line, one main button.</small></div>
+</div>
+
+<!-- 2. QUESTIONNAIRE -->
+<div class="shot">
+  <div class="phone"><div class="notch"></div>
+    <div class="status"><span>9:41</span><span class="row" style="gap:0"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-battery"/></svg></span></div>
+    <div class="screen">
+      <div class="row between"><span style="font-size:22px"><svg class="ic"><use href="#i-chevron-left"/></svg></span><span class="eyebrow">Part B · Your problems</span><span class="muted" style="font-size:12px;font-weight:700">6 / 16</span></div>
+      <div class="bar teal"><i style="width:37%"></i></div>
+      <div class="card dark" style="margin-top:8px">
+        <div class="pill" style="display:inline-block;margin-bottom:10px">SCENARIO</div>
+        <div style="font-size:19px;font-weight:800;line-height:1.35">A coin you watch jumps <span style="color:var(--gold)">15% in an hour</span> while you're at work.</div>
+        <div class="muted" style="margin-top:8px;font-size:14px">What do you most likely do?</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-top:4px">
+        <div class="opt"><span class="k">A</span>Buy immediately</div>
+        <div class="opt sel"><span class="k">B</span>Check charts, probably buy</div>
+        <div class="opt"><span class="k">C</span>Check my plan first</div>
+        <div class="opt"><span class="k">D</span>Ignore it</div>
+      </div>
+      <p class="muted" style="font-size:12px;text-align:center;margin-top:auto;margin-bottom:12px">Be honest. Nobody sees this but you.</p>
+      <div class="btn" style="margin-bottom:26px"><span>NEXT</span></div>
+    </div>
+  </div>
+  <div class="label">2 · Questionnaire<small>~3 min, mostly taps. Scenario questions beat self-rating.</small></div>
+</div>
+
+<!-- 3. YOUR PATH -->
+<div class="shot">
+  <div class="phone"><div class="notch"></div>
+    <div class="status"><span>9:41</span><span class="row" style="gap:0"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-battery"/></svg></span></div>
+    <div class="screen halftone">
+      <div class="comic h-gold slant speed" style="font-size:38px;margin-top:6px">YOUR HUNTER PATH</div>
+      <div class="card">
+        <div class="row between"><span class="eyebrow" style="color:var(--teal-dk)">Level</span><span class="pill">DEVELOPING</span></div>
+        <div style="height:1.5px;background:rgba(0,0,0,.12);margin:12px 0"></div>
+        <div class="eyebrow" style="color:var(--teal-dk)">Main focus</div>
+        <div style="font-weight:800;font-size:18px;margin:4px 0"><svg class="ic"><use href="#i-flame"/></svg> FOMO &amp; Hype</div>
+        <div style="font-size:12px;color:#55605F">"You said you'd probably buy a 15% pump."</div>
+        <div style="height:1.5px;background:rgba(0,0,0,.12);margin:12px 0"></div>
+        <div class="eyebrow" style="color:var(--teal-dk)">Second focus</div>
+        <div style="font-weight:800;font-size:18px;margin:4px 0"><svg class="ic"><use href="#i-scale"/></svg> Leverage &amp; Size</div>
+        <div style="font-size:12px;color:#55605F">"You trade futures and picked 'positions too big'."</div>
+      </div>
+      <div class="card dark" style="padding:12px">
+        <div class="row between" style="font-size:13px;font-weight:700"><span><svg class="ic"><use href="#i-timer"/></svg> 10 min / day</span><span><svg class="ic"><use href="#i-bell"/></svg> 12:30</span><span><svg class="ic"><use href="#i-snowflake"/></svg> The System</span></div>
+      </div>
+      <div style="margin-top:auto;display:flex;flex-direction:column;gap:12px;margin-bottom:26px">
+        <div class="btn"><span>START DAY 1</span></div>
+        <div class="btn ghost sm"><span>CHANGE FOCUS</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="label">3 · Your Path<small>Explains why each focus was picked. User can change it.</small></div>
+</div>
+
+<!-- 4. TODAY -->
+<div class="shot">
+  <div class="phone"><div class="notch"></div>
+    <div class="status"><span>9:41</span><span class="row" style="gap:0"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-battery"/></svg></span></div>
+    <div class="screen" style="gap:12px">
+      <div class="row between">
+        <div>
+          <div class="eyebrow">Day 12 · Chapter 1</div>
+          <div class="comic h-white" style="font-size:26px">LV. 4 · RANK D</div>
+        </div>
+        <div class="card gold" style="padding:6px 10px;box-shadow:3px 3px 0 var(--ink);text-align:center">
+          <div class="comic" style="font-size:22px;line-height:1"><svg class="ic"><use href="#i-flame"/></svg> 12</div><div style="font-size:9px;font-weight:800">DAY STREAK</div>
+        </div>
+      </div>
+      <div class="row"><div class="bar grow"><i style="width:64%"></i></div><span style="font-size:11px;font-weight:800">640 / 1000 XP</span></div>
+
+      <div class="card" style="padding:12px 14px">
+        <div class="row between"><span class="comic slant" style="font-size:20px;color:var(--teal-dk)"><svg class="ic"><use href="#i-zap"/></svg> DAILY QUEST HAS ARRIVED</span></div>
+        <div style="font-weight:800;font-size:17px;margin:6px 0 2px">Separate Fact &amp; Guess</div>
+        <div style="font-size:12px;color:#55605F">Tag 3 statements as fact, assumption or unknown.</div>
+        <div class="row" style="margin:10px 0 8px;gap:6px">
+          <span class="chip"><svg class="ic"><use href="#i-timer"/></svg> ~8 min</span><span class="chip">+30 XP</span><span class="chip">RES <svg class="ic"><use href="#i-arrow-up"/></svg></span>
+        </div>
+        <div class="row"><div class="bar teal grow"><i style="width:33%"></i></div><span style="font-size:11px;font-weight:800">1 / 3</span></div>
+        <div class="btn sm" style="margin-top:12px"><span>CONTINUE QUEST</span></div>
+      </div>
+
+      <div class="card" style="padding:8px 14px">
+        <div class="row between" style="margin:2px 0 2px"><span class="eyebrow" style="color:var(--teal-dk)">Daily training</span><span style="font-size:11px;font-weight:800">3 / 7</span></div>
+        <div class="task done"><span class="check done"><svg class="ic"><use href="#i-check"/></svg></span><span class="t"><svg class="ic"><use href="#i-activity"/></svg> Mind Check</span><span class="xp">+5 EMO</span></div>
+        <div class="task done"><span class="check done"><svg class="ic"><use href="#i-check"/></svg></span><span class="t"><svg class="ic"><use href="#i-newspaper"/></svg> News Scan</span><span class="xp">+5 RES</span></div>
+        <div class="task done"><span class="check done"><svg class="ic"><use href="#i-check"/></svg></span><span class="t"><svg class="ic"><use href="#i-calendar"/></svg> Event Calendar</span><span class="xp">+5 RES</span></div>
+        <div class="task"><span class="check"></span><span class="t"><svg class="ic"><use href="#i-target"/></svg> Fit-to-Trade Gate</span><span class="xp">+5 DIS</span></div>
+      </div>
+
+      <div class="fab"><svg viewBox="0 0 200 200"><g transform="translate(27 0) skewX(-15)"><rect x="68" y="50" width="28" height="96" rx="4" fill="#111"/><rect x="112" y="50" width="28" height="96" rx="4" fill="#111"/></g></svg><small>URGE?</small></div>
+      <div class="tabs">
+        <div class="tab on"><b><svg class="ic"><use href="#i-zap"/></svg></b>Today</div><div class="tab"><b><svg class="ic"><use href="#i-map"/></svg></b>Path</div><div class="tab"><b><svg class="ic"><use href="#i-backpack"/></svg></b>Inventory</div><div class="tab"><b><svg class="ic"><use href="#i-user"/></svg></b>Me</div>
+      </div>
+    </div>
+  </div>
+  <div class="label">4 · Today (home)<small>Main quest card, daily training checklist, streak and XP. The gold Pause button is always there for an urge.</small></div>
+</div>
+
+<!-- 5. QUEST IN PROGRESS -->
+<div class="shot">
+  <div class="phone"><div class="notch"></div>
+    <div class="status"><span>9:41</span><span class="row" style="gap:0"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-battery"/></svg></span></div>
+    <div class="screen">
+      <div class="row between"><span style="font-size:22px"><svg class="ic"><use href="#i-x"/></svg></span><span class="eyebrow">Main quest · Day 12</span><span></span></div>
+      <div class="comic h-gold slant" style="font-size:32px">FACT OR GUESS?</div>
+      <div class="row" style="gap:6px">
+        <div class="bar teal grow"><i style="width:100%"></i></div><div class="bar teal grow"><i style="width:100%"></i></div><div class="bar teal grow"><i style="width:0"></i></div>
+      </div>
+      <div class="muted" style="font-size:12px;font-weight:700">Statement 2 of 3</div>
+      <div class="card" style="padding:18px">
+        <div style="font-size:11px;font-weight:800;color:var(--teal-dk);margin-bottom:8px">FROM A CRYPTO NEWS POST</div>
+        <div style="font-size:19px;font-weight:800;line-height:1.4">"Whales are buying, so the price will pump this week."</div>
+      </div>
+      <div class="muted" style="font-size:13px;font-weight:600">Tag this statement:</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="opt"><span class="k"><svg class="ic"><use href="#i-check"/></svg></span>Fact: can be checked</div>
+        <div class="opt sel"><span class="k"><svg class="ic"><use href="#i-help"/></svg></span>Assumption: a guess dressed as fact</div>
+        <div class="opt"><span class="k"><svg class="ic"><use href="#i-circle-slash"/></svg></span>Unknown: no way to tell</div>
+      </div>
+      <div class="card dark" style="padding:10px 12px;font-size:12px;line-height:1.45"><b style="color:var(--gold)">Why?</b> "Whales are buying" might be checkable. "Price will pump" is a prediction, not a fact.</div>
+      <div class="btn" style="margin-top:auto;margin-bottom:26px"><span>NEXT STATEMENT</span></div>
+    </div>
+  </div>
+  <div class="label">5 · Quest in progress<small>One clear action at a time, an example and instant feedback.</small></div>
+</div>
+
+<!-- 6. QUEST CLEAR -->
+<div class="shot">
+  <div class="phone"><div class="notch"></div>
+    <div class="status"><span>9:41</span><span class="row" style="gap:0"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-battery"/></svg></span></div>
+    <div class="screen halftone" style="align-items:stretch;text-align:center">
+      <div style="position:relative;height:210px;margin-top:10px">
+        <div class="burst" style="position:absolute;inset:0 30px;background:var(--ink)"></div>
+        <div class="burst" style="position:absolute;inset:8px 38px;background:var(--gold)"></div>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+          <div class="comic slant" style="font-size:44px;color:var(--ink);line-height:.9">QUEST<br>CLEAR!</div>
+        </div>
+      </div>
+      <div class="row" style="justify-content:center;gap:10px">
+        <span class="card gold" style="padding:6px 12px;box-shadow:3px 3px 0 var(--ink)"><b class="comic" style="font-size:22px">+30 XP</b></span>
+        <span class="card" style="padding:6px 12px;box-shadow:3px 3px 0 var(--ink)"><b class="comic" style="font-size:22px;color:var(--teal-dk)">RESEARCH <svg class="ic"><use href="#i-arrow-up"/></svg></b></span>
+      </div>
+      <div style="text-align:left;margin-top:6px">
+        <div class="bubble">Not bad. You caught the guess hiding in a headline. Most people buy that shit. <svg class="ic"><use href="#i-flame"/></svg></div>
+        <div style="font-size:11px;font-weight:800;margin:16px 0 0 4px" class="muted"><svg class="ic"><use href="#i-flame"/></svg> THE SERGEANT</div>
+      </div>
+      <div class="card dark" style="padding:12px">
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px">How did that feel?</div>
+        <div class="row" style="gap:8px;justify-content:center">
+          <span class="chip">Too easy</span><span class="chip on">About right</span><span class="chip">Too hard</span>
+        </div>
+      </div>
+      <div class="btn" style="margin-top:auto;margin-bottom:26px"><span>BACK TO TODAY</span></div>
+    </div>
+  </div>
+  <div class="label">6 · Quest clear (reward)<small>XP + stat up, a coach line and the too easy / right / too hard feedback that tunes the next quest.</small></div>
+</div>
+
+<!-- 7. URGE / PAUSE -->
+<div class="shot">
+  <div class="phone"><div class="notch"></div>
+    <div class="status"><span>9:41</span><span class="row" style="gap:0"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-battery"/></svg></span></div>
+    <div class="screen" style="text-align:center;gap:16px">
+      <div class="row between"><span style="font-size:22px"><svg class="ic"><use href="#i-x"/></svg></span><span class="eyebrow">Urge button</span><span></span></div>
+      <div class="comic h-gold slant" style="font-size:56px;line-height:1">PAUSE.</div>
+      <div class="muted" style="font-size:14px">Don't decide yet. Breathe for 90 seconds.</div>
+      <div class="ring">
+        <div class="comic" style="font-size:52px;color:#fff;line-height:1">0:56</div>
+        <div style="font-size:12px;font-weight:700;color:var(--gold)">BREATHE IN…</div>
+      </div>
+      <div style="text-align:left">
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px">What triggered it?</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span class="chip on"><svg class="ic"><use href="#i-trending-up"/></svg> Big green candle</span><span class="chip"><svg class="ic"><use href="#i-smartphone"/></svg> Social media</span><span class="chip"><svg class="ic"><use href="#i-trending-down"/></svg> After a loss</span><span class="chip"><svg class="ic"><use href="#i-hourglass"/></svg> Bored</span><span class="chip"><svg class="ic"><use href="#i-plus"/></svg> Other</span>
+        </div>
+      </div>
+      <div style="margin-top:auto;display:flex;flex-direction:column;gap:12px;margin-bottom:26px">
+        <div class="btn teal"><span>I'M CALM. NO TRADE (+40 XP)</span></div>
+        <div class="btn ghost sm"><span>CHECK MY RULES FIRST</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="label">7 · Pause (urge button)<small>The logo becomes the feature: 90-sec pause, log the trigger, XP for choosing not to trade.</small></div>
+</div>
+
+<!-- 8. FIT TO TRADE GATE -->
+<div class="shot">
+  <div class="phone"><div class="notch"></div>
+    <div class="status"><span>9:41</span><span class="row" style="gap:0"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-battery"/></svg></span></div>
+    <div class="screen">
+      <div class="row between"><span style="font-size:22px"><svg class="ic"><use href="#i-chevron-left"/></svg></span><span class="eyebrow">Daily training</span><span></span></div>
+      <div class="comic h-gold slant speed" style="font-size:36px">FIT-TO-TRADE GATE</div>
+      <div class="muted" style="font-size:13px">4 taps before you open your exchange.</div>
+      <div class="card" style="padding:6px 14px">
+        <div class="toggle"><span>Slept enough?</span><span class="yn"><b class="y">Yes</b><b>No</b></span></div>
+        <div class="toggle"><span>Urge 3 or less?</span><span class="yn"><b>Yes</b><b class="n">No</b></span></div>
+        <div class="toggle"><span>Not angry, drunk or exhausted?</span><span class="yn"><b class="y">Yes</b><b>No</b></span></div>
+        <div class="toggle" style="border:0"><span>Remember today's rule?</span><span class="yn"><b class="y">Yes</b><b>No</b></span></div>
+      </div>
+      <div style="position:relative;margin-top:6px">
+        <div class="card" style="background:var(--coral);color:#fff;text-align:center;padding:16px;box-shadow:5px 5px 0 var(--ink)">
+          <div class="comic slant" style="font-size:40px;line-height:1;text-shadow:3px 3px 0 var(--ink)">NOT TODAY</div>
+          <div style="font-size:13px;font-weight:600;margin-top:6px">Your urge is high. That's your signal to sit this one out.</div>
+        </div>
+      </div>
+      <div class="card dark" style="padding:10px 12px;font-size:12px;text-align:center">"Not today" earns the <b style="color:var(--gold)">same +5 XP</b> and keeps your streak.</div>
+      <div class="btn" style="margin-top:auto;margin-bottom:26px"><span>DONE</span></div>
+    </div>
+  </div>
+  <div class="label">8 · Fit-to-Trade Gate<small>Daily sub-task. Not trading is a valid, rewarded answer.</small></div>
+</div>
+
+<!-- 9. ME / STATS -->
+<div class="shot">
+  <div class="phone"><div class="notch"></div>
+    <div class="status"><span>9:41</span><span class="row" style="gap:0"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-battery"/></svg></span></div>
+    <div class="screen" style="gap:12px">
+      <div class="row" style="gap:14px">
+        <div style="width:64px;height:64px;border-radius:16px;border:3px solid var(--ink);background:var(--teal);box-shadow:4px 4px 0 var(--ink);display:flex;align-items:center;justify-content:center" class="comic"><span style="font-size:30px;color:var(--gold);text-shadow:2px 2px 0 var(--ink)">D</span></div>
+        <div>
+          <div class="comic h-white" style="font-size:26px">HUNTER ALEX</div>
+          <div class="muted" style="font-size:12px;font-weight:700">Lv. 4 · Rank D · Day 12 of 56</div>
+        </div>
+      </div>
+      <div class="card" style="padding:12px 14px;display:flex;flex-direction:column;gap:9px">
+        <div class="eyebrow" style="color:var(--teal-dk)">Stats</div>
+        <div class="stat"><span>Discipline</span><div class="bar"><i style="width:58%"></i></div><span>29</span></div>
+        <div class="stat"><span>Research</span><div class="bar"><i style="width:44%"></i></div><span>22</span></div>
+        <div class="stat"><span>Chart Reading</span><div class="bar"><i style="width:20%"></i></div><span>10</span></div>
+        <div class="stat"><span>Emotional Ctrl</span><div class="bar"><i style="width:66%"></i></div><span>33</span></div>
+        <div class="stat"><span>Life Rhythm</span><div class="bar"><i style="width:36%"></i></div><span>18</span></div>
+      </div>
+      <div class="card dark" style="padding:12px 14px">
+        <div class="row between" style="margin-bottom:10px"><span class="eyebrow">56-day map</span><span style="font-size:11px;font-weight:700" class="muted"><i class="sq" style="background:#0FA3A3"></i>done<i class="sq" style="background:#FFC300"></i>today<i class="sq" style="background:#111"></i>boss</span></div>
+        <div class="dots">
+          <i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="t"></i><i></i><i class="b"></i>
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="b"></i>
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="b"></i>
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="b"></i>
+        </div>
+        <div class="row between" style="margin-top:10px;font-size:10px;font-weight:800;color:var(--muted)"><span>E</span><span>D</span><span>C</span><span>B</span><span>A</span><span style="color:var(--gold)">S</span></div>
+      </div>
+      <div class="tabs">
+        <div class="tab"><b><svg class="ic"><use href="#i-zap"/></svg></b>Today</div><div class="tab"><b><svg class="ic"><use href="#i-map"/></svg></b>Path</div><div class="tab"><b><svg class="ic"><use href="#i-backpack"/></svg></b>Inventory</div><div class="tab on"><b><svg class="ic"><use href="#i-user"/></svg></b>Me</div>
+      </div>
+    </div>
+  </div>
+  <div class="label">9 · Me (stats &amp; progress)<small>Five stats, rank and the 56-day map. XP never comes from trades or profit.</small></div>
+</div>
+
+<!-- 10. COACH -->
+<div class="shot">
+  <div class="phone"><div class="notch"></div>
+    <div class="status"><span>9:41</span><span class="row" style="gap:0"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-battery"/></svg></span></div>
+    <div class="screen halftone">
+      <div class="row between"><span style="font-size:22px"><svg class="ic"><use href="#i-chevron-left"/></svg></span><span class="eyebrow">Setup</span><span class="muted" style="font-size:12px;font-weight:700">16 / 16</span></div>
+      <div class="comic h-gold slant speed" style="font-size:40px">PICK YOUR COACH</div>
+      <div class="muted" style="font-size:13px;margin-top:-6px">Same quests. Different voice. Change any time.</div>
+      <div class="coach" style="background:var(--teal);">
+        <div class="row between"><span class="comic" style="font-size:26px;color:#fff;text-shadow:2px 2px 0 var(--ink)"><svg class="ic"><use href="#i-snowflake"/></svg> THE SYSTEM</span><span class="pill">SELECTED</span></div>
+        <div style="font-size:12px;font-weight:600;color:#E6FFFE;margin:4px 0 10px">Calm, clear, encouraging.</div>
+        <div class="bubble">"Today's quest: separate facts from guesses. About 8 minutes."</div>
+        <div style="height:10px"></div>
+      </div>
+      <div class="coach" style="background:var(--cream);color:var(--ink);box-shadow:5px 5px 0 var(--teal-dk)">
+        <div class="row between"><span class="comic" style="font-size:26px"><svg class="ic"><use href="#i-flame"/></svg> THE SERGEANT</span><span class="pill" style="background:var(--coral);color:#fff">18+</span></div>
+        <div style="font-size:12px;font-weight:600;color:#55605F;margin:4px 0 10px">Swears, roasts you, tough love.</div>
+        <div class="bubble">"Quest's here. 8 minutes. You've spent longer staring at candles today."</div>
+        <div style="height:10px"></div>
+      </div>
+      <div class="btn" style="margin-top:auto;margin-bottom:26px"><span>FINISH SETUP</span></div>
+    </div>
+  </div>
+  <div class="label">10 · Pick your coach<small>Only the coach's lines change. The Sergeant is opt-in and needs an 18+ confirmation.</small></div>
+</div>
+
+</div>
+</body>
+</html>
