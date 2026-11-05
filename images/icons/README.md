@@ -8,7 +8,7 @@
 | Stroke | 2px, round caps, round joins |
 | Fill | none |
 | Colour | `currentColor`: the icon takes the text colour around it |
-| Style | Lucide-style line icons ([lucide.dev](https://lucide.dev), ISC licence). Many shapes follow Lucide, so the app can use `lucide-react-native` and get matching icons. |
+| Style | Lucide-style line icons ([lucide.dev](https://lucide.dev), ISC licence). Many shapes follow Lucide, so new icons can be taken from Lucide and still match. |
 
 Colour rules are in [`docs/brand-colors.md`](../../docs/brand-colors.md#11-icons).
 
@@ -51,12 +51,16 @@ Files are named for **what they mean in Still**, not what they look like (for ex
 <!-- or inline the SVG so it picks up the text colour -->
 ```
 
-**React Native (Expo)**: install `react-native-svg` and `react-native-svg-transformer`, then:
+**iOS app (SwiftUI)**: drag the SVGs into `Assets.xcassets`. For each icon set **Render As: Template Image** (so it takes a tint colour) and tick **Preserve Vector Data** (so it stays sharp at any size). Then:
 
-```tsx
-import Streak from '@/assets/icons/streak.svg';
-<Streak width={24} height={24} color={colors.gold} />
+```swift
+Image("streak")
+    .resizable()
+    .frame(width: 24, height: 24)
+    .foregroundStyle(StillColor.gold)
 ```
+
+Check a few icons once after importing: template images use the shape's outline, so the 2px stroke must stay visible at 16–20 px.
 
 ## Adding a new icon
 

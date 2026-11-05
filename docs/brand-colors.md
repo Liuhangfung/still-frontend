@@ -1,7 +1,7 @@
 # Still: Brand Colours
 
 > **Status:** v1, chosen 2026-11-05
-> **Applies to:** the mobile app, the website, store screenshots and marketing
+> **Applies to:** the iOS app (Swift / SwiftUI), the website, store screenshots and marketing
 > **Logo:** the teal "Pause pose" (see [`images/`](../images/))
 > **UI reference:** [`ui-design/still-ui-v1.html`](../ui-design/still-ui-v1.html)
 
@@ -189,41 +189,78 @@ Both are free on Google Fonts (Open Font License).
 }
 ```
 
-### React Native / Expo (`src/theme/colors.ts`)
+### SwiftUI (iOS app, `DesignSystem/StillColors.swift`)
 
-```ts
-export const colors = {
-  teal: '#0FA3A3',
-  gold: '#FFC300',
-  ink: '#111111',
-  tealDark: '#064E4E',
-  cream: '#FFF6DC',
+```swift
+import SwiftUI
 
-  bg: '#072B2F',
-  panel: '#0D3B40',
-  panelRaised: '#11494F',
-  tabBar: '#05201F',
-  shadowDeep: '#021416',
+extension Color {
+    /// Builds a colour from a hex value, e.g. Color(hex: 0x0FA3A3).
+    init(hex: UInt32) {
+        self.init(
+            red: Double((hex >> 16) & 0xFF) / 255,
+            green: Double((hex >> 8) & 0xFF) / 255,
+            blue: Double(hex & 0xFF) / 255
+        )
+    }
+}
 
-  text: '#FFFFFF',
-  textMuted: '#8FB9BB',
-  textOnLight: '#111111',
-  textMutedOnLight: '#55605F',
+enum StillColor {
+    // brand
+    static let teal = Color(hex: 0x0FA3A3)
+    static let gold = Color(hex: 0xFFC300)
+    static let ink = Color(hex: 0x111111)
+    static let tealDark = Color(hex: 0x064E4E)
+    static let cream = Color(hex: 0xFFF6DC)
 
-  coral: '#FF5A4E',
-  green: '#2BD67B',
-} as const;
+    // surfaces
+    static let bg = Color(hex: 0x072B2F)
+    static let panel = Color(hex: 0x0D3B40)
+    static let panelRaised = Color(hex: 0x11494F)
+    static let tabBar = Color(hex: 0x05201F)
+    static let shadowDeep = Color(hex: 0x021416)
 
-// Hard comic shadow. React Native has no "box-shadow: x y 0" on Android,
-// so draw it as a second View offset by (4, 4) behind the card or button.
-export const comic = {
-  outlineWidth: 3,
-  cardShadowOffset: 5,
-  buttonShadowOffset: 4,
-  radius: { card: 14, button: 12, chip: 999 },
-  skewDeg: -6,
-} as const;
+    // text
+    static let text = Color.white
+    static let textMuted = Color(hex: 0x8FB9BB)
+    static let textOnLight = Color(hex: 0x111111)
+    static let textMutedOnLight = Color(hex: 0x55605F)
+
+    // status
+    static let coral = Color(hex: 0xFF5A4E)
+    static let green = Color(hex: 0x2BD67B)
+}
+
+enum Comic {
+    static let outlineWidth: CGFloat = 3
+    static let cardShadowOffset: CGFloat = 5
+    static let buttonShadowOffset: CGFloat = 4
+    static let cardRadius: CGFloat = 14
+    static let buttonRadius: CGFloat = 12
+    static let skewDegrees: Double = -6
+}
+
+extension View {
+    /// Cream comic card: ink outline and a hard offset shadow (radius 0 = no blur).
+    func comicCard() -> some View {
+        let shape = RoundedRectangle(cornerRadius: Comic.cardRadius)
+        return self
+            .background(StillColor.cream, in: shape)
+            .overlay(shape.stroke(StillColor.ink, lineWidth: Comic.outlineWidth))
+            .shadow(color: StillColor.tealDark, radius: 0,
+                    x: Comic.cardShadowOffset, y: Comic.cardShadowOffset)
+    }
+
+    /// The logo's slant for big headings and primary buttons. SwiftUI has no skew
+    /// modifier, so apply a shear transform.
+    func comicSlant(_ degrees: Double = Comic.skewDegrees) -> some View {
+        transformEffect(CGAffineTransform(a: 1, b: 0, c: tan(degrees * .pi / 180),
+                                          d: 1, tx: 0, ty: 0))
+    }
+}
 ```
+
+> SwiftUI's `.shadow(radius: 0, x:, y:)` draws a sharp offset shadow, so comic shadows need no extra layer. Bangers and Inter are bundled as font files in the app and registered in `Info.plist` (`UIAppFonts`).
 
 ---
 
