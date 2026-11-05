@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Bangers, Inter } from "next/font/google";
 import type { ReactNode } from "react";
+import { MotionProvider } from "@/components/motion/provider";
 import { siteUrl } from "@/content/site";
 import "./globals.css";
 
@@ -30,7 +31,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={`${bangers.variable} ${inter.variable}`}>
-      <body>{children}</body>
+      <body>
+        <MotionProvider>{children}</MotionProvider>
+      </body>
     </html>
   );
 }

@@ -1,4 +1,5 @@
 import { Eyebrow } from "@still/ui";
+import { Stagger, StaggerItem } from "../motion/reveal";
 import { clsx } from "clsx";
 import type { ReactNode } from "react";
 
@@ -35,10 +36,18 @@ export function SectionHead({
   lead?: ReactNode;
 }) {
   return (
-    <div className="mx-auto mb-[60px] flex max-w-[760px] flex-col items-center gap-4 text-center">
-      <Eyebrow>{eyebrow}</Eyebrow>
-      <h2 className="display text-[clamp(44px,6vw,68px)]">{title}</h2>
-      {lead && <p className="max-w-[600px] text-[19px] text-muted">{lead}</p>}
-    </div>
+    <Stagger className="mx-auto mb-[60px] flex max-w-[760px] flex-col items-center gap-4 text-center">
+      <StaggerItem>
+        <Eyebrow>{eyebrow}</Eyebrow>
+      </StaggerItem>
+      <StaggerItem from="zoom">
+        <h2 className="display text-[clamp(44px,6vw,68px)]">{title}</h2>
+      </StaggerItem>
+      {lead && (
+        <StaggerItem>
+          <p className="max-w-[600px] text-[19px] text-muted">{lead}</p>
+        </StaggerItem>
+      )}
+    </Stagger>
   );
 }

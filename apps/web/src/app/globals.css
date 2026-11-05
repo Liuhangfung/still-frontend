@@ -6,6 +6,11 @@
   html {
     scroll-behavior: smooth;
   }
+  html,
+  body {
+    /* Animated elements start off to the side; never let them cause sideways scrolling. */
+    overflow-x: clip;
+  }
   body {
     @apply bg-white font-sans leading-[1.6] text-ink antialiased;
   }
@@ -21,5 +26,185 @@
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+}
+
+/* ---------- Motion (all switched off for "reduce motion") ---------- */
+
+/* Comic banners */
+@keyframes marquee {
+  to {
+    transform: translateX(-100%);
+  }
+}
+.marquee {
+  animation: marquee 32s linear infinite;
+}
+.marquee-reverse {
+  animation-direction: reverse;
+  animation-duration: 38s;
+}
+
+/* Soft colour orbs behind the hero phones */
+@keyframes orb {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(40px, -30px) scale(1.15);
+  }
+}
+.hero-orb {
+  animation: orb 12s ease-in-out infinite;
+}
+.hero-orb-2 {
+  animation-duration: 15s;
+  animation-direction: reverse;
+}
+
+/* Morphing blob behind the toolkit phone */
+@keyframes blob {
+  0%,
+  100% {
+    border-radius: 44% 56% 52% 48% / 50% 44% 56% 50%;
+    transform: rotate(0deg);
+  }
+  50% {
+    border-radius: 56% 44% 40% 60% / 42% 58% 42% 58%;
+    transform: rotate(8deg);
+  }
+}
+.blob-morph {
+  border-radius: 44% 56% 52% 48% / 50% 44% 56% 50%;
+  animation: blob 14s ease-in-out infinite;
+}
+
+/* Halftone dots drifting in the founder-list section */
+@keyframes halftone {
+  to {
+    background-position: 32px 32px;
+  }
+}
+.halftone-drift {
+  animation: halftone 6s linear infinite;
+}
+
+/* "FIRST 100 ONLY" ribbon swinging on its pin */
+@keyframes swing {
+  0%,
+  100% {
+    transform: rotate(3deg);
+  }
+  50% {
+    transform: rotate(-3deg);
+  }
+}
+.ribbon-swing {
+  transform-origin: 50% -20px;
+  animation: swing 3.2s ease-in-out infinite;
+}
+
+/* A light sweep across the "DAY 56" header */
+@keyframes shine {
+  0%,
+  60% {
+    transform: translateX(-120%) skewX(-20deg);
+  }
+  100% {
+    transform: translateX(320%) skewX(-20deg);
+  }
+}
+.day56-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 35%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+  animation: shine 4s ease-in-out infinite;
+}
+
+/* Manga speed lines behind the blog */
+.speed-lines {
+  background: repeating-conic-gradient(
+    from 0deg at 50% 120%,
+    rgba(255, 195, 0, 0.09) 0deg 1.2deg,
+    transparent 1.2deg 7deg
+  );
+}
+
+/* Badges react when their card is hovered */
+.rank-badge,
+.step-num {
+  transition: transform 0.35s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+.group:hover .rank-badge,
+.group:hover .step-num {
+  transform: rotate(-8deg) scale(1.12);
+}
+
+/* Line illustrations draw themselves in */
+.draw-svg svg path:not([stroke-dasharray]),
+.draw-svg svg rect,
+.draw-svg svg circle {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+}
+.draw-svg.is-drawn svg path:not([stroke-dasharray]),
+.draw-svg.is-drawn svg rect,
+.draw-svg.is-drawn svg circle {
+  animation: draw 1.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.draw-svg svg [fill]:not([fill="none"]) {
+  fill-opacity: 0;
+}
+.draw-svg.is-drawn svg [fill]:not([fill="none"]) {
+  animation: fill-in 0.6s ease 0.7s forwards;
+}
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes fill-in {
+  to {
+    fill-opacity: 1;
+  }
+}
+
+/* Smooth open/close for FAQ answers (browsers that support it) */
+:root {
+  interpolate-size: allow-keywords;
+}
+.faq::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition:
+    block-size 0.35s ease,
+    content-visibility 0.35s allow-discrete;
+}
+.faq[open]::details-content {
+  block-size: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee,
+  .hero-orb,
+  .blob-morph,
+  .halftone-drift,
+  .ribbon-swing,
+  .day56-shine::after {
+    animation: none;
+  }
+  .draw-svg svg path,
+  .draw-svg svg rect,
+  .draw-svg svg circle {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+    animation: none !important;
+  }
+  .draw-svg svg [fill] {
+    fill-opacity: 1 !important;
+    animation: none !important;
   }
 }

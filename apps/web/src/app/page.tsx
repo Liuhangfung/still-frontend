@@ -5,6 +5,7 @@ import { Final } from "@/components/landing/final";
 import { Footer } from "@/components/landing/footer";
 import { Hero } from "@/components/landing/hero";
 import { How } from "@/components/landing/how";
+import { Marquee } from "@/components/landing/marquee";
 import { Nav } from "@/components/landing/nav";
 import { Pricing } from "@/components/landing/pricing";
 import { Problems } from "@/components/landing/problems";
@@ -18,6 +19,7 @@ export default function Home() {
       <Nav />
       <Hero />
       <main>
+        <Marquee />
         <Problems />
         <Reset />
         <Programme />

@@ -1,6 +1,6 @@
-import { ButtonLink, Device, Eyebrow, Icon, Mark } from "@still/ui";
-import Image from "next/image";
+import { ButtonLink, Eyebrow, Icon } from "@still/ui";
 import { joinCta, trust } from "@/content/site";
+import { FadeUp, HeroArt, HeroHeadline } from "./hero-motion";
 import { Wrap } from "./section";
 
 function StoreBadge({ store }: { store: "apple" | "google" }) {
@@ -27,113 +27,49 @@ function StoreBadge({ store }: { store: "apple" | "google" }) {
   );
 }
 
-function Screen({
-  src,
-  alt,
-  width,
-  priority,
-}: {
-  src: string;
-  alt: string;
-  width: number;
-  priority?: boolean;
-}) {
-  return (
-    <Device width={width}>
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        sizes={`${width}px`}
-        className="object-cover"
-        priority={priority}
-      />
-    </Device>
-  );
-}
-
 export function Hero() {
   return (
     <header className="relative overflow-hidden bg-[radial-gradient(900px_520px_at_78%_30%,#EAF7F7_0%,rgba(234,247,247,0)_70%)] pb-[110px] pt-9 lg:pt-16">
       <Wrap className="grid items-center gap-10 lg:grid-cols-[1.05fr_.95fr]">
         <div>
-          <Eyebrow>The 56-day trading reset</Eyebrow>
-          <h1 className="display mb-6 mt-5 text-[clamp(54px,7.4vw,98px)]">
-            LOST MONEY?
-            <br />
-            <Mark>RESET HOW</Mark>
-            <br />
-            <Mark>YOU TRADE.</Mark>
-          </h1>
-          <p className="mb-[34px] max-w-[600px] text-xl text-muted">
-            Still is a 56-day programme that rebuilds your whole trading behaviour:{" "}
-            <b className="text-ink">how you think, plan, practise and review.</b> One short quest a
-            day, built around your own problems, whether that&apos;s FOMO, revenge trading,
-            overtrading or no plan at all.
-          </p>
-          <div className="flex flex-wrap items-center gap-4">
+          <FadeUp delay={0}>
+            <Eyebrow>The 56-day trading reset</Eyebrow>
+          </FadeUp>
+          <HeroHeadline />
+          <FadeUp delay={0.55}>
+            <p className="mb-[34px] max-w-[600px] text-xl text-muted">
+              Still is a 56-day programme that rebuilds your whole trading behaviour:{" "}
+              <b className="text-ink">how you think, plan, practise and review.</b> One short quest
+              a day, built around your own problems, whether that&apos;s FOMO, revenge trading,
+              overtrading or no plan at all.
+            </p>
+          </FadeUp>
+          <FadeUp delay={0.7} className="flex flex-wrap items-center gap-4">
             <ButtonLink href={joinCta.href} className="w-full sm:w-auto">
               {joinCta.label}
             </ButtonLink>
             <ButtonLink href="#how" variant="outline" className="w-full sm:w-auto">
               See how it works
             </ButtonLink>
-          </div>
-          <div className="mt-7 flex flex-wrap gap-[22px] text-sm font-semibold text-muted">
+          </FadeUp>
+          <FadeUp
+            delay={0.85}
+            className="mt-7 flex flex-wrap gap-[22px] text-sm font-semibold text-muted"
+          >
             {trust.map((t) => (
               <span key={t.text} className="flex items-center gap-2">
                 <Icon name={t.icon} className="text-lg text-teal" />
                 {t.text}
               </span>
             ))}
-          </div>
-          <div className="mt-[30px] flex flex-wrap items-center gap-3">
+          </FadeUp>
+          <FadeUp delay={1} className="mt-[30px] flex flex-wrap items-center gap-3">
             <StoreBadge store="apple" />
             <StoreBadge store="google" />
             <span className="text-[13px] font-semibold text-muted">Founder list hears first</span>
-          </div>
+          </FadeUp>
         </div>
-
-        <div className="relative flex h-[640px] items-end justify-center pb-5 sm:items-center sm:pb-0">
-          <div className="absolute left-[4%] top-[70px] hidden -rotate-[7deg] opacity-[.97] sm:block">
-            <Screen
-              src="/images/screens/path.png"
-              alt="Your Path: one illustrated card for every day of the programme"
-              width={250}
-            />
-          </div>
-          <div className="relative z-[2] origin-bottom max-sm:scale-[.862] sm:left-[12%]">
-            <Screen
-              src="/images/screens/today.png"
-              alt="Still Today screen with daily quest and training checklist"
-              width={290}
-              priority
-            />
-          </div>
-          <div className="absolute left-1/2 top-0 z-[5] flex w-[250px] -translate-x-1/2 items-start gap-[11px] rounded-[22px] border border-black/5 bg-white/95 px-3.5 py-3 shadow-[0_18px_40px_-12px_rgba(0,0,0,.28)] backdrop-blur-md sm:-right-[70px] sm:-top-7 sm:left-auto sm:w-[300px] sm:translate-x-0">
-            <Image
-              src="/images/still-app-icon.svg"
-              alt=""
-              width={40}
-              height={40}
-              className="rounded-[10px]"
-            />
-            <div className="flex-1">
-              <div className="flex justify-between text-xs font-semibold text-[#6B7B7D]">
-                <span>STILL</span>
-                <span>now</span>
-              </div>
-              <b className="block text-sm leading-snug">Daily Quest has arrived</b>
-              <p className="text-[13px] leading-snug text-[#3E4C4E]">
-                Separate Fact &amp; Guess · about 8 min
-              </p>
-            </div>
-          </div>
-          <div className="absolute bottom-[50px] left-0 z-[5] flex -rotate-[4deg] items-center gap-2.5 rounded-[14px] border-[2.5px] border-ink bg-gold px-3.5 py-2.5 text-sm font-extrabold shadow-comic-md sm:bottom-[90px] sm:-left-1">
-            <Icon name="rank" className="text-[22px]" />
-            <span>Rank up · E → D · Chapter 1 complete</span>
-          </div>
-        </div>
+        <HeroArt />
       </Wrap>
     </header>
   );
