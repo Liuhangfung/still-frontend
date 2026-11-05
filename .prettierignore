@@ -1,0 +1,10 @@
+node_modules
+.next
+.turbo
+dist
+pnpm-lock.yaml
+ui-design
+docs
+*.md
+packages/ui/src/icons/icons.ts
+*.html

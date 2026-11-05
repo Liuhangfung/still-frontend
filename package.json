@@ -1,0 +1,30 @@
+{
+  "name": "still-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:web": "turbo run dev --filter=still-web",
+    "build": "turbo run build",
+    "build:web": "turbo run build --filter=still-web",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "icons": "pnpm --filter @still/ui icons",
+    "format": "prettier --write --cache --cache-location .turbo/prettiercache .",
+    "format:check": "prettier --check --cache --cache-location .turbo/prettiercache .",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.4.1",
+    "@commitlint/config-conventional": "^20.4.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.9.4",
+    "turbo": "^2.10.4"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,mjs,cjs,json,css,yaml,yml}": "prettier --write"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "prettier": "@still/prettier-config"
+}

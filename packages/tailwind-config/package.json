@@ -1,0 +1,14 @@
+{
+  "name": "@still/tailwind-config",
+  "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "main": "tailwind.config.js",
+  "exports": {
+    ".": "./tailwind.config.js"
+  },
+  "peerDependencies": {
+    "tailwindcss": "^3.4.0"
+  },
+  "type": "module"
+}

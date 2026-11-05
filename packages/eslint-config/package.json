@@ -1,0 +1,14 @@
+{
+  "name": "@still/eslint-config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "index.mjs",
+  "dependencies": {
+    "eslint-config-next": "^16.2.10",
+    "eslint-config-prettier": "^10.1.8"
+  },
+  "peerDependencies": {
+    "eslint": "^9.0.0"
+  }
+}
