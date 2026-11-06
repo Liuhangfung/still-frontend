@@ -18,17 +18,18 @@ export function LegalPage({ slug }: { slug: LegalDoc["slug"] }) {
   return (
     <>
       <SubpageHeader />
-      <main className="bg-white py-14 lg:py-20">
+      <main className="py-14 lg:py-20">
         <Wrap className="max-w-[820px]">
-          <h1 className="display text-[clamp(44px,6vw,64px)]">{doc.title.toUpperCase()}</h1>
-          <p className="mt-3 text-sm font-semibold text-muted">
+          <h1 className="text-[clamp(44px,6vw,64px)] tracking-[-0.025em]">{doc.title}</h1>
+          <p className="mt-3 text-sm text-muted">
             Version {doc.version} · Last updated {doc.lastUpdated}
           </p>
-          <div className="mt-6 rounded-[14px] border-[1.5px] border-l-[5px] border-line border-l-gold bg-gold-paper px-5 py-4 text-sm text-ink">
-            <b>Draft.</b> This document is being finalised and will be reviewed by a lawyer before
-            the Still app launches. Text in [brackets] is still to be filled in.
+          <div className="mt-6 rounded-2xl border border-[#d8c8ab] bg-gold-wash px-5 py-4 text-sm text-ink">
+            <b className="font-semibold">Draft.</b> This document is being finalised and will be
+            reviewed by a lawyer before the Still app launches. Text in [brackets] is still to be
+            filled in.
           </div>
-          <article className="prose prose-slate mt-10 max-w-none prose-headings:font-extrabold prose-headings:text-ink prose-h2:mt-12 prose-h2:text-2xl prose-h3:text-lg prose-a:text-teal-dark prose-strong:text-ink prose-table:text-sm prose-th:text-ink">
+          <article className="prose prose-stone mt-10 max-w-none prose-headings:font-serif prose-headings:font-normal prose-headings:text-ink prose-h2:mt-12 prose-h2:text-[32px] prose-h3:text-2xl prose-p:text-lead prose-li:text-lead prose-a:text-ink prose-strong:text-ink prose-table:text-sm prose-th:text-ink">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>{loadDoc(slug)}</ReactMarkdown>
           </article>
         </Wrap>

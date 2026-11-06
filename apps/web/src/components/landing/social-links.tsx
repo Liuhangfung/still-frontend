@@ -10,7 +10,7 @@ const logos: Record<(typeof socials)[number]["network"], SimpleIcon> = {
 };
 
 const circle =
-  "flex h-10 w-10 items-center justify-center rounded-full border-2 border-ink bg-white text-ink shadow-comic-sm transition-transform";
+  "flex h-10 w-10 items-center justify-center rounded-full border border-line text-ink transition-[transform,background-color]";
 
 /** Round social logo buttons. Each becomes a link once its URL is set in content/site.ts. */
 export function SocialLinks() {
@@ -18,7 +18,7 @@ export function SocialLinks() {
     <ul className="flex flex-wrap gap-3" aria-label="Still on social media">
       {socials.map((s) => {
         const logo = (
-          <svg viewBox="0 0 24 24" aria-hidden className="h-[18px] w-[18px]" fill="currentColor">
+          <svg viewBox="0 0 24 24" aria-hidden className="h-4 w-4" fill="currentColor">
             <path d={logos[s.network].path} />
           </svg>
         );
@@ -30,7 +30,7 @@ export function SocialLinks() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={s.label}
-                className={`${circle} hover:-translate-y-0.5 hover:bg-gold`}
+                className={`${circle} hover:-translate-y-0.5 hover:bg-ink/5`}
               >
                 {logo}
               </a>

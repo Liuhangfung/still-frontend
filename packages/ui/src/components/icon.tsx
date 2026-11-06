@@ -11,16 +11,18 @@ type IconProps = {
   className?: string;
   /** Accessible name. Leave empty for decorative icons next to text. */
   label?: string;
+  /** Line weight; the classical web pages use a lighter stroke than the app's 2px. */
+  strokeWidth?: number;
 };
 
 /** Brand line icon (24×24, 2px stroke) that takes the surrounding text colour. */
-export function Icon({ name, className, label }: IconProps) {
+export function Icon({ name, className, label, strokeWidth = 2 }: IconProps) {
   return (
     <svg
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={2}
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
       className={clsx("inline-block h-[1em] w-[1em] flex-none align-[-0.14em]", className)}

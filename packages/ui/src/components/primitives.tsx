@@ -3,13 +3,13 @@ import type { HTMLAttributes, ReactNode } from "react";
 
 type DivProps = HTMLAttributes<HTMLDivElement>;
 
-/** Comic card: ink outline and a hard offset shadow. `soft` is the quiet variant. */
+/** Paper card: flat, hairline border. `soft` is the quieter stone-tinted variant. */
 export function Card({ soft, className, ...rest }: DivProps & { soft?: boolean }) {
   return (
     <div
       className={clsx(
-        "rounded-[20px] bg-white",
-        soft ? "border-[2.5px] border-line shadow-soft" : "border-[2.5px] border-ink shadow-comic",
+        "rounded-2xl border border-line",
+        soft ? "bg-stone-deep/60" : "bg-paper",
         className
       )}
       {...rest}
@@ -17,12 +17,12 @@ export function Card({ soft, className, ...rest }: DivProps & { soft?: boolean }
   );
 }
 
-/** Small pill with an ink outline. */
+/** Small round pill with a hairline border. */
 export function Chip({ className, ...rest }: HTMLAttributes<HTMLSpanElement>) {
   return (
     <span
       className={clsx(
-        "inline-flex items-center gap-[7px] rounded-full border-2 border-ink bg-white px-[13px] py-[7px] text-[13px] font-bold text-ink",
+        "inline-flex items-center gap-2 rounded-full border border-line bg-paper px-3 py-1.5 text-xs text-ink",
         className
       )}
       {...rest}
@@ -30,25 +30,39 @@ export function Chip({ className, ...rest }: HTMLAttributes<HTMLSpanElement>) {
   );
 }
 
-/** Uppercase label with a short teal rule before it. */
-export function Eyebrow({ className, children }: { className?: string; children: ReactNode }) {
+/** Small uppercase label; `dot` adds the antique-gold point used before hero eyebrows. */
+export function Eyebrow({
+  dot,
+  className,
+  children,
+}: {
+  dot?: boolean;
+  className?: string;
+  children: ReactNode;
+}) {
   return (
-    <div
-      className={clsx(
-        "inline-flex items-center gap-2 text-[13px] font-extrabold uppercase tracking-[2px] text-teal-dark before:h-[3px] before:w-[22px] before:rounded-sm before:bg-teal before:content-['']",
-        className
+    <p className={clsx("text-[11px] font-medium uppercase tracking-[2.3px]", className)}>
+      {dot && (
+        <span
+          aria-hidden
+          className="mr-2 inline-block h-[5px] w-[5px] rounded-full bg-gold align-[2px]"
+        />
       )}
-    >
       {children}
-    </div>
+    </p>
   );
 }
 
-/** Gold highlighter stroke behind a word, skewed like the logo. */
-export function Mark({ children }: { children: ReactNode }) {
+/** The lowercase serif wordmark; the initial "s" is set slightly smaller. */
+export function Wordmark({ className }: { className?: string }) {
   return (
-    <span className="relative z-0 inline-block after:absolute after:-left-1.5 after:-right-2 after:bottom-[6%] after:-z-10 after:h-[42%] after:-skew-x-[10deg] after:rounded after:bg-gold after:content-['']">
-      {children}
+    <span
+      className={clsx(
+        "block font-serif font-medium leading-none tracking-[-0.035em] first-letter:text-[0.85em]",
+        className
+      )}
+    >
+      still
     </span>
   );
 }

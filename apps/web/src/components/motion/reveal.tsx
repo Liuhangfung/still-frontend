@@ -3,34 +3,20 @@
 import { motion, type Variants } from "framer-motion";
 import type { ReactNode } from "react";
 
-export type RevealFrom = "up" | "flip" | "left" | "right" | "zoom" | "pop";
+export type RevealFrom = "up" | "fade";
 
 const hidden: Record<RevealFrom, Record<string, number>> = {
-  up: { opacity: 0, y: 48 },
-  flip: { opacity: 0, y: 90, rotateX: 55, scale: 0.94 },
-  left: { opacity: 0, x: -90, rotateY: 22 },
-  right: { opacity: 0, x: 90, rotateY: -22 },
-  zoom: { opacity: 0, scale: 0.86, y: 24 },
-  pop: { opacity: 0, scale: 0.4, rotate: -8 },
+  up: { opacity: 0, y: 24 },
+  fade: { opacity: 0 },
 };
 
-const shown = { opacity: 1, x: 0, y: 0, rotateX: 0, rotateY: 0, scale: 1, rotate: 0 };
+const shown = { opacity: 1, y: 0 };
 
+/** Slow, quiet fades only: the classical design has no springs or pops. */
 function variantsFor(from: RevealFrom, delay = 0): Variants {
-  const pop = from === "pop";
   return {
-    hidden: { ...hidden[from], transformPerspective: 1200 },
-    show: {
-      ...shown,
-      transformPerspective: 1200,
-      transition: {
-        type: "spring",
-        stiffness: pop ? 260 : 80,
-        damping: pop ? 14 : 18,
-        mass: 0.9,
-        delay,
-      },
-    },
+    hidden: hidden[from],
+    show: { ...shown, transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1], delay } },
   };
 }
 

@@ -5,13 +5,13 @@ import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import { useEffect, type ReactNode } from "react";
 
-/** Smooth scrolling (Lenis), a gold scroll-progress bar, and "reduce motion" support. */
+/** Smooth scrolling (Lenis), a thin gold scroll-progress line, and "reduce motion" support. */
 export function MotionProvider({ children }: { children: ReactNode }) {
   const reduce = useReducedMotion();
 
   useEffect(() => {
     if (reduce) return;
-    const lenis = new Lenis({ autoRaf: true, anchors: { offset: -80 }, lerp: 0.1 });
+    const lenis = new Lenis({ autoRaf: true, anchors: { offset: -24 }, lerp: 0.1 });
     return () => lenis.destroy();
   }, [reduce]);
 
@@ -29,7 +29,7 @@ function ScrollProgress() {
   return (
     <motion.div
       aria-hidden
-      className="fixed inset-x-0 top-0 z-[60] h-1 origin-left bg-gold"
+      className="fixed inset-x-0 top-0 z-[60] h-0.5 origin-left bg-gold"
       style={{ scaleX }}
     />
   );

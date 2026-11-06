@@ -7,8 +7,8 @@ import { contactLimits, contactTopics } from "@/content/contact";
 type State = "idle" | "sending" | "sent" | "not_connected" | "invalid" | "error";
 
 const field =
-  "w-full rounded-[14px] border-[2.5px] border-ink bg-white px-4 py-3 text-base text-ink placeholder:text-muted/70 focus:outline-none focus:ring-4 focus:ring-teal/30";
-const label = "mb-1.5 block text-sm font-bold text-ink";
+  "w-full rounded-xl border border-line bg-paper px-4 py-3 text-base text-ink placeholder:text-muted/70 focus:border-ink";
+const label = "mb-1.5 block text-sm font-semibold text-ink";
 
 export function ContactForm({ fallbackEmail }: { fallbackEmail: string }) {
   const [state, setState] = useState<State>("idle");
@@ -35,11 +35,8 @@ export function ContactForm({ fallbackEmail }: { fallbackEmail: string }) {
 
   if (state === "sent") {
     return (
-      <div
-        role="status"
-        className="rounded-[20px] border-[2.5px] border-ink bg-gold-paper p-8 shadow-comic"
-      >
-        <h2 className="display text-4xl">MESSAGE SENT.</h2>
+      <div role="status" className="rounded-2xl border border-line bg-gold-wash p-8">
+        <h2 className="text-[40px] tracking-[-0.02em]">Message sent.</h2>
         <p className="mt-3 text-muted">
           Thanks for reaching out. We usually reply within 2 working days.
         </p>
@@ -115,7 +112,7 @@ export function ContactForm({ fallbackEmail }: { fallbackEmail: string }) {
       <p className="text-xs leading-relaxed text-muted">
         Please don&apos;t include passwords, card details or exchange account information. We use
         your message only to reply to you. See our{" "}
-        <a href="/privacy" className="font-semibold text-teal-dark underline">
+        <a href="/privacy" className="text-ink underline underline-offset-2">
           Privacy Policy
         </a>
         .
@@ -125,7 +122,7 @@ export function ContactForm({ fallbackEmail }: { fallbackEmail: string }) {
         <Button type="submit" disabled={state === "sending"}>
           {state === "sending" ? "Sending…" : "Send message"}
         </Button>
-        <p role="status" aria-live="polite" className="text-sm font-semibold text-ink">
+        <p role="status" aria-live="polite" className="text-sm text-ink">
           {state === "not_connected" &&
             `The contact form isn't connected yet. For now, please email us at ${fallbackEmail}.`}
           {state === "invalid" &&

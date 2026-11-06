@@ -57,7 +57,7 @@ Files are named for **what they mean in Still**, not what they look like (for ex
 Image("streak")
     .resizable()
     .frame(width: 24, height: 24)
-    .foregroundStyle(StillColor.gold)
+    .foregroundStyle(StillColor.textGold)
 ```
 
 Check a few icons once after importing: template images use the shape's outline, so the 2px stroke must stay visible at 16–20 px.

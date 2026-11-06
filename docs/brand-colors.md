@@ -1,15 +1,15 @@
 # Still: Brand Colours
 
-> **Status:** v1, chosen 2026-11-05
+> **Status:** v2, classical editorial (Greek mythology), chosen 2026-11-06. Replaces v1 (teal + gold comic, 2026-11-05), which is in git history.
 > **Applies to:** the iOS app (Swift / SwiftUI), the website, store screenshots and marketing
-> **Logo:** the teal "Pause pose" (see [`images/`](../images/))
-> **UI reference:** [`ui-design/still-ui-v1.html`](../ui-design/still-ui-v1.html)
+> **Wordmark:** lowercase serif **still**, with a slightly smaller initial **s**
+> **UI reference:** [`ui-design-page/`](../ui-design-page/) (46 editable screens; tokens in [`shared/screens.css`](../ui-design-page/shared/screens.css)) · [`docs/ui-design/still-ui-v8.html`](ui-design/still-ui-v8.html) (app) · [`docs/ui-design/landing-v3.html`](ui-design/landing-v3.html) (landing)
 
 ---
 
 ## 1. The idea in one line
 
-**Calm teal + bold gold, drawn like a comic.** Teal is the "still" part: calm, steady, in control. Gold is the energy: action, reward, the pause button. Thick black outlines and offset shadows give it the JoJo-style comic feel.
+**A quiet museum, not a comic.** Warm ivory paper, charcoal ink, a touch of antique gold and powder-blue sky, with Greek mythological frescoes and statues as the art. The art gives the atmosphere; the practice gives the value. Screens should feel calm, editorial and unhurried: that is the "still" part.
 
 ---
 
@@ -17,73 +17,69 @@
 
 | Swatch | Name | Hex | Role |
 |---|---|---|---|
-| 🟦 | **Teal** | `#0FA3A3` | Brand colour. App icon background, progress, selected states, links |
-| 🟨 | **Gold** | `#FFC300` | Main action. Primary buttons, the Pause button, XP, rewards, key headings |
-| ⬛ | **Ink** | `#111111` | Outlines, comic shadows, text on gold, cream and teal |
-| 🟩 | **Dark teal** | `#064E4E` | The logo's shadow colour. Card shadows, small teal text on light backgrounds |
-| 🟫 | **Cream** | `#FFF6DC` | Comic "paper" cards on the dark app background |
+| ⬜ | **Ivory** | `#F5F2EB` | Main background, tab bar, text on ink buttons |
+| ⬛ | **Ink** | `#20201D` | Text, primary buttons, outlines of selected controls |
+| 🟫 | **Antique gold** | `#B69A64` | Progress bars, selected borders, gilded art edges. Decoration and fills, **not small text** |
+| 🟦 | **Sky** | `#AABAC4` | Calm accent: selected grade/choice fill, Pause and calm screens |
+| ◻️ | **Stone** | `#DAD8D2` | Quiet surfaces, dividers on art pages |
 
 > The emoji squares are only for this document. In the app, use the hex values.
 
-### App surfaces (dark theme)
+### Surfaces
 
 | Name | Hex | Use |
 |---|---|---|
-| **Background** | `#072B2F` | Main app background |
-| **Panel** | `#0D3B40` | Dark cards, sheets, input areas |
-| **Panel raised** | `#11494F` | Pressed state, nested cards |
-| **Tab bar** | `#05201F` | Bottom navigation |
-| **Deep shadow** | `#021416` | Shadow under dark cards |
+| **Paper** | `#FAF8F2` | Cards and panels on ivory |
+| **Field** | `#FAF8F3` | Inputs, choices, selects |
+| **Gold wash** | `#EEE8DB` | Highlighted panel (with border `#D8C8AB`) |
+| **Sky wash** | `#E7ECEC` | Soft, calm panel (with border `#D3DDDF`) |
+| **Selected** | `#EBE4D5` | Checked choice or selected calendar day (border `#AF9568`) |
+| **Line** | `#DEDBD3` | Hairline dividers, tab bar top border |
+| **Track** | `#DED7CA` | Empty part of a progress bar |
 
 ### Text
 
 | Name | Hex | Use |
 |---|---|---|
-| **Text** | `#FFFFFF` | Main text on dark backgrounds |
-| **Text muted** | `#8FB9BB` | Secondary text and hints on dark backgrounds |
-| **Text on light** | `#111111` | Main text on cream, gold, teal and white |
-| **Text muted on light** | `#55605F` | Secondary text on cream |
+| **Text** | `#20201D` | Main text (Ink) |
+| **Lead** | `#59554F` | Intro paragraph under a heading |
+| **Muted** | `#656159` | Secondary text, hints |
+| **Gold text** | `#76654B` | Eyebrows and small gold labels (use this, never `#B69A64`, for text) |
+| **On ink** | `#F5F2EB` | Text on primary (ink) buttons |
+| **Focus ring** | `#627784` | 2px keyboard focus outline, 3px offset |
 
-### Status colours (use sparingly)
+### Status
 
-| Name | Hex | Use |
-|---|---|---|
-| **Coral** | `#FF5A4E` | Warnings and "Not today" only. Never for losses or prices. |
-| **Green** | `#2BD67B` | Success ticks. Never for "profit". |
-| **Info** | `#0FA3A3` | Same as Teal |
+There are **no status colours** in v2. No coral, no green, no red. Warnings, "Not today" and safety messages are carried by **words, icons and layout** (a calm sky panel, a plain sentence), never by an alarm colour. This keeps the app from ever looking like a P&L screen.
 
 ---
 
 ## 3. How much of each colour
 
-Use roughly **60 / 30 / 10** on a typical screen:
-
 | Share | Colour | Where |
 |---|---|---|
-| ~60% | Background and panel (dark teals) | Calm base: the screen should feel *still* |
-| ~30% | Cream cards and white text | Content |
-| ~10% | **Gold** + Teal accents | Actions and rewards only |
+| ~70% | Ivory, paper, stone | Background and cards: the screen should feel *still* |
+| ~20% | Ink | Text and the one primary button |
+| ~10% | Art, gold, sky | Fresco crops, progress, selected states |
 
-**Gold is precious.** If everything is gold, nothing stands out. Aim for **one gold button per screen**, the thing the user should do next.
+**One ink button per screen**: the thing the user should do next. Everything else is a secondary (outlined) button or a text link. Gold is used for progress and selection, never as a button colour.
 
 ---
 
-## 4. Comic style rules
-
-These make the colours feel like the logo:
+## 4. Classical style rules
 
 | Element | Rule |
 |---|---|
-| **Outline** | `3px solid #111111` on cards, buttons, chips and inputs (`2px` on small items) |
-| **Shadow (cards on dark)** | Hard offset, no blur: `5px 5px 0 #064E4E` |
-| **Shadow (buttons)** | `4px 4px 0 #111111` |
-| **Shadow (dark cards)** | `5px 5px 0 #021416` |
-| **Corner radius** | Cards 14px · Buttons 12px · Chips: fully round |
-| **Slant** | Big headings and primary buttons are skewed **-6° to -8°**, like the logo |
-| **Speed lines** | 3 short teal lines before a heading (decoration only, max one per screen) |
-| **Halftone** | Teal dots at 18% opacity on hero screens only (welcome, rewards) |
+| **Artwork** | Greek mythological frescoes, statues and painted skies, cropped as a single image band on hero screens (Welcome, Today, Journey, Pause). Gilded gold edges on crops are allowed. One artwork per screen at most; form screens have none |
+| **Headings** | Cormorant Garamond, sentence case, often ending with a full stop ("Judge your day.") |
+| **Outline** | 1px hairlines (`#DEDBD3` / `#C9C3B7`). No thick black outlines |
+| **Shadow** | Almost none. Cards are flat; only overlays (toast, sheet) get a soft shadow such as `0 5px 24px rgba(0,0,0,.13)` |
+| **Corner radius** | Cards ~16px, buttons ~10–12px, chips fully round |
+| **Slant** | None. Nothing is skewed |
+| **Motion** | Slow fades only, and respects Reduce Motion |
+| **Titles** | Useful title first, mythology second (e.g. "Know your habits", not a god's name). Myth is atmosphere, never required to understand a screen |
 
-**Never use soft, blurry drop shadows.** Comic shadows are always hard-edged.
+**Never use** comic bursts, speed lines, halftone, hard offset shadows or skewed text. Those belong to v1.
 
 ---
 
@@ -93,25 +89,24 @@ Checked with the WCAG 2.1 contrast formula. **AA** needs 4.5:1 for normal text a
 
 | Text / icon | On | Ratio | OK for |
 |---|---|---|---|
-| White `#FFFFFF` | Background `#072B2F` | **15.0** | ✅ All text |
-| Muted `#8FB9BB` | Background `#072B2F` | **7.0** | ✅ All text |
-| Gold `#FFC300` | Background `#072B2F` | **9.4** | ✅ All text |
-| Teal `#0FA3A3` | Background `#072B2F` | **4.9** | ✅ All text |
-| White | Panel `#0D3B40` | **12.2** | ✅ All text |
-| Muted | Panel `#0D3B40` | **5.7** | ✅ All text |
-| Ink `#111111` | Gold `#FFC300` | **11.7** | ✅ All text |
-| Ink | Cream `#FFF6DC` | **17.5** | ✅ All text |
-| Dark teal `#064E4E` | Cream | **8.8** | ✅ All text |
-| Ink | Teal `#0FA3A3` | **6.1** | ✅ All text |
-| Ink | Coral `#FF5A4E` | **6.1** | ✅ All text |
-| ⚠️ White | Teal `#0FA3A3` | **3.1** | Large / bold text and icons **only** |
-| ⚠️ White | Coral `#FF5A4E` | **3.1** | Large / bold text and icons **only** |
-| ⚠️ Teal | White `#FFFFFF` | **3.1** | Large text and icons **only**. Use Dark teal for small text. |
+| Ink `#20201D` | Ivory `#F5F2EB` | **14.6** | ✅ All text |
+| Ink | Paper `#FAF8F2` | **15.4** | ✅ All text |
+| Ivory | Ink (primary button) | **14.6** | ✅ All text |
+| Ink | Sky `#AABAC4` | **8.2** | ✅ All text |
+| Ink | Antique gold `#B69A64` | **6.1** | ✅ All text |
+| Ink | Stone `#DAD8D2` | **11.5** | ✅ All text |
+| Muted `#656159` | Ivory | **5.5** | ✅ All text |
+| Lead `#59554F` | Ivory | **6.6** | ✅ All text |
+| Gold text `#76654B` | Ivory | **5.0** | ✅ All text |
+| Focus ring `#627784` | Ivory | **4.2** | ✅ Non-text (needs 3:1) |
+| ⚠️ Active tab `#8F743E` | Ivory | **4.0** | Large text and icons **only**. The 9px tab label in the current designs needs a darker gold (e.g. `#76654B`) |
+| ❌ Antique gold `#B69A64` | Ivory | **2.4** | **Never for text.** Fills, bars and borders only |
+| ❌ Sky `#AABAC4` | Ivory | **1.8** | **Never for text or icons.** Fills only |
 
 **Rules that come from this table:**
-1. Small text on a **teal or coral** background is **Ink**, not white.
-2. Small teal text on a **light** background is **Dark teal** `#064E4E`.
-3. Never put meaning in colour alone: "Not today" also has the icon and the words.
+1. Text is Ink, Muted, Lead or Gold text. Never Antique gold or Sky.
+2. Text on a gold or sky fill is **Ink**.
+3. Never put meaning in colour alone: every state also has words or an icon.
 
 ---
 
@@ -119,25 +114,20 @@ Checked with the WCAG 2.1 contrast formula. **AA** needs 4.5:1 for normal text a
 
 Trading apps use green = up/profit and red = down/loss. **Still is not a trading app**, so:
 
-- ❌ Don't use green/red to show gains, losses or prices.
-- ❌ Don't make a "win" state look like a profit (no green money, no rising-chart celebrations).
-- ✅ **Gold = you did the right thing** (finished a quest, kept a rule, *chose not to trade*).
-- ✅ **Coral = stop and think** (urge too high, "Not today", safety messages).
-- ✅ Safety screens (big loss, distress, help page) switch to **calm mode**: teal and white only, no gold rewards, no comic bursts, no slant.
+- ❌ No green/red anywhere, and no colour for gains, losses or prices.
+- ❌ No celebration that looks like a profit (no rising charts, no money).
+- ✅ **Gold = progress you made** (quest done, rule kept, *chose not to trade*), shown as a bar or a gilded edge, not a burst.
+- ✅ **Sky = calm and space** (Pause, Calm mode, "you don't have to act right now").
+- ✅ Safety screens (big loss, distress, help page, after an E · Tilt day) stay **ivory and sky only**: no artwork drama, no gold, no rewards next to a loss or distress message.
 
 ---
 
-## 7. Logo colours
+## 7. Logo and app icon
 
-| Part | Hex |
+| Part | Value |
 |---|---|
-| Pause bars | Gold `#FFC300` |
-| Bar outline | Ink `#111111` |
-| Bar shadow | Dark teal `#064E4E` |
-| Speed lines | Teal `#0FA3A3` on light backgrounds · White `#FFFFFF` on dark backgrounds |
-| App icon background | Teal `#0FA3A3` |
-
-Files are in [`images/`](../images/): `still-logo.svg` (light backgrounds), `still-logo-on-dark.svg`, `still-app-icon.svg` and `still-app-icon-square.svg` (for the stores).
+| Wordmark | Lowercase **still** in Cormorant Garamond, Ink `#20201D` on light, Ivory on dark; the initial **s** is set slightly smaller |
+| App icon | **To be redrawn for v2.** The files in [`images/`](../images/) (`still-logo.svg`, `still-logo-on-dark.svg`, `still-app-icon.svg`, `still-app-icon-square.svg`) are still the v1 teal/gold comic Pause pose and must not be used for v2 store assets |
 
 ---
 
@@ -145,10 +135,10 @@ Files are in [`images/`](../images/): `still-logo.svg` (light backgrounds), `sti
 
 | Use | Font | Notes |
 |---|---|---|
-| Headings, buttons, rewards | **Bangers** | Comic, all caps, skewed. Short words only, never paragraphs. |
-| Body, labels, numbers | **Inter** | 400 / 600 / 800 |
+| Headings, wordmark, big numbers | **Cormorant Garamond** | Serif, sentence case, 300–700 |
+| Body, labels, buttons, controls | **Manrope** | Sans, 200–800; buttons 600 |
 
-Both are free on Google Fonts (Open Font License).
+Both are under the SIL Open Font License 1.1. WOFF2 files and licence notices are in [`ui-design-page/assets/fonts/`](../ui-design-page/assets/fonts/). In the app they are bundled and registered in `Info.plist` (`UIAppFonts`).
 
 ---
 
@@ -159,33 +149,31 @@ Both are free on Google Fonts (Open Font License).
 ```css
 :root {
   /* brand */
-  --still-teal: #0FA3A3;
-  --still-gold: #FFC300;
-  --still-ink: #111111;
-  --still-teal-dark: #064E4E;
-  --still-cream: #FFF6DC;
+  --still-ivory: #F5F2EB;
+  --still-ink: #20201D;
+  --still-gold: #B69A64;
+  --still-sky: #AABAC4;
+  --still-stone: #DAD8D2;
 
   /* surfaces */
-  --still-bg: #072B2F;
-  --still-panel: #0D3B40;
-  --still-panel-raised: #11494F;
-  --still-tabbar: #05201F;
-  --still-shadow-deep: #021416;
+  --still-paper: #FAF8F2;
+  --still-field: #FAF8F3;
+  --still-gold-wash: #EEE8DB;
+  --still-sky-wash: #E7ECEC;
+  --still-selected: #EBE4D5;
+  --still-line: #DEDBD3;
+  --still-track: #DED7CA;
 
   /* text */
-  --still-text: #FFFFFF;
-  --still-text-muted: #8FB9BB;
-  --still-text-on-light: #111111;
-  --still-text-muted-on-light: #55605F;
+  --still-text: #20201D;
+  --still-text-lead: #59554F;
+  --still-text-muted: #656159;
+  --still-text-gold: #76654B;
+  --still-focus: #627784;
 
-  /* status */
-  --still-coral: #FF5A4E;
-  --still-green: #2BD67B;
-
-  /* comic */
-  --still-outline: 3px solid var(--still-ink);
-  --still-shadow-card: 5px 5px 0 var(--still-teal-dark);
-  --still-shadow-button: 4px 4px 0 var(--still-ink);
+  /* type */
+  --still-serif: "Cormorant Garamond", Georgia, serif;
+  --still-sans: "Manrope", system-ui, sans-serif;
 }
 ```
 
@@ -195,7 +183,7 @@ Both are free on Google Fonts (Open Font License).
 import SwiftUI
 
 extension Color {
-    /// Builds a colour from a hex value, e.g. Color(hex: 0x0FA3A3).
+    /// Builds a colour from a hex value, e.g. Color(hex: 0xF5F2EB).
     init(hex: UInt32) {
         self.init(
             red: Double((hex >> 16) & 0xFF) / 255,
@@ -207,60 +195,45 @@ extension Color {
 
 enum StillColor {
     // brand
-    static let teal = Color(hex: 0x0FA3A3)
-    static let gold = Color(hex: 0xFFC300)
-    static let ink = Color(hex: 0x111111)
-    static let tealDark = Color(hex: 0x064E4E)
-    static let cream = Color(hex: 0xFFF6DC)
+    static let ivory = Color(hex: 0xF5F2EB)
+    static let ink = Color(hex: 0x20201D)
+    static let gold = Color(hex: 0xB69A64)   // fills and bars only, never text
+    static let sky = Color(hex: 0xAABAC4)    // fills only, never text
+    static let stone = Color(hex: 0xDAD8D2)
 
     // surfaces
-    static let bg = Color(hex: 0x072B2F)
-    static let panel = Color(hex: 0x0D3B40)
-    static let panelRaised = Color(hex: 0x11494F)
-    static let tabBar = Color(hex: 0x05201F)
-    static let shadowDeep = Color(hex: 0x021416)
+    static let paper = Color(hex: 0xFAF8F2)
+    static let field = Color(hex: 0xFAF8F3)
+    static let goldWash = Color(hex: 0xEEE8DB)
+    static let skyWash = Color(hex: 0xE7ECEC)
+    static let selected = Color(hex: 0xEBE4D5)
+    static let line = Color(hex: 0xDEDBD3)
+    static let track = Color(hex: 0xDED7CA)
 
     // text
-    static let text = Color.white
-    static let textMuted = Color(hex: 0x8FB9BB)
-    static let textOnLight = Color(hex: 0x111111)
-    static let textMutedOnLight = Color(hex: 0x55605F)
-
-    // status
-    static let coral = Color(hex: 0xFF5A4E)
-    static let green = Color(hex: 0x2BD67B)
+    static let text = Color(hex: 0x20201D)
+    static let textLead = Color(hex: 0x59554F)
+    static let textMuted = Color(hex: 0x656159)
+    static let textGold = Color(hex: 0x76654B)
+    static let focus = Color(hex: 0x627784)
 }
 
-enum Comic {
-    static let outlineWidth: CGFloat = 3
-    static let cardShadowOffset: CGFloat = 5
-    static let buttonShadowOffset: CGFloat = 4
-    static let cardRadius: CGFloat = 14
+enum Classical {
+    static let cardRadius: CGFloat = 16
     static let buttonRadius: CGFloat = 12
-    static let skewDegrees: Double = -6
+    static let hairline: CGFloat = 1
 }
 
 extension View {
-    /// Cream comic card: ink outline and a hard offset shadow (radius 0 = no blur).
-    func comicCard() -> some View {
-        let shape = RoundedRectangle(cornerRadius: Comic.cardRadius)
+    /// Paper card: flat, hairline border, no shadow.
+    func paperCard() -> some View {
+        let shape = RoundedRectangle(cornerRadius: Classical.cardRadius)
         return self
-            .background(StillColor.cream, in: shape)
-            .overlay(shape.stroke(StillColor.ink, lineWidth: Comic.outlineWidth))
-            .shadow(color: StillColor.tealDark, radius: 0,
-                    x: Comic.cardShadowOffset, y: Comic.cardShadowOffset)
-    }
-
-    /// The logo's slant for big headings and primary buttons. SwiftUI has no skew
-    /// modifier, so apply a shear transform.
-    func comicSlant(_ degrees: Double = Comic.skewDegrees) -> some View {
-        transformEffect(CGAffineTransform(a: 1, b: 0, c: tan(degrees * .pi / 180),
-                                          d: 1, tx: 0, ty: 0))
+            .background(StillColor.paper, in: shape)
+            .overlay(shape.stroke(StillColor.line, lineWidth: Classical.hairline))
     }
 }
 ```
-
-> SwiftUI's `.shadow(radius: 0, x:, y:)` draws a sharp offset shadow, so comic shadows need no extra layer. Bangers and Inter are bundled as font files in the app and registered in `Info.plist` (`UIAppFonts`).
 
 ---
 
@@ -268,12 +241,13 @@ extension View {
 
 | ✅ Do | ❌ Don't |
 |---|---|
-| One gold call-to-action per screen | Gold buttons everywhere |
-| Hard black outlines and offset shadows | Soft blurry shadows or gradients on cards |
-| Dark teal base so the screen feels calm | Bright full-screen colours except on reward moments |
-| Ink text on gold, teal and coral | White small text on teal or coral |
-| Calm mode (teal + white, no slant) on safety screens | Comic bursts or rewards next to a loss or distress message |
-| Gold for discipline and "no trade" rewards | Green/red for profit and loss |
+| One ink call-to-action per screen | Gold or coloured buttons |
+| Hairlines and flat cards | Thick outlines, hard offset shadows, gradients on cards |
+| One fresco/statue crop on hero screens | Art on form screens, or art that hides the task |
+| Useful titles, myth as atmosphere | Titles that need Greek mythology to understand |
+| Ink text on gold and sky fills | Gold or sky text on ivory |
+| Ivory + sky only on safety screens | Rewards or art drama next to a loss or distress message |
+| Gold for discipline and "no trade" progress | Green/red for profit and loss |
 
 ---
 
@@ -283,47 +257,43 @@ Line icons live in [`images/icons/`](../images/icons/) (106 icons, 24×24, 2px s
 
 | Context | Icon colour |
 |---|---|
-| Default on dark | White `#FFFFFF` or Muted `#8FB9BB` |
-| Reward, XP | Gold `#FFC300` |
+| Default | Ink `#20201D` or Muted `#656159` |
 | Bottom bar | See [section 13](#13-bottom-bar) |
-| Selected, progress, info | Teal `#0FA3A3` |
-| On gold, cream or teal | Ink `#111111` |
-| Warning, "Not today" | Coral `#FF5A4E` (with text, never alone) |
+| Progress, reward, XP | Gold text `#76654B` |
+| On gold or sky fill | Ink `#20201D` |
+| Warning, "Not today" | Ink, always with words |
 
 ---
 
 ## 12. Day Log grades
 
-The Log tab grades each day **A to E** for how the user traded (rules kept or broken), never for money. Product rules: [still-day-log.md](https://github.com/Liuhangfung/still-backend/blob/main/docs/product-concept/still-day-log.md). Design: [`ui-design/still-ui-v6.html`](../ui-design/still-ui-v6.html).
+The Log tab grades each day **A to E** for how the user traded (rules kept or broken), never for money. Product rules: [still-day-log.md](https://github.com/Liuhangfung/still-backend/blob/main/docs/product-concept/still-day-log.md). Design: [`ui-design-page/screens/43-log-calendar.html`](../ui-design-page/screens/43-log-calendar.html) and [`44-day-grade.html`](../ui-design-page/screens/44-day-grade.html).
 
-| Grade | Name | Hex | Symbol | Ink on it |
-|---|---|---|---|---|
-| **A** | Clean | Gold `#FFC300` | ★ | 11.7 ✅ |
-| **B** | Solid | Teal `#0FA3A3` | ✓ | 6.1 ✅ |
-| **C** | Mixed | Grey `#A9B6B9` | – | 9.1 ✅ |
-| **D** | Slipped | Violet `#9A7BE0` | ! | 5.7 ✅ |
-| **E** | Tilt | Coral `#FF5A4E` | ✕ | 6.1 ✅ |
+| Grade | Name |
+|---|---|
+| **A** | Clean |
+| **B** | Solid |
+| **C** | Mixed |
+| **D** | Slipped |
+| **E** | Tilt |
 
-- Letters and symbols on grades are always **Ink**, and every grade shows its letter, so meaning never depends on colour alone.
-- These 5 colours are **fixed in every chapter theme**.
-- Grey and violet are used **only** for Day Log grades.
-- Still no green or red: the scale is about behaviour, not profit and loss.
-- **E · Tilt** screens switch to calm mode (section 6): no speed lines, sound effects or slant.
+- v2 grades have **no per-grade colours**. Each grade is a serif letter plus its name on an ink tile; the selected or suggested grade is filled **Sky** with Ink text. The meaning is in the letter and name, never in colour.
+- The suggestion is labelled in Gold text ("Suggested: C").
+- No green or red: the scale is about behaviour, not profit and loss.
+- **E · Tilt** leads to the calm screen (section 6): ivory and sky, no artwork drama.
 
 ---
 
 ## 13. Bottom bar
 
-A floating capsule with **icons only**: Today · Path · **Still logo (Log)** · Inventory · Me (avatar). Design: [`ui-design/still-ui-v7.html`](../ui-design/still-ui-v7.html), option D.
+Five labelled tabs: **Today · Journey · Log · Tools · Me**. Design: any screen in [`ui-design-page/`](../ui-design-page/).
 
 | Part | Value |
 |---|---|
-| Capsule | `rgba(14,14,18,.86)` with background blur, 1px border `rgba(255,255,255,.09)`, fully round, 16px from the screen sides and 18px from the bottom |
-| Icons | Drawn for Still, 25px, 2px stroke. Inactive: `#8A8F98` (5.9 : 1). Active: white `#FFFFFF`, filled |
-| Log (centre) | The Still logo in a soft pill `rgba(255,255,255,.07)`; brighter `rgba(255,255,255,.14)` when active |
-| Me | The user's avatar, 30px circle; white ring when active |
-| Quest waiting | 7px gold dot on the Today icon |
+| Bar | Flat, full width, Ivory `#F5F2EB`, 1px top border Line `#DEDBD3`. No capsule, no blur, no shadow |
+| Icons | Thin line icons, 21px, with a small label underneath |
+| Inactive | `#756F63` (4.5 : 1) |
+| Active | Gold `#8F743E`, label bold (see the contrast note in section 5) |
 
-- The bar is the one place that is **not** comic style: no ink outline, no slant, and the only soft shadow in the app (`0 10px 28px rgba(0,0,0,.45)`), so it floats above the content. It is furniture; the screens are the show.
-- **No gold** in the bar except the quest dot, so each screen's one gold button still stands out.
-- The floating **Urge** button also uses the pause bars, so it always keeps its "URGE?" label.
+- **Tools** holds the user's saved work (Trader Code, Urge Plan, rules): the "Inventory" in product docs.
+- **Journey** is the chapter path (was "Path" in v1).
