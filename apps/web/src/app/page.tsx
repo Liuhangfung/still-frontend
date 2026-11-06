@@ -1,3 +1,4 @@
+import { AppTour } from "@/components/landing/app-tour";
 import { Faq } from "@/components/landing/faq";
 import { Footer } from "@/components/landing/footer";
 import { Hero } from "@/components/landing/hero";
@@ -23,6 +24,7 @@ export default function Home() {
         <Hero />
         <Markets />
         <Problems />
+        <AppTour />
         <Practice />
         <Programme />
         <Pause />

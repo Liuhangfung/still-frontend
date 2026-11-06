@@ -1,13 +1,25 @@
-import type { IconName } from "@still/ui";
+import { studio, type Artwork } from "./artwork";
 
 /** Payment happens only in the app (App Store / Google Play). The site collects the founder list. */
 export const joinCta = { href: "#join", label: "Join the founder list" };
 
 export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3100";
 
-export const price = { founder: "49", regular: "US$79", currency: "US$" };
+/**
+ * Planned prices (still-backend docs/product-concept/still-pricing.md). The
+ * founder discount is shown off the standard launch price, and it ends at a
+ * real, stated number of buyers: no countdowns or fake urgency.
+ */
+export const price = {
+  currency: "US$",
+  founder: 49,
+  regular: 79,
+  /** Pricing doc: "50 or 100" is still open. Change here once decided. */
+  founderSpots: 100,
+};
 
 export const navLinks = [
+  { href: "#app", label: "The app" },
   { href: "#practice", label: "The practice" },
   { href: "#programme", label: "The 56 days" },
   { href: "#pricing", label: "Pricing" },
@@ -26,50 +38,98 @@ export const socials = [
   { network: "discord", label: "Still's Discord community", url: "" },
 ] as const;
 
+/**
+ * App store listings. While a URL is empty the badge shows "Coming soon" and is
+ * not clickable; add the listing URL at launch to turn it into a link.
+ */
+export const stores = [
+  { id: "apple", store: "App Store", url: "" },
+  { id: "google", store: "Google Play", url: "" },
+] as const;
+
 export const markets = ["Stocks", "Forex", "Crypto", "Futures", "Options", "Commodities"];
 
-export const problems: {
-  title: string;
-  text: string;
-  quote?: string;
-  art: string;
-  artAlt: string;
-  /** Where to centre the band crop on the painting, so faces are never cut. */
-  artPosition: string;
-}[] = [
+export const problems: { title: string; text: string; quote?: string; art: Artwork }[] = [
   {
     title: "Fear of missing out",
+    art: studio.fomo,
     text: "A price moves. The plan disappears. You enter before checking why.",
     quote: "I’ll just get in before it runs.",
-    art: "/images/art/problems/fomo.jpg",
-    artAlt:
-      "Rococo painting: a young figure lunges from a marble balcony toward a golden staircase of candlestick-chart bars rising into the clouds, a scroll of rules slipping from one hand.",
-    artPosition: "center 33%",
   },
   {
     title: "Trying to win it back",
+    art: studio.revenge,
     text: "A loss turns into a reason to take another trade—or make it bigger.",
     quote: "One more and I’m even.",
-    art: "/images/art/problems/revenge.jpg",
-    artAlt:
-      "Neoclassical painting: a trader throws a second fistful of gold coins across a marble table, his reflection split in a cracked mirror, a falling candlestick chart carved into the stone.",
-    artPosition: "center 26%",
   },
   {
     title: "Trading to feel something",
+    art: studio.boredom,
     text: "You open a position because you’re bored, not because it fits a setup.",
-    art: "/images/art/problems/boredom.jpg",
-    artAlt:
-      "Fresco painting: a figure reclines on clouds with a chin in one hand, holding a dark tablet that shows a single flat gold line, dice spilled beside them.",
-    artPosition: "center 46%",
   },
   {
     title: "A plan that stays in your head",
+    art: studio.unwritten,
     text: "No written boundaries to return to when the pressure arrives.",
-    art: "/images/art/problems/unwritten.jpg",
-    artAlt:
-      "A marble bust holds a blank ivory tablet while a gilded candlestick chart dissolves into smoke above its head, an unused stylus on the plinth.",
-    artPosition: "center 32%",
+  },
+];
+
+/** "Inside the app": the daily loop, one real screen per step. */
+export const appTour: {
+  when: string;
+  title: string;
+  text: string;
+  points: string[];
+  screen: string;
+  alt: string;
+}[] = [
+  {
+    when: "Day 1 · 4 minutes",
+    title: "An honest starting point.",
+    text: "Answer 16 quick questions about how you really trade. Still shows your starting level, your two focus areas and a routine that fits your day.",
+    points: ["Real trading scenarios, mostly one tap", "No account logins, no balances"],
+    screen: "/images/app/profile.webp",
+    alt: "Hunter Profile screen: starting level Developing, focus areas FOMO and Leverage, and a 10-minute daily routine",
+  },
+  {
+    when: "Every day · 10–15 minutes",
+    title: "One quest a day.",
+    text: "Today shows one main quest built around your focus areas, plus a short daily routine. Save a draft and come back later.",
+    points: ["XP for doing the work, never for trading", "A shorter version for busy days"],
+    screen: "/images/app/today.webp",
+    alt: "Today screen: main quest “Inside the Urge”, two of five objectives done, and the daily routine",
+  },
+  {
+    when: "Before you trade · 1 minute",
+    title: "A gate, not a signal.",
+    text: "The Fit-to-Trade Gate checks your own best-self conditions: sleep, setting, a written idea. If one isn’t true, “Not today” is a valid result.",
+    points: ["Your conditions, in your words", "Choosing not to trade earns XP too"],
+    screen: "/images/app/fit-gate.webp",
+    alt: "Fit-to-Trade Gate screen: three of four best-self conditions ticked, with the result “Not today”",
+  },
+  {
+    when: "When the urge hits",
+    title: "Your plan, one tap away.",
+    text: "Write your Urge Plan in your own words. When a loss turns into an urge, Pause brings it back before the next trade, not after.",
+    points: ["Pause is always one tap away", "Skipping a trade counts as progress"],
+    screen: "/images/app/urge-plan.webp",
+    alt: "My Urge Plan screen: the story “I’ll win it back quickly” and the first written step",
+  },
+  {
+    when: "Every evening · 30 seconds",
+    title: "Judge your day, not your P&L.",
+    text: "A quick Rule Check, then grade the day A to E for how you followed your rules. Choosing not to trade can be an A.",
+    points: ["Never graded on money", "Patterns show up on your Day Log"],
+    screen: "/images/app/day-grade.webp",
+    alt: "Judge your day screen: Rule Check partly kept, suggested grade C · Mixed, with grades A to E",
+  },
+  {
+    when: "Every two weeks",
+    title: "Rank up. Keep what you build.",
+    text: "Finish a chapter and rank from E toward S. Every tool you made, from your Trigger Map to your Rules Card, stays in your Tools tab.",
+    points: ["Ranks mean practice, not trading skill", "Your tools stay with you"],
+    screen: "/images/app/rank-up.webp",
+    alt: "Chapter complete screen: rank E to D and an XP receipt of plus 80",
   },
 ];
 
@@ -95,102 +155,61 @@ export const practiceSteps = [
   { title: "Reflect", text: "Notice what to keep." },
 ];
 
-export const chapters: {
-  name: string;
-  days: string;
-  title: string;
-  text: string;
-  output: string;
-  art: string;
-  artAlt: string;
-  /** Where to centre the panel band crop, so faces are never cut. */
-  artPosition: string;
-}[] = [
+export const chapters = [
   {
     name: "Know yourself",
+    art: studio.knowYourself,
     days: "Days 1–14",
     title: "Understand what sets you off.",
     text: "Look at the moments behind your impulsive trades. Name the triggers and write a more deliberate response, without shame.",
     output: "Your Trigger Map",
-    art: "/images/art/programme/01-know-yourself.jpg",
-    artAlt:
-      "Classical painting: a woman kneels at the edge of a still marble pool, gold rings spreading from her fingers, her own shadow standing tall on the wall behind her.",
-    artPosition: "center 46%",
   },
   {
     name: "Build a method",
+    art: studio.buildMethod,
     days: "Days 15–28",
     title: "Put your method into words.",
     text: "Define when you trade, when you do not, and the risk boundaries you intend to follow. Build a checklist around your own plan.",
     output: "Your own trading plan",
-    art: "/images/art/programme/02-build-a-method.jpg",
-    artAlt:
-      "Neoclassical painting: an architect bends over a marble drafting table with brass compasses, a ruled tablet marked with faint gold candlestick lines, half-built columns behind him.",
-    artPosition: "center 44%",
   },
   {
     name: "Practise",
+    art: studio.practise,
     days: "Days 29–42",
     title: "Practise without risking money.",
     text: "Use historical charts and paper exercises to work through decisions. Reflect on the process, not just an outcome.",
     output: "A practice journal",
-    art: "/images/art/programme/03-practise.jpg",
-    artAlt:
-      "Neoclassical painting: an athlete in a marble hall squares up to his own long shadow, a gilded candlestick chart glowing inside it.",
-    artPosition: "center 42%",
   },
   {
     name: "Make it last",
+    art: studio.makeItLast,
     days: "Days 43–56",
     title: "Make the routine your own.",
     text: "Bring your rules into one card and a manageable daily routine. Prepare for the days when old habits return.",
     output: "Your Rules Card",
-    art: "/images/art/programme/04-make-it-last.jpg",
-    artAlt:
-      "Classical painting: a weaver at an upright loom, ivory cloth carrying a repeated row of small gold candlestick marks, a gold thread running from the basket at her feet.",
-    artPosition: "center 45%",
   },
 ];
 
-export const tools: {
-  title: string;
-  text: string;
-  art: string;
-  artAlt: string;
-  /** Where to centre the band crop on the painting. */
-  artPosition: string;
-}[] = [
+export const tools: { title: string; text: string; art: Artwork }[] = [
   {
     title: "Your Trigger Map",
+    art: studio.triggerMap,
     text: "The situations that set you off—and what you intend to do instead.",
-    art: "/images/art/tools/01-trigger-map.jpg",
-    artAlt:
-      "Still life: an aged map of ink contour lines on a marble table, gilded pins joined by one gold thread, a hand about to place another pin.",
-    artPosition: "center 46%",
   },
   {
     title: "Your preparation checklist",
+    art: studio.checklist,
     text: "A written set of questions to ask before acting. Not a guarantee that a trade is safe.",
-    art: "/images/art/tools/02-checklist.jpg",
-    artAlt:
-      "Still life: a pale wax tablet ruled with empty lines and small gold ticks, a bronze stylus resting across it, a clay oil lamp burning low.",
-    artPosition: "center 52%",
   },
   {
     title: "Your practice journal",
+    art: studio.journal,
     text: "A simple way to reflect on your process and bring patterns into a weekly review.",
-    art: "/images/art/tools/03-journal.jpg",
-    artAlt:
-      "Still life: an open book of blank ivory pages on white linen, a quill and brass inkwell, a single white flower pressed across the page.",
-    artPosition: "center 54%",
   },
   {
     title: "Your Rules Card",
+    art: studio.rulesCard,
     text: "Your plan, condensed into something you can actually return to.",
-    art: "/images/art/tools/04-rules-card.jpg",
-    artAlt:
-      "Still life: a small ivory tablet with a gilded edge set in a plaster niche, lit by a tiny oil lamp, a laurel sprig on the shelf, a hand just leaving it.",
-    artPosition: "center 48%",
   },
 ];
 
@@ -198,12 +217,6 @@ export const priceIncludes = [
   "A path selected around your starting habits",
   "Daily practice and a preparation/review routine",
   "Pause and practical tools you build yourself",
-];
-
-/** Rows in the hero phone's daily routine. */
-export const phoneRoutine: { icon: IconName; label: string; time: string }[] = [
-  { icon: "exercise", label: "Movement break", time: "5 min" },
-  { icon: "research", label: "Review one source", time: "5 min" },
 ];
 
 export const faqs = [

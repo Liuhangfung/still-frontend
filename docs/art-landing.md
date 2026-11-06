@@ -86,16 +86,23 @@ Rules learned by repainting:
 
 - Source generations are ~2400 × 1792; delivered files are downsampled to 1200 px wide (1000 px for
   the Pause portrait), 4:3, progressive JPEG q82 (94–245 KB).
-- Problems render as bands `h-[124px] md:h-[150px] lg:h-[176px]`; programme panels at
-  `h-[185px] md:h-[285px]`; tools at `h-[150px] md:h-[190px] lg:h-[215px]`; the Pause plate is
-  `h-[124px]`. All of them crop the 4:3 frame, so every item carries an `artPosition` focal point in
-  `site.ts`; update it if a new composition moves the subject.
-- Alt text describes the scene and its meaning in one sentence; inactive chapter images are
-  `aria-hidden` with empty alt.
-- Copy, alt text and focal points all live in `apps/web/src/content/site.ts`.
+- **Where they are wired in:** each painting is an entry in `studio` in
+  `apps/web/src/content/artwork.ts` (file, size, alt text, focal point `focus`, and the myth line it
+  is paired with). `site.ts` points `problems`, `chapters` and `tools` at those entries.
+- **How they are shown** (animated landing):
+  - Problems: the pinned 3D gallery on wide screens (the painting turns to match the problem in
+    the middle of the screen); a band above each problem on phones.
+  - Chapters: the panel painting turns over like a page when the chapter changes.
+  - Tools: a band above each tool, unveiled bottom-up as it scrolls in.
+  - Pause: the art band at the top of the Pause card (`h-[124px]`).
+- These are Still's own paintings, so they carry **no museum label** (the label only appears for
+  public-domain works with a painter and year).
+- Alt text describes the scene and its meaning in one sentence. Every image crops the 4:3 frame,
+  so update `focus` if a new composition moves the subject.
 
 ## Regenerating
 
-Pass the other paintings plus `hero.jpg` and `task.jpg` as references, keep the 4:3 framing, then
-resize to 1200 px wide and export progressive JPEG at q82. Add `art`, `artAlt` and `artPosition` to
-the matching entry in `site.ts`.
+Pass the other paintings plus `hero.jpg` as references, keep the 4:3 framing, then resize to
+1200 px wide and export progressive JPEG at q82. Add or update the matching `studio` entry in
+`apps/web/src/content/artwork.ts`. Don't change the component files to swap a picture: they
+carry the animation.

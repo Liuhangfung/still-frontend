@@ -1,8 +1,13 @@
+"use client";
+
 import { Eyebrow } from "@still/ui";
-import Image from "next/image";
+import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { markets, problems } from "@/content/site";
-import { Stagger, StaggerItem } from "../motion/reveal";
+import { ScrollZoom, Tilt } from "../motion/depth";
+import { Label, Painting } from "./painting";
 import { Section, Wrap } from "./section";
+import { Lines, Rule, Unveil } from "../motion/scenes";
 
 /** All markets, not a signal list. */
 export function Markets() {
@@ -13,65 +18,178 @@ export function Markets() {
           One practice. <br className="hidden md:inline" />
           Across all markets.
         </p>
-        <ul
-          aria-label="Supported trading markets"
-          className="flex flex-1 flex-wrap items-center gap-x-6 gap-y-4 font-serif text-[21px] leading-none md:flex-nowrap md:justify-between md:gap-4 md:text-[19px] lg:gap-7 lg:text-[22px]"
-        >
+        <ul className="sr-only">
           {markets.map((m) => (
-            <li key={m} className="whitespace-nowrap">
-              {m}
-            </li>
+            <li key={m}>{m}</li>
           ))}
         </ul>
+        {/* A slow frieze of markets, fading out at both edges. */}
+        <div
+          aria-hidden
+          className="frieze relative w-full min-w-0 flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]"
+        >
+          <div className="frieze-track flex w-max">
+            {[0, 1].map((copy) => (
+              <div key={copy} className="flex shrink-0 items-center">
+                {markets.map((m) => (
+                  <span
+                    key={m}
+                    className="flex items-center whitespace-nowrap font-serif text-[21px] leading-none lg:text-[22px]"
+                  >
+                    {m}
+                    <span className="mx-7 h-[5px] w-[5px] rounded-full bg-gold lg:mx-10" />
+                  </span>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
       </Wrap>
     </div>
   );
 }
 
+const pad = (n: number) => String(n).padStart(2, "0");
+
+/**
+ * Each problem has a myth. On wide screens the paintings are pinned and turn in
+ * 3D to match the problem in the middle of the screen; on phones each problem
+ * carries its own painting.
+ */
 export function Problems() {
+  const [active, setActive] = useState(0);
+  const items = useRef<(HTMLElement | null)[]>([]);
+
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) setActive(Number((e.target as HTMLElement).dataset.index));
+        }
+      },
+      { rootMargin: "-45% 0px -45% 0px" }
+    );
+    items.current.forEach((el) => el && io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
   return (
     <Section labelledBy="problem-title">
-      <Wrap className="grid gap-9 md:grid-cols-2 md:gap-[45px] lg:gap-[90px]">
-        <div className="md:sticky md:top-10 md:self-start">
-          <Eyebrow className="mb-[22px]">If this feels familiar</Eyebrow>
-          <h2 id="problem-title" className="section-title max-w-[460px]">
-            The hard part isn’t finding another signal. It’s following your own plan.
-          </h2>
-          <p className="mt-5 max-w-[450px] text-[13px] leading-[1.9] text-muted md:mt-6">
+      <Wrap>
+        <div className="grid gap-5 md:grid-cols-2 md:items-end md:gap-[45px] lg:gap-[90px]">
+          <div>
+            <Eyebrow className="mb-[22px]">If this feels familiar</Eyebrow>
+            <h2 id="problem-title" className="section-title max-w-[520px]">
+              <Lines
+                lines={[
+                  "The hard part isn’t finding another signal.",
+                  "It’s following your own plan.",
+                ]}
+              />
+            </h2>
+          </div>
+          <p className="max-w-[450px] text-[13px] leading-[1.9] text-muted md:mb-2">
             You can understand a chart and still act on an impulse. Still focuses on the habits
-            around a decision: how you prepare, pause, practise and review.
+            around a decision: how you prepare, pause, practise and review. The Greeks knew these
+            moments well.
           </p>
         </div>
-        <Stagger className="md:pt-1.5">
-          {problems.map((p, i) => (
-            <StaggerItem key={p.title}>
-              <article className="grid grid-cols-[37px_1fr] gap-3 border-t border-line py-5 [&:last-child]:border-b">
-                <span className="pt-1 font-serif text-[22px] leading-none text-[#857a68]">
-                  {String(i + 1).padStart(2, "0")}
+
+        <div className="mt-10 grid md:mt-16 md:grid-cols-2 md:gap-[45px] lg:gap-[90px]">
+          <div className="hidden md:block">
+            <div className="sticky top-[10vh] h-[80vh]">
+              <Gallery active={active} />
+            </div>
+          </div>
+
+          <div>
+            {problems.map((p, i) => (
+              <article
+                key={p.title}
+                ref={(el) => {
+                  items.current[i] = el;
+                }}
+                data-index={i}
+                className="relative py-8 last:border-b last:border-line md:flex md:min-h-[72vh] md:flex-col md:justify-center md:py-12"
+              >
+                <Rule className="absolute inset-x-0 top-0" />
+                <Unveil className="mb-6 rounded-[3px] md:hidden">
+                  <ScrollZoom className="aspect-[4/3] rounded-[3px]">
+                    <Painting art={p.art} sizes="100vw" />
+                  </ScrollZoom>
+                </Unveil>
+                <span className="font-serif text-[22px] leading-none text-[#857a68]">
+                  {pad(i + 1)}
                 </span>
-                <div>
-                  <Image
-                    src={p.art}
-                    alt={p.artAlt}
-                    width={1200}
-                    height={900}
-                    sizes="(min-width: 1024px) 470px, (min-width: 768px) 44vw, 92vw"
-                    style={{ objectPosition: p.artPosition }}
-                    className="mb-4 h-[124px] w-full rounded-[2px] border border-line object-cover md:h-[150px] lg:h-[176px]"
-                  />
-                  <h3 className="text-[26px] tracking-[-0.01em]">{p.title}</h3>
-                  <p className="mt-2 max-w-[340px] text-[13px] text-muted">{p.text}</p>
-                  {p.quote && (
-                    <blockquote className="mt-3 font-serif text-lg italic leading-[1.3] text-gold-text">
-                      “{p.quote}”
-                    </blockquote>
-                  )}
-                </div>
+                <h3 className="mt-3 text-[30px] tracking-[-0.01em] md:text-[38px]">{p.title}</h3>
+                <p className="mt-3 max-w-[380px] text-[14px] text-muted">{p.text}</p>
+                {p.quote && (
+                  <blockquote className="mt-4 font-serif text-xl italic leading-[1.3] text-gold-text">
+                    “{p.quote}”
+                  </blockquote>
+                )}
+                <p className="mt-6 max-w-[380px] border-l border-gold pl-4 font-serif text-[19px] leading-[1.35] text-ink">
+                  {p.art.myth}
+                </p>
+                <Label art={p.art} className="mt-3 md:hidden" />
               </article>
-            </StaggerItem>
-          ))}
-        </Stagger>
+            ))}
+          </div>
+        </div>
       </Wrap>
     </Section>
+  );
+}
+
+/** The four paintings stacked in depth; the active one turns to face the viewer. */
+function Gallery({ active }: { active: number }) {
+  const reduce = useReducedMotion();
+  const current = problems[active].art;
+
+  return (
+    <div className="flex h-full flex-col">
+      <Unveil className="relative min-h-0 flex-1">
+        <Tilt max={5} className="h-full">
+          <div className="relative h-full w-full [perspective:1400px] [transform-style:preserve-3d]">
+            {problems.map((p, i) => {
+              const state = i === active ? "on" : i < active ? "past" : "next";
+              return (
+                <motion.div
+                  key={p.title}
+                  className="absolute inset-0 overflow-hidden rounded-[3px] shadow-phone"
+                  initial={false}
+                  animate={
+                    reduce
+                      ? { opacity: state === "on" ? 1 : 0 }
+                      : {
+                          opacity: state === "on" ? 1 : 0,
+                          rotateY: state === "on" ? 0 : state === "past" ? -18 : 18,
+                          rotateX: state === "on" ? 0 : state === "past" ? 6 : -6,
+                          scale: state === "on" ? 1 : state === "past" ? 0.9 : 1.08,
+                          z: state === "on" ? 0 : -120,
+                        }
+                  }
+                  transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+                  style={{ zIndex: state === "on" ? 2 : 1 }}
+                  aria-hidden={state !== "on"}
+                >
+                  <Painting art={p.art} sizes="(min-width: 768px) 45vw, 100vw" />
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 shadow-[inset_0_0_80px_rgba(32,32,29,.25)]"
+                  />
+                </motion.div>
+              );
+            })}
+          </div>
+        </Tilt>
+      </Unveil>
+      <div className="mt-4 flex items-start justify-between gap-6">
+        <Label art={current} />
+        <span className="flex-none font-serif text-sm text-muted">
+          {pad(active + 1)} / {pad(problems.length)}
+        </span>
+      </div>
+    </div>
   );
 }
