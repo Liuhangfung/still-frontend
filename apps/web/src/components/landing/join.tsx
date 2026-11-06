@@ -1,5 +1,7 @@
 import { Eyebrow } from "@still/ui";
-import Image from "next/image";
+import { art } from "@/content/artwork";
+import { Parallax } from "../motion/depth";
+import { Painting } from "./painting";
 import { Wrap } from "./section";
 import { SignupForm } from "./signup-form";
 
@@ -11,16 +13,12 @@ export function Join() {
       aria-labelledby="join-title"
       className="relative isolate overflow-hidden border-t border-line pb-12 pt-[62px] md:pb-[83px] md:pt-[88px]"
     >
-      <Image
-        src="/images/art/fresco.jpg"
-        alt=""
-        fill
-        sizes="100vw"
-        className="-z-20 object-cover"
-      />
+      <Parallax depth={200} className="absolute -inset-y-[100px] inset-x-0 -z-20">
+        <Painting art={art.olympus} sizes="100vw" />
+      </Parallax>
       <div
         aria-hidden
-        className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(245,242,235,.96),rgba(245,242,235,.86))]"
+        className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(245,242,235,.95),rgba(245,242,235,.72))]"
       />
       <Wrap className="grid items-center gap-[30px] md:grid-cols-2 md:gap-[45px] lg:gap-[90px]">
         <div>

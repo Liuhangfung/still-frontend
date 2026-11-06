@@ -1,6 +1,9 @@
 import { ButtonLink, Eyebrow, Icon } from "@still/ui";
 import { joinCta, price, priceIncludes, tools } from "@/content/site";
+import { art } from "@/content/artwork";
+import { ScrollZoom } from "../motion/depth";
 import { Stagger, StaggerItem } from "../motion/reveal";
+import { Label, Painting } from "./painting";
 import { Section, Wrap } from "./section";
 
 /** Your own tools, not a dashboard full of promises. */
@@ -22,6 +25,15 @@ export function Tools() {
             decision feels difficult.
           </p>
         </div>
+        <figure className="mb-10 md:mb-14">
+          <ScrollZoom from={1.25} className="h-[220px] rounded-[3px] md:h-[380px]">
+            <Painting art={art.vulcan} sizes="(min-width: 1180px) 1108px, 100vw" />
+          </ScrollZoom>
+          <figcaption className="mt-3 flex flex-col gap-1 md:flex-row md:items-baseline md:justify-between">
+            <span className="font-serif text-[17px]">{art.vulcan.myth}</span>
+            <Label art={art.vulcan} />
+          </figcaption>
+        </figure>
         <Stagger className="grid md:grid-cols-2 md:gap-x-[70px]">
           {tools.map((t, i) => (
             <StaggerItem key={t.title}>

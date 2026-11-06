@@ -11,6 +11,7 @@ const links = [
   { href: "/contact", label: "Contact" },
   { href: "/terms", label: "Terms" },
   { href: "/privacy", label: "Privacy" },
+  { href: "/credits", label: "Art credits" },
 ];
 
 export function Footer() {

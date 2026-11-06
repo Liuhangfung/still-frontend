@@ -50,7 +50,7 @@ v1 (teal + gold JoJo-style comic, Bangers + Inter) is retired. The live site in 
 
 ## Landing page design
 
-[`docs/ui-design/landing-v3.html`](docs/ui-design/landing-v3.html) is the design the live site in `apps/web` is built from. Page text lives in `apps/web/src/content/site.ts`; artwork crops are in `apps/web/public/images/art/` (concept-only until rights are cleared). `ui-design/landing-v2.html` is the retired comic version. `landing-v1.html` is the earlier dark version, kept for reference.
+[`docs/ui-design/landing-v3.html`](docs/ui-design/landing-v3.html) is the design the live site in `apps/web` is built from. Page text lives in `apps/web/src/content/site.ts`; the hero ceiling and app-preview art are in `apps/web/public/images/art/` (concept-only until rights are cleared); the public-domain myth paintings are in `public/images/myth/` and the 3D Athena (SMK scan, public domain, simplified to 100k triangles with meshopt) is `public/models/athena.glb`. Credits: `src/content/artwork.ts` and `/credits`. `ui-design/landing-v2.html` is the retired comic version. `landing-v1.html` is the earlier dark version, kept for reference.
 
 [`docs/ui-design/landing-v3.html`](docs/ui-design/landing-v3.html) is the classical editorial landing concept matching the v8 app design. It is self-contained and opens offline, with responsive layouts, chapter tabs, FAQ accordions and a clearly non-submitting signup preview. It is the design source for the live site; artwork remains concept-only pending production rights clearance.
 

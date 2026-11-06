@@ -2,9 +2,11 @@
 
 import { Eyebrow, Icon } from "@still/ui";
 import { clsx } from "clsx";
-import Image from "next/image";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useRef, useState, type KeyboardEvent } from "react";
 import { chapters } from "@/content/site";
+import { Tilt } from "../motion/depth";
+import { Label, Painting } from "./painting";
 import { Section, Wrap } from "./section";
 
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -12,6 +14,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
 /** Four chapters. Practical titles take priority over mythological names. */
 export function Programme() {
   const [active, setActive] = useState(0);
+  const reduce = useReducedMotion();
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   const c = chapters[active];
 
@@ -98,20 +101,39 @@ export function Programme() {
           tabIndex={0}
           className="grid items-center gap-[25px] pt-7 md:grid-cols-[1.05fr_.95fr] md:gap-[50px] md:pt-9"
         >
-          <Image
-            src="/images/art/fresco.jpg"
-            alt="Soft classical ceiling fresco, framing the four-chapter journey"
-            width={900}
-            height={369}
-            sizes="(min-width: 768px) 560px, 100vw"
-            className="h-[185px] w-full rounded-[3px] object-cover md:h-[241px]"
-          />
+          <div>
+            {/* The chapter's painting turns over like a page when the chapter changes. */}
+            <Tilt max={6} className="h-[240px] md:h-[340px]">
+              <div className="relative h-full w-full [perspective:1400px]">
+                <AnimatePresence initial={false} mode="popLayout">
+                  <motion.div
+                    key={active}
+                    className="absolute inset-0 overflow-hidden rounded-[3px] shadow-phone [backface-visibility:hidden]"
+                    initial={
+                      reduce ? { opacity: 0 } : { opacity: 0, rotateY: 70, scale: 0.94, x: 40 }
+                    }
+                    animate={reduce ? { opacity: 1 } : { opacity: 1, rotateY: 0, scale: 1, x: 0 }}
+                    exit={
+                      reduce ? { opacity: 0 } : { opacity: 0, rotateY: -70, scale: 0.94, x: -40 }
+                    }
+                    transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <Painting art={c.art} sizes="(min-width: 768px) 560px, 100vw" />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </Tilt>
+            <Label art={c.art} className="mt-3" />
+          </div>
           <div>
             <Eyebrow className="mb-3.5 text-[10px] text-gold-text">
               Chapter {pad(active + 1)} · {c.days}
             </Eyebrow>
             <h3 className="max-w-[370px] text-[32px] md:text-[35px]">{c.title}</h3>
-            <p className="mb-6 mt-4 max-w-[385px] text-[13px] text-muted">{c.text}</p>
+            <p className="mb-5 mt-4 max-w-[385px] text-[13px] text-muted">{c.text}</p>
+            <p className="mb-6 max-w-[385px] border-l border-gold pl-4 font-serif text-[18px] leading-[1.35]">
+              {c.art.myth}
+            </p>
             <p className="flex items-center gap-3 border-t border-line pt-4 text-xs">
               <Icon name="check" strokeWidth={1.4} className="text-[19px]" />
               What you build: {c.output}

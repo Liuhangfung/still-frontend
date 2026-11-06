@@ -1,8 +1,16 @@
+"use client";
+
 import { ButtonLink, Eyebrow, Icon, Wordmark, type IconName } from "@still/ui";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import dynamic from "next/dynamic";
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { athenaModel } from "@/content/artwork";
 import { joinCta, phoneRoutine } from "@/content/site";
-import { Reveal } from "../motion/reveal";
 import { Wrap } from "./section";
+
+// three.js loads after the page is interactive and never on the server.
+const AthenaBust = dynamic(() => import("../three/athena-bust"), { ssr: false });
 
 const tabs: { icon: IconName; label: string }[] = [
   { icon: "today", label: "Today" },
@@ -12,27 +20,59 @@ const tabs: { icon: IconName; label: string }[] = [
   { icon: "profile", label: "Me" },
 ];
 
-/** The artwork frames the product; the headline leads. */
+/**
+ * Three depth layers: the fresco sky drifts slowest, the marble Athena sits in
+ * the middle, and the app phone floats in front and rises fastest on scroll.
+ */
 export function Hero() {
+  const ref = useRef<HTMLElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const skyY = useTransform(scrollYProgress, [0, 1], ["0%", "28%"]);
+  const skyScale = useTransform(scrollYProgress, [0, 1], [1.04, 1.16]);
+  const copyY = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  const copyFade = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  const phoneY = useTransform(scrollYProgress, [0, 1], [0, -120]);
+  // On phones the app sits under Athena's face, so it only lifts on wider screens.
+  const [wide, setWide] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const update = () => setWide(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+  const phoneRotate = useTransform(scrollYProgress, [0, 1], [-4, 6]);
+
   return (
     <section
+      ref={ref}
       aria-labelledby="hero-title"
       className="relative isolate overflow-hidden py-[42px] md:py-[67px] 2xl:py-[75px]"
     >
-      <Image
-        src="/images/art/hero.jpg"
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        className="-z-20 object-cover object-[68%_top] md:object-top"
-      />
+      <motion.div
+        aria-hidden
+        className="absolute inset-0 -z-20 origin-top"
+        style={reduce ? undefined : { y: skyY, scale: skyScale }}
+      >
+        <Image
+          src="/images/art/hero.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-[68%_top] md:object-top"
+        />
+      </motion.div>
       <div
         aria-hidden
         className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(245,242,235,.55),rgba(245,242,235,.86)_45%,#F5F2EB)] md:bg-[linear-gradient(90deg,rgba(245,242,235,.92)_0%,rgba(245,242,235,.7)_43%,rgba(245,242,235,.12)_80%),linear-gradient(0deg,#F5F2EB,transparent_35%)]"
       />
-      <Wrap className="flex flex-col items-stretch gap-4 md:grid md:grid-cols-[1.15fr_.85fr] md:items-center md:gap-[15px] lg:gap-9">
-        <div className="pb-2.5 pt-1.5 md:pb-8">
+      <Wrap className="flex flex-col items-stretch gap-4 md:grid md:grid-cols-[1.05fr_.95fr] md:items-center md:gap-[15px] lg:gap-9">
+        <motion.div
+          className="relative z-10 pb-2.5 pt-1.5 md:pb-8"
+          style={reduce ? undefined : { y: copyY, opacity: copyFade }}
+        >
           <Eyebrow dot className="mb-6 md:mb-7">
             A 56-day practice for retail traders
           </Eyebrow>
@@ -40,41 +80,84 @@ export function Hero() {
             id="hero-title"
             className="max-w-[670px] text-[clamp(47px,8.5vw,70px)] tracking-[-0.03em] md:text-[clamp(58px,6.3vw,84px)] 2xl:text-[86px]"
           >
-            A steadier mind.
-            <br />A better
-            <br />
-            <span className="text-[#777160]">trading routine.</span>
+            <Line delay={0.05}>A steadier mind.</Line>
+            <Line delay={0.18}>A better</Line>
+            <Line delay={0.31} className="text-[#777160]">
+              trading routine.
+            </Line>
           </h1>
-          <p className="mt-6 max-w-[460px] leading-[1.8] text-lead md:mt-7 md:text-[15px]">
-            FOMO. Impulsive trades. A plan you don’t follow.
-            <br />
-            Practise a different response—one useful task at a time.
-          </p>
-          <div className="mt-6 flex flex-wrap items-center gap-[18px] md:mt-8 md:gap-6">
-            <ButtonLink href={joinCta.href}>
-              {joinCta.label}
-              <Icon name="arrow-right" strokeWidth={1.4} className="text-lg" />
-            </ButtonLink>
-            <a className="text-link" href="#practice">
-              See a daily practice
-            </a>
+          <div className="fade-up" style={{ animationDelay: "0.55s" }}>
+            <p className="mt-6 max-w-[460px] leading-[1.8] text-lead md:mt-7 md:text-[15px]">
+              FOMO. Impulsive trades. A plan you don’t follow.
+              <br />
+              Practise a different response—one useful task at a time.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-[18px] md:mt-8 md:gap-6">
+              <ButtonLink href={joinCta.href}>
+                {joinCta.label}
+                <Icon name="arrow-right" strokeWidth={1.4} className="text-lg" />
+              </ButtonLink>
+              <a className="text-link" href="#practice">
+                See a daily practice
+              </a>
+            </div>
+            <p className="mt-4 text-xs text-muted">
+              iPhone first · Joining is free · No payment today
+            </p>
           </div>
-          <p className="mt-4 text-xs text-muted">
-            iPhone first · Joining is free · No payment today
-          </p>
-        </div>
+        </motion.div>
 
-        <Reveal
-          delay={0.25}
-          className="relative flex justify-center pb-7 pt-3.5 md:justify-end md:pt-1.5 lg:justify-center"
-        >
-          <PhonePreview />
-          <p className="absolute bottom-0 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] uppercase tracking-[1.5px] text-muted md:left-auto md:right-0 md:translate-x-0">
+        <div className="relative md:h-[640px] lg:h-[680px]">
+          {/* Middle layer: the marble Athena. */}
+          <div className="relative h-[460px] md:absolute md:inset-y-0 md:-left-[18%] md:right-[22%] md:h-auto">
+            <AthenaBust className="absolute inset-0" />
+          </div>
+          {/* Front layer: the app. */}
+          <div
+            className="fade-up relative z-10 -mt-[110px] flex justify-center md:absolute md:bottom-10 md:right-0 md:mt-0 md:block"
+            style={{ animationDelay: "0.4s" }}
+          >
+            <motion.div style={reduce || !wide ? undefined : { y: phoneY, rotate: phoneRotate }}>
+              <div className="[zoom:0.78] md:[zoom:0.6] lg:[zoom:0.66]">
+                <PhonePreview />
+              </div>
+            </motion.div>
+          </div>
+          <a
+            href={athenaModel.source}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute left-0 top-[24px] z-20 max-w-[110px] text-[10px] leading-snug text-muted hover:text-ink md:bottom-10 md:left-[2%] md:top-auto md:max-w-[150px]"
+          >
+            <i className="font-serif text-xs not-italic text-ink">Athena</i>
+            <br />
+            Real-time scan of a classical cast · SMK, public domain
+          </a>
+          <p className="mt-4 text-center text-[10px] uppercase tracking-[1.5px] text-muted md:absolute md:bottom-0 md:right-0 md:mt-0 md:text-right">
             App concept · Still in development
           </p>
-        </Reveal>
+        </div>
       </Wrap>
     </section>
+  );
+}
+
+/** A headline line that rises out of a mask on load (pure CSS, so it plays before hydration). */
+function Line({
+  delay,
+  className,
+  children,
+}: {
+  delay: number;
+  className?: string;
+  children: string;
+}) {
+  return (
+    <span className="block overflow-hidden pb-[0.08em]">
+      <span className={`rise block ${className ?? ""}`} style={{ animationDelay: `${delay}s` }}>
+        {children}
+      </span>
+    </span>
   );
 }
 

@@ -70,13 +70,13 @@ There are **no status colours** in v2. No coral, no green, no red. Warnings, "No
 
 | Element | Rule |
 |---|---|
-| **Artwork** | Greek mythological frescoes, statues and painted skies, cropped as a single image band on hero screens (Welcome, Today, Journey, Pause). Gilded gold edges on crops are allowed. One artwork per screen at most; form screens have none |
+| **Artwork** | Greek mythological frescoes, statues and painted skies, cropped as a single image band on hero screens (Welcome, Today, Journey, Pause). Gilded gold edges on crops are allowed. One artwork per screen at most; form screens have none. On the website, each idea is paired with one myth in a **public-domain painting** (e.g. Icarus for FOMO, Ulysses and the Sirens for Pause), shown with a museum label; sources are in `apps/web/src/content/artwork.ts` and on `/credits` |
 | **Headings** | Cormorant Garamond, sentence case, often ending with a full stop ("Judge your day.") |
 | **Outline** | 1px hairlines (`#DEDBD3` / `#C9C3B7`). No thick black outlines |
 | **Shadow** | Almost none. Cards are flat; only overlays (toast, sheet) get a soft shadow such as `0 5px 24px rgba(0,0,0,.13)` |
 | **Corner radius** | Cards ~16px, buttons ~10–12px, chips fully round |
 | **Slant** | None. Nothing is skewed |
-| **Motion** | Slow fades only, and respects Reduce Motion |
+| **Motion** | App: slow fades only. Website: museum-like depth: a real-time 3D marble Athena in the hero, scroll parallax between painting and text layers, paintings that turn in 3D, gentle tilt toward the cursor. Always slow (≈1 s, ease-out), never bouncy, and everything is still under Reduce Motion |
 | **Titles** | Useful title first, mythology second (e.g. "Know your habits", not a god's name). Myth is atmosphere, never required to understand a screen |
 
 **Never use** comic bursts, speed lines, halftone, hard offset shadows or skewed text. Those belong to v1.
