@@ -27,6 +27,15 @@ export const socials = [
   { network: "discord", label: "Still's Discord community", url: "" },
 ] as const;
 
+/**
+ * App store listings. While a URL is empty the badge shows "Coming soon" and is
+ * not clickable; add the listing URL at launch to turn it into a link.
+ */
+export const stores = [
+  { id: "apple", store: "App Store", url: "" },
+  { id: "google", store: "Google Play", url: "" },
+] as const;
+
 export const markets = ["Stocks", "Forex", "Crypto", "Futures", "Options", "Commodities"];
 
 export const problems: { title: string; text: string; quote?: string; art: Artwork }[] = [

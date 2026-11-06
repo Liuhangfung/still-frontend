@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { athenaModel } from "@/content/artwork";
 import { joinCta } from "@/content/site";
 import { Wrap } from "./section";
+import { StoreBadges } from "./store-badges";
 import { Magnetic } from "../motion/scenes";
 
 // three.js loads after the page is interactive and never on the server.
@@ -104,8 +105,9 @@ export function Hero() {
                 See how it works
               </a>
             </div>
+            <StoreBadges className="mt-6" />
             <p className="mt-4 text-xs text-muted">
-              iPhone first · Joining is free · No payment today
+              iPhone first, then Android · Joining is free · No payment today
             </p>
             <ul aria-label="Inside the app" className="mt-8 flex flex-wrap gap-2 md:mt-10">
               {features.map((f, i) => (
