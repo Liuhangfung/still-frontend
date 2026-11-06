@@ -52,9 +52,10 @@ v1 (teal + gold JoJo-style comic, Bangers + Inter) is retired. The live site in 
 
 [`docs/ui-design/landing-v3.html`](docs/ui-design/landing-v3.html) is the design the live site in `apps/web` is built from. Page text lives in `apps/web/src/content/site.ts`; artwork crops are in `apps/web/public/images/art/` (concept-only until rights are cleared). `ui-design/landing-v2.html` is the retired comic version. `landing-v1.html` is the earlier dark version, kept for reference.
 
-The four “If this feels familiar” problems each have their own allegorical painting in
-[`apps/web/public/images/art/problems/`](apps/web/public/images/art/problems/). Symbolism, the shared
-style recipe and regeneration notes: [problem paintings](docs/art-problems.md).
+Allegorical paintings run through the page: one per “If this feels familiar” problem
+([`images/art/problems/`](apps/web/public/images/art/problems/)) and one per programme chapter
+([`images/art/programme/`](apps/web/public/images/art/programme/)). Symbolism, the shared style recipe
+and regeneration notes: [landing art](docs/art-landing.md).
 
 [`docs/ui-design/landing-v3.html`](docs/ui-design/landing-v3.html) is the classical editorial landing concept matching the v8 app design. It is self-contained and opens offline, with responsive layouts, chapter tabs, FAQ accordions and a clearly non-submitting signup preview. It is the design source for the live site; artwork remains concept-only pending production rights clearance.
 

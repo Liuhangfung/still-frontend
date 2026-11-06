@@ -98,14 +98,24 @@ export function Programme() {
           tabIndex={0}
           className="grid items-center gap-[25px] pt-7 md:grid-cols-[1.05fr_.95fr] md:gap-[50px] md:pt-9"
         >
-          <Image
-            src="/images/art/fresco.jpg"
-            alt="Soft classical ceiling fresco, framing the four-chapter journey"
-            width={900}
-            height={369}
-            sizes="(min-width: 768px) 560px, 100vw"
-            className="h-[185px] w-full rounded-[3px] object-cover md:h-[241px]"
-          />
+          <div className="relative h-[185px] w-full overflow-hidden rounded-[3px] md:h-[285px]">
+            {chapters.map((ch, i) => (
+              <Image
+                key={ch.art}
+                src={ch.art}
+                alt={i === active ? ch.artAlt : ""}
+                aria-hidden={i !== active}
+                width={1200}
+                height={900}
+                sizes="(min-width: 768px) 560px, 100vw"
+                style={{ objectPosition: ch.artPosition }}
+                className={clsx(
+                  "absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out",
+                  i === active ? "opacity-100" : "opacity-0"
+                )}
+              />
+            ))}
+          </div>
           <div>
             <Eyebrow className="mb-3.5 text-[10px] text-gold-text">
               Chapter {pad(active + 1)} · {c.days}

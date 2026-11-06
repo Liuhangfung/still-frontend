@@ -95,13 +95,27 @@ export const practiceSteps = [
   { title: "Reflect", text: "Notice what to keep." },
 ];
 
-export const chapters = [
+export const chapters: {
+  name: string;
+  days: string;
+  title: string;
+  text: string;
+  output: string;
+  art: string;
+  artAlt: string;
+  /** Where to centre the panel band crop, so faces are never cut. */
+  artPosition: string;
+}[] = [
   {
     name: "Know yourself",
     days: "Days 1–14",
     title: "Understand what sets you off.",
     text: "Look at the moments behind your impulsive trades. Name the triggers and write a more deliberate response, without shame.",
     output: "Your Trigger Map",
+    art: "/images/art/programme/01-know-yourself.jpg",
+    artAlt:
+      "Classical painting: a woman kneels at the edge of a still marble pool, gold rings spreading from her fingers, her own shadow standing tall on the wall behind her.",
+    artPosition: "center 46%",
   },
   {
     name: "Build a method",
@@ -109,6 +123,10 @@ export const chapters = [
     title: "Put your method into words.",
     text: "Define when you trade, when you do not, and the risk boundaries you intend to follow. Build a checklist around your own plan.",
     output: "Your own trading plan",
+    art: "/images/art/programme/02-build-a-method.jpg",
+    artAlt:
+      "Neoclassical painting: an architect bends over a marble drafting table with brass compasses, a ruled tablet marked with faint gold candlestick lines, half-built columns behind him.",
+    artPosition: "center 44%",
   },
   {
     name: "Practise",
@@ -116,6 +134,10 @@ export const chapters = [
     title: "Practise without risking money.",
     text: "Use historical charts and paper exercises to work through decisions. Reflect on the process, not just an outcome.",
     output: "A practice journal",
+    art: "/images/art/programme/03-practise.jpg",
+    artAlt:
+      "Neoclassical painting: an athlete in a marble hall squares up to his own long shadow, a gilded candlestick chart glowing inside it.",
+    artPosition: "center 42%",
   },
   {
     name: "Make it last",
@@ -123,6 +145,10 @@ export const chapters = [
     title: "Make the routine your own.",
     text: "Bring your rules into one card and a manageable daily routine. Prepare for the days when old habits return.",
     output: "Your Rules Card",
+    art: "/images/art/programme/04-make-it-last.jpg",
+    artAlt:
+      "Classical painting: a weaver at an upright loom, ivory cloth carrying a repeated row of small gold candlestick marks, a gold thread running from the basket at her feet.",
+    artPosition: "center 45%",
   },
 ];
 
