@@ -40,6 +40,7 @@ Import the repo in Vercel and set **Root Directory** to `apps/web` (framework: N
 | [`images/`](images/) | Logo and app icons (teal Pause pose), [`icons/`](images/icons/) 106-icon set, [`screens/`](images/screens/) app screenshots, [`blog/`](images/blog/) blog illustrations |
 | [`ui-design/`](ui-design/) | `still-ui-v1.html` (10 app screens), `still-ui-v2.html` (quest art), `still-ui-v3.html` (chapter themes), `still-ui-v4.html` (inventory), `still-ui-v5.html` (day log), `still-ui-v6.html` (day log, JoJo style), `still-ui-v7.html` (bottom bar), `landing-v2.html` (pre-sale landing page) |
 | [`docs/ui-design/`](docs/ui-design/) | [`still-ui-v8.html`](docs/ui-design/still-ui-v8.html): classical editorial concept, five editable iPhone screens, embedded artwork/fonts and demo interactions. Open directly in a browser; artwork is concept-only pending production rights clearance. |
+| [`ui-design-page/`](ui-design-page/) | [`index.html`](ui-design-page/index.html): searchable gallery of all 46 editable feature-screen HTML pages, with shared classical styling, local demo controls and original-image comparisons. Keep the folder together and open the index directly; no backend or server required. See the [editing guide](ui-design-page/README.md). |
 
 ## Landing page design
 
