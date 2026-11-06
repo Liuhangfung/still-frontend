@@ -7,6 +7,7 @@ import { Parallax, Tilt } from "../motion/depth";
 import { Reveal } from "../motion/reveal";
 import { Label, Painting } from "./painting";
 import { Wrap } from "./section";
+import { Lines } from "../motion/scenes";
 
 /** A pause is a useful outcome, not a game reward. */
 export function Pause() {
@@ -33,9 +34,7 @@ export function Pause() {
             id="pause-title"
             className="max-w-[470px] text-[46px] tracking-[-0.025em] md:text-[49px] lg:text-[58px]"
           >
-            You don’t have to
-            <br />
-            win it back today.
+            <Lines lines={["You don’t have to", "win it back today."]} />
           </h2>
           <p className="mt-5 max-w-[380px] text-[13px] leading-[1.9] text-[#bfbdb3] md:mt-6">
             When a loss becomes an urge, Pause gives you a moment to check in and return to your own
@@ -66,11 +65,15 @@ export function Pause() {
                 <br />
                 act right now.
               </h3>
-              <div
-                aria-hidden
-                className="breathe mx-auto mb-4 mt-7 grid h-[61px] w-[61px] place-items-center rounded-full border border-[#91948d]"
-              >
-                <Icon name="pause" strokeWidth={1.4} className="text-2xl" />
+              <div aria-hidden className="relative mx-auto mb-4 mt-7 h-[61px] w-[61px]">
+                <span className="ripple absolute inset-0 rounded-full border border-[#91948d]" />
+                <span
+                  className="ripple absolute inset-0 rounded-full border border-[#91948d]"
+                  style={{ animationDelay: "3.5s" }}
+                />
+                <div className="breathe relative grid h-full w-full place-items-center rounded-full border border-[#91948d] bg-ivory/60">
+                  <Icon name="pause" strokeWidth={1.4} className="text-2xl" />
+                </div>
               </div>
               <p className="mb-8 text-xs text-muted">Take one slow breath.</p>
               <p className="mb-6 font-serif text-[21px] leading-[1.16]">

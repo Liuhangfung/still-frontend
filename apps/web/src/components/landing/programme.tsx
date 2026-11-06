@@ -8,6 +8,7 @@ import { chapters } from "@/content/site";
 import { Tilt } from "../motion/depth";
 import { Label, Painting } from "./painting";
 import { Section, Wrap } from "./section";
+import { Lines, Unveil } from "../motion/scenes";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
@@ -43,9 +44,7 @@ export function Programme() {
           <div>
             <Eyebrow className="mb-[18px]">Your 56-day journey</Eyebrow>
             <h2 id="programme-title" className="section-title">
-              Small steps.
-              <br />
-              Something real to keep.
+              <Lines lines={["Small steps.", "Something real to keep."]} />
             </h2>
           </div>
           <p className="mt-5 max-w-[420px] text-[13px] leading-[1.9] text-muted md:mb-1.5 md:mt-0 md:max-w-[330px]">
@@ -103,26 +102,28 @@ export function Programme() {
         >
           <div>
             {/* The chapter's painting turns over like a page when the chapter changes. */}
-            <Tilt max={6} className="h-[240px] md:h-[340px]">
-              <div className="relative h-full w-full [perspective:1400px]">
-                <AnimatePresence initial={false} mode="popLayout">
-                  <motion.div
-                    key={active}
-                    className="absolute inset-0 overflow-hidden rounded-[3px] shadow-phone [backface-visibility:hidden]"
-                    initial={
-                      reduce ? { opacity: 0 } : { opacity: 0, rotateY: 70, scale: 0.94, x: 40 }
-                    }
-                    animate={reduce ? { opacity: 1 } : { opacity: 1, rotateY: 0, scale: 1, x: 0 }}
-                    exit={
-                      reduce ? { opacity: 0 } : { opacity: 0, rotateY: -70, scale: 0.94, x: -40 }
-                    }
-                    transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    <Painting art={c.art} sizes="(min-width: 768px) 560px, 100vw" />
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-            </Tilt>
+            <Unveil className="rounded-[3px]">
+              <Tilt max={6} className="h-[240px] md:h-[340px]">
+                <div className="relative h-full w-full [perspective:1400px]">
+                  <AnimatePresence initial={false} mode="popLayout">
+                    <motion.div
+                      key={active}
+                      className="absolute inset-0 overflow-hidden rounded-[3px] shadow-phone [backface-visibility:hidden]"
+                      initial={
+                        reduce ? { opacity: 0 } : { opacity: 0, rotateY: 70, scale: 0.94, x: 40 }
+                      }
+                      animate={reduce ? { opacity: 1 } : { opacity: 1, rotateY: 0, scale: 1, x: 0 }}
+                      exit={
+                        reduce ? { opacity: 0 } : { opacity: 0, rotateY: -70, scale: 0.94, x: -40 }
+                      }
+                      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      <Painting art={c.art} sizes="(min-width: 768px) 560px, 100vw" />
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+              </Tilt>
+            </Unveil>
             <Label art={c.art} className="mt-3" />
           </div>
           <div>

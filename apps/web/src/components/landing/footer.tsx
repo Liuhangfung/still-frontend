@@ -1,5 +1,6 @@
 import { Icon } from "@still/ui";
 import Link from "next/link";
+import { GiantMark } from "../motion/scenes";
 import { Brand } from "./nav";
 import { Wrap } from "./section";
 import { SocialLinks } from "./social-links";
@@ -16,7 +17,7 @@ const links = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-line pb-6 pt-[34px]">
+    <footer className="overflow-hidden border-t border-line pt-[34px]">
       <Wrap>
         <div className="flex flex-wrap items-center justify-between gap-[22px] md:gap-8">
           <Brand href="/" className="text-[40px]" />
@@ -64,6 +65,7 @@ export function Footer() {
           future results. For users aged 18 and over. © 2026 Still.
         </p>
       </Wrap>
+      <GiantMark className="mt-10 text-[34vw] text-[#e4ddcf] md:mt-14 md:text-[26vw]" />
     </footer>
   );
 }

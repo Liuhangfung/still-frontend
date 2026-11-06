@@ -4,6 +4,7 @@ import { Parallax } from "../motion/depth";
 import { Painting } from "./painting";
 import { Wrap } from "./section";
 import { SignupForm } from "./signup-form";
+import { Lines } from "../motion/scenes";
 
 /** The founder list. Payment happens only in the app at launch. */
 export function Join() {
@@ -26,8 +27,7 @@ export function Join() {
             iPhone first · In development
           </Eyebrow>
           <h2 id="join-title" className="text-[47px] tracking-[-0.025em] md:text-[58px]">
-            Make room for
-            <br />a different routine.
+            <Lines lines={["Make room for", "a different routine."]} />
           </h2>
           <p className="mt-5 max-w-[340px] text-[13px] text-lead">
             Launch updates, a first look at the app and details of the founder offer. A small next

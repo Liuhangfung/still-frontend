@@ -9,6 +9,7 @@ import { Parallax, Tilt } from "../motion/depth";
 import { Reveal } from "../motion/reveal";
 import { Label, Painting } from "./painting";
 import { Section, Wrap } from "./section";
+import { Lines, Unveil } from "../motion/scenes";
 
 export function Practice() {
   const [answer, setAnswer] = useState(sampleTask.right);
@@ -20,9 +21,9 @@ export function Practice() {
           {/* Back layer: the oracle of Delphi, drifting slower than the card. */}
           <div aria-hidden className="absolute bottom-20 right-0 top-0 hidden w-[62%] md:block">
             <Parallax depth={140} className="h-full">
-              <div className="h-full overflow-hidden rounded-[3px] opacity-90 shadow-phone">
+              <Unveil className="h-full rounded-[3px] opacity-90 shadow-phone">
                 <Painting art={art.delphi} sizes="30vw" />
-              </div>
+              </Unveil>
             </Parallax>
           </div>
           <Tilt max={7} className="relative z-10 mx-auto max-w-[356px] md:mx-0 md:mr-auto">
@@ -81,8 +82,7 @@ export function Practice() {
         <div>
           <Eyebrow className="mb-5">More than watching lessons</Eyebrow>
           <h2 id="daily-title" className="section-title max-w-[460px]">
-            One useful task.
-            <br />A little more clarity.
+            <Lines lines={["One useful task.", "A little more clarity."]} />
           </h2>
           <p className="mt-5 max-w-[440px] text-[13px] leading-[1.9] text-muted md:mt-6">
             Open Still and know what to work on today. Map a trigger. Check a source. Practise with

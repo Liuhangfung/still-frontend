@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { athenaModel } from "@/content/artwork";
 import { joinCta, phoneRoutine } from "@/content/site";
 import { Wrap } from "./section";
+import { Magnetic } from "../motion/scenes";
 
 // three.js loads after the page is interactive and never on the server.
 const AthenaBust = dynamic(() => import("../three/athena-bust"), { ssr: false });
@@ -93,10 +94,12 @@ export function Hero() {
               Practise a different response—one useful task at a time.
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-[18px] md:mt-8 md:gap-6">
-              <ButtonLink href={joinCta.href}>
-                {joinCta.label}
-                <Icon name="arrow-right" strokeWidth={1.4} className="text-lg" />
-              </ButtonLink>
+              <Magnetic>
+                <ButtonLink href={joinCta.href}>
+                  {joinCta.label}
+                  <Icon name="arrow-right" strokeWidth={1.4} className="text-lg" />
+                </ButtonLink>
+              </Magnetic>
               <a className="text-link" href="#practice">
                 See a daily practice
               </a>

@@ -5,6 +5,7 @@ import { ScrollZoom } from "../motion/depth";
 import { Stagger, StaggerItem } from "../motion/reveal";
 import { Label, Painting } from "./painting";
 import { Section, Wrap } from "./section";
+import { Lines, Magnetic, Rule, Unveil } from "../motion/scenes";
 
 /** Your own tools, not a dashboard full of promises. */
 export function Tools() {
@@ -15,9 +16,7 @@ export function Tools() {
           <div>
             <Eyebrow className="mb-[19px]">Not just a completed programme</Eyebrow>
             <h2 id="tools-title" className="section-title">
-              Tools for the days
-              <br />
-              that follow.
+              <Lines lines={["Tools for the days", "that follow."]} />
             </h2>
           </div>
           <p className="max-w-[390px] self-end text-[13px] leading-[1.9] text-muted md:mb-1.5">
@@ -26,9 +25,11 @@ export function Tools() {
           </p>
         </div>
         <figure className="mb-10 md:mb-14">
-          <ScrollZoom from={1.25} className="h-[220px] rounded-[3px] md:h-[380px]">
-            <Painting art={art.vulcan} sizes="(min-width: 1180px) 1108px, 100vw" />
-          </ScrollZoom>
+          <Unveil className="rounded-[3px]">
+            <ScrollZoom from={1.25} className="h-[220px] rounded-[3px] md:h-[380px]">
+              <Painting art={art.vulcan} sizes="(min-width: 1180px) 1108px, 100vw" />
+            </ScrollZoom>
+          </Unveil>
           <figcaption className="mt-3 flex flex-col gap-1 md:flex-row md:items-baseline md:justify-between">
             <span className="font-serif text-[17px]">{art.vulcan.myth}</span>
             <Label art={art.vulcan} />
@@ -37,7 +38,8 @@ export function Tools() {
         <Stagger className="grid md:grid-cols-2 md:gap-x-[70px]">
           {tools.map((t, i) => (
             <StaggerItem key={t.title}>
-              <article className="flex items-start gap-[18px] border-t border-line py-[25px]">
+              <Rule />
+              <article className="flex items-start gap-[18px] py-[25px]">
                 <span className="min-w-[31px] font-serif text-[29px] leading-none text-[#857a68]">
                   {String(i + 1).padStart(2, "0")}
                 </span>
@@ -71,9 +73,7 @@ export function Pricing() {
         <div>
           <Eyebrow className="mb-[22px]">The planned founder offer</Eyebrow>
           <h2 id="pricing-title" className="text-[46px] tracking-[-0.02em] md:text-[53px]">
-            A practice.
-            <br />
-            Not another feed.
+            <Lines lines={["A practice.", "Not another feed."]} />
           </h2>
           <p className="mt-5 max-w-[370px] text-[13px] text-muted md:mt-6">
             One guided programme. Practical tools. No trading-account connection and no need to
@@ -103,10 +103,12 @@ export function Pricing() {
               </li>
             ))}
           </ul>
-          <ButtonLink href={joinCta.href} className="w-full md:max-w-[350px]">
-            {joinCta.label}
-            <Icon name="arrow-right" strokeWidth={1.4} className="text-lg" />
-          </ButtonLink>
+          <Magnetic strength={0.15} className="w-full md:max-w-[350px]">
+            <ButtonLink href={joinCta.href} className="w-full">
+              {joinCta.label}
+              <Icon name="arrow-right" strokeWidth={1.4} className="text-lg" />
+            </ButtonLink>
+          </Magnetic>
           <p className="mt-3 text-xs text-muted">Expected regular price: {price.regular}</p>
           <p className="mt-3 max-w-[350px] text-[11px] text-muted">
             Pricing is planned and will be confirmed at launch. Joining is free. No checkout or

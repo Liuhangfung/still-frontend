@@ -7,6 +7,7 @@ import { markets, problems } from "@/content/site";
 import { ScrollZoom, Tilt } from "../motion/depth";
 import { Label, Painting } from "./painting";
 import { Section, Wrap } from "./section";
+import { Lines, Rule, Unveil } from "../motion/scenes";
 
 /** All markets, not a signal list. */
 export function Markets() {
@@ -17,16 +18,32 @@ export function Markets() {
           One practice. <br className="hidden md:inline" />
           Across all markets.
         </p>
-        <ul
-          aria-label="Supported trading markets"
-          className="flex flex-1 flex-wrap items-center gap-x-6 gap-y-4 font-serif text-[21px] leading-none md:flex-nowrap md:justify-between md:gap-4 md:text-[19px] lg:gap-7 lg:text-[22px]"
-        >
+        <ul className="sr-only">
           {markets.map((m) => (
-            <li key={m} className="whitespace-nowrap">
-              {m}
-            </li>
+            <li key={m}>{m}</li>
           ))}
         </ul>
+        {/* A slow frieze of markets, fading out at both edges. */}
+        <div
+          aria-hidden
+          className="frieze relative w-full min-w-0 flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]"
+        >
+          <div className="frieze-track flex w-max">
+            {[0, 1].map((copy) => (
+              <div key={copy} className="flex shrink-0 items-center">
+                {markets.map((m) => (
+                  <span
+                    key={m}
+                    className="flex items-center whitespace-nowrap font-serif text-[21px] leading-none lg:text-[22px]"
+                  >
+                    {m}
+                    <span className="mx-7 h-[5px] w-[5px] rounded-full bg-gold lg:mx-10" />
+                  </span>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
       </Wrap>
     </div>
   );
@@ -63,7 +80,12 @@ export function Problems() {
           <div>
             <Eyebrow className="mb-[22px]">If this feels familiar</Eyebrow>
             <h2 id="problem-title" className="section-title max-w-[520px]">
-              The hard part isn’t finding another signal. It’s following your own plan.
+              <Lines
+                lines={[
+                  "The hard part isn’t finding another signal.",
+                  "It’s following your own plan.",
+                ]}
+              />
             </h2>
           </div>
           <p className="max-w-[450px] text-[13px] leading-[1.9] text-muted md:mb-2">
@@ -88,11 +110,14 @@ export function Problems() {
                   items.current[i] = el;
                 }}
                 data-index={i}
-                className="border-t border-line py-8 last:border-b md:flex md:min-h-[72vh] md:flex-col md:justify-center md:py-12"
+                className="relative py-8 last:border-b last:border-line md:flex md:min-h-[72vh] md:flex-col md:justify-center md:py-12"
               >
-                <ScrollZoom className="mb-6 aspect-[4/3] rounded-[3px] md:hidden">
-                  <Painting art={p.art} sizes="100vw" />
-                </ScrollZoom>
+                <Rule className="absolute inset-x-0 top-0" />
+                <Unveil className="mb-6 rounded-[3px] md:hidden">
+                  <ScrollZoom className="aspect-[4/3] rounded-[3px]">
+                    <Painting art={p.art} sizes="100vw" />
+                  </ScrollZoom>
+                </Unveil>
                 <span className="font-serif text-[22px] leading-none text-[#857a68]">
                   {pad(i + 1)}
                 </span>
@@ -123,40 +148,42 @@ function Gallery({ active }: { active: number }) {
 
   return (
     <div className="flex h-full flex-col">
-      <Tilt max={5} className="relative min-h-0 flex-1">
-        <div className="relative h-full w-full [perspective:1400px] [transform-style:preserve-3d]">
-          {problems.map((p, i) => {
-            const state = i === active ? "on" : i < active ? "past" : "next";
-            return (
-              <motion.div
-                key={p.title}
-                className="absolute inset-0 overflow-hidden rounded-[3px] shadow-phone"
-                initial={false}
-                animate={
-                  reduce
-                    ? { opacity: state === "on" ? 1 : 0 }
-                    : {
-                        opacity: state === "on" ? 1 : 0,
-                        rotateY: state === "on" ? 0 : state === "past" ? -18 : 18,
-                        rotateX: state === "on" ? 0 : state === "past" ? 6 : -6,
-                        scale: state === "on" ? 1 : state === "past" ? 0.9 : 1.08,
-                        z: state === "on" ? 0 : -120,
-                      }
-                }
-                transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-                style={{ zIndex: state === "on" ? 2 : 1 }}
-                aria-hidden={state !== "on"}
-              >
-                <Painting art={p.art} sizes="(min-width: 768px) 45vw, 100vw" />
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 shadow-[inset_0_0_80px_rgba(32,32,29,.25)]"
-                />
-              </motion.div>
-            );
-          })}
-        </div>
-      </Tilt>
+      <Unveil className="relative min-h-0 flex-1">
+        <Tilt max={5} className="h-full">
+          <div className="relative h-full w-full [perspective:1400px] [transform-style:preserve-3d]">
+            {problems.map((p, i) => {
+              const state = i === active ? "on" : i < active ? "past" : "next";
+              return (
+                <motion.div
+                  key={p.title}
+                  className="absolute inset-0 overflow-hidden rounded-[3px] shadow-phone"
+                  initial={false}
+                  animate={
+                    reduce
+                      ? { opacity: state === "on" ? 1 : 0 }
+                      : {
+                          opacity: state === "on" ? 1 : 0,
+                          rotateY: state === "on" ? 0 : state === "past" ? -18 : 18,
+                          rotateX: state === "on" ? 0 : state === "past" ? 6 : -6,
+                          scale: state === "on" ? 1 : state === "past" ? 0.9 : 1.08,
+                          z: state === "on" ? 0 : -120,
+                        }
+                  }
+                  transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+                  style={{ zIndex: state === "on" ? 2 : 1 }}
+                  aria-hidden={state !== "on"}
+                >
+                  <Painting art={p.art} sizes="(min-width: 768px) 45vw, 100vw" />
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 shadow-[inset_0_0_80px_rgba(32,32,29,.25)]"
+                  />
+                </motion.div>
+              );
+            })}
+          </div>
+        </Tilt>
+      </Unveil>
       <div className="mt-4 flex items-start justify-between gap-6">
         <Label art={current} />
         <span className="flex-none font-serif text-sm text-muted">

@@ -77,6 +77,39 @@
   animation: fade-up 1s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* Markets frieze: two copies slide left forever; pauses on hover. */
+@keyframes frieze {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.frieze-track {
+  animation: frieze 38s linear infinite;
+}
+.frieze:hover .frieze-track {
+  animation-play-state: paused;
+}
+
+/* Pause: rings ripple out from the breathing circle. */
+@keyframes ripple {
+  from {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  to {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+}
+.ripple {
+  animation: ripple 7s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+/* FAQ answers drift up as they open. */
+.faq[open] > p {
+  animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 /* Smooth open/close for FAQ answers (browsers that support it) */
 :root {
   interpolate-size: allow-keywords;
@@ -95,7 +128,10 @@
 @media (prefers-reduced-motion: reduce) {
   .breathe,
   .rise,
-  .fade-up {
+  .fade-up,
+  .ripple,
+  .frieze-track,
+  .faq[open] > p {
     animation: none;
   }
 }

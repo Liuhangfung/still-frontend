@@ -2,7 +2,12 @@
 
 import { useEffect, useRef } from "react";
 import {
+  BufferAttribute,
+  BufferGeometry,
   Box3,
+  CanvasTexture,
+  Points,
+  PointsMaterial,
   Color,
   DirectionalLight,
   Group,
@@ -14,7 +19,6 @@ import {
   SRGBColorSpace,
   Vector3,
   WebGLRenderer,
-  type BufferGeometry,
 } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
@@ -65,6 +69,29 @@ export default function AthenaBust({ className }: { className?: string }) {
 
     const pivot = new Group();
     scene.add(pivot);
+
+    // Gold dust: soft motes drifting upward around the bust, on their own layer.
+    const DUST = 260;
+    const dustPos = new Float32Array(DUST * 3);
+    const dustSpeed = new Float32Array(DUST);
+    for (let i = 0; i < DUST; i++) {
+      dustPos[i * 3] = (Math.random() - 0.5) * 5;
+      dustPos[i * 3 + 1] = (Math.random() - 0.5) * 3.6;
+      dustPos[i * 3 + 2] = (Math.random() - 0.5) * 3;
+      dustSpeed[i] = 0.04 + Math.random() * 0.1;
+    }
+    const dustGeo = new BufferGeometry();
+    dustGeo.setAttribute("position", new BufferAttribute(dustPos, 3));
+    const dustMat = new PointsMaterial({
+      size: 0.13,
+      map: softDot(),
+      color: new Color("#b69a64"),
+      transparent: true,
+      opacity: 0.85,
+      depthWrite: false,
+    });
+    const dust = new Points(dustGeo, dustMat);
+    scene.add(dust);
 
     const material = new MeshPhysicalMaterial({
       color: new Color("#ece6da"),
@@ -137,6 +164,7 @@ export default function AthenaBust({ className }: { className?: string }) {
     let raf = 0;
     let running = false;
     const t0 = performance.now();
+    let last = t0;
     function frame(now: number) {
       if (!visible || disposed) {
         running = false;
@@ -155,6 +183,18 @@ export default function AthenaBust({ className }: { className?: string }) {
       pivot.rotation.y = YAW + Math.sin(t * 0.25) * 0.12 + current.x * 0.38 + out * 0.9;
       pivot.rotation.x = current.y * 0.12 + out * 0.15;
       pivot.position.y = Math.sin(t * 0.6) * 0.04 + out * 0.4;
+      // Dust rises and wraps; it sways a little against the bust for depth.
+      const dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
+      for (let i = 0; i < DUST; i++) {
+        let y = dustPos[i * 3 + 1] + dustSpeed[i] * dt;
+        if (y > 1.8) y = -1.8;
+        dustPos[i * 3 + 1] = y;
+        dustPos[i * 3] += Math.sin(t * 0.3 + i) * 0.0006;
+      }
+      dustGeo.attributes.position.needsUpdate = true;
+      dust.rotation.y = -current.x * 0.25 + t * 0.02;
+      dust.rotation.x = -current.y * 0.08;
       camera.position.z = 6.2 + out * 1.6;
       renderer.render(scene, camera);
     }
@@ -179,10 +219,27 @@ export default function AthenaBust({ className }: { className?: string }) {
         if ((o as Mesh).isMesh) (o as Mesh).geometry.dispose();
       });
       material.dispose();
+      dustGeo.dispose();
+      dustMat.map?.dispose();
+      dustMat.dispose();
       renderer.dispose();
       renderer.domElement.remove();
     };
   }, []);
 
   return <div ref={host} aria-hidden className={className} />;
+}
+
+/** A small radial-gradient sprite so each mote is a soft round glow, not a square. */
+function softDot() {
+  const c = document.createElement("canvas");
+  c.width = c.height = 64;
+  const g = c.getContext("2d")!;
+  const r = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+  r.addColorStop(0, "rgba(255,255,255,1)");
+  r.addColorStop(0.35, "rgba(255,255,255,.55)");
+  r.addColorStop(1, "rgba(255,255,255,0)");
+  g.fillStyle = r;
+  g.fillRect(0, 0, 64, 64);
+  return new CanvasTexture(c);
 }
