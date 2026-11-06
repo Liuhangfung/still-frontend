@@ -1,4 +1,3 @@
-import type { IconName } from "@still/ui";
 import { art, type Artwork } from "./artwork";
 
 /** Payment happens only in the app (App Store / Google Play). The site collects the founder list. */
@@ -9,6 +8,7 @@ export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:310
 export const price = { founder: "49", regular: "US$79", currency: "US$" };
 
 export const navLinks = [
+  { href: "#app", label: "The app" },
   { href: "#practice", label: "The practice" },
   { href: "#programme", label: "The 56 days" },
   { href: "#pricing", label: "Pricing" },
@@ -51,6 +51,65 @@ export const problems: { title: string; text: string; quote?: string; art: Artwo
     title: "A plan that stays in your head",
     art: art.ariadne,
     text: "No written boundaries to return to when the pressure arrives.",
+  },
+];
+
+/** "Inside the app": the daily loop, one real screen per step. */
+export const appTour: {
+  when: string;
+  title: string;
+  text: string;
+  points: string[];
+  screen: string;
+  alt: string;
+}[] = [
+  {
+    when: "Day 1 · 4 minutes",
+    title: "An honest starting point.",
+    text: "Answer 16 quick questions about how you really trade. Still shows your starting level, your two focus areas and a routine that fits your day.",
+    points: ["Real trading scenarios, mostly one tap", "No account logins, no balances"],
+    screen: "/images/app/profile.webp",
+    alt: "Hunter Profile screen: starting level Developing, focus areas FOMO and Leverage, and a 10-minute daily routine",
+  },
+  {
+    when: "Every day · 10–15 minutes",
+    title: "One quest a day.",
+    text: "Today shows one main quest built around your focus areas, plus a short daily routine. Save a draft and come back later.",
+    points: ["XP for doing the work, never for trading", "A shorter version for busy days"],
+    screen: "/images/app/today.webp",
+    alt: "Today screen: main quest “Inside the Urge”, two of five objectives done, and the daily routine",
+  },
+  {
+    when: "Before you trade · 1 minute",
+    title: "A gate, not a signal.",
+    text: "The Fit-to-Trade Gate checks your own best-self conditions: sleep, setting, a written idea. If one isn’t true, “Not today” is a valid result.",
+    points: ["Your conditions, in your words", "Choosing not to trade earns XP too"],
+    screen: "/images/app/fit-gate.webp",
+    alt: "Fit-to-Trade Gate screen: three of four best-self conditions ticked, with the result “Not today”",
+  },
+  {
+    when: "When the urge hits",
+    title: "Your plan, one tap away.",
+    text: "Write your Urge Plan in your own words. When a loss turns into an urge, Pause brings it back before the next trade, not after.",
+    points: ["Pause is always one tap away", "Skipping a trade counts as progress"],
+    screen: "/images/app/urge-plan.webp",
+    alt: "My Urge Plan screen: the story “I’ll win it back quickly” and the first written step",
+  },
+  {
+    when: "Every evening · 30 seconds",
+    title: "Judge your day, not your P&L.",
+    text: "A quick Rule Check, then grade the day A to E for how you followed your rules. Choosing not to trade can be an A.",
+    points: ["Never graded on money", "Patterns show up on your Day Log"],
+    screen: "/images/app/day-grade.webp",
+    alt: "Judge your day screen: Rule Check partly kept, suggested grade C · Mixed, with grades A to E",
+  },
+  {
+    when: "Every two weeks",
+    title: "Rank up. Keep what you build.",
+    text: "Finish a chapter and rank from E toward S. Every tool you made, from your Trigger Map to your Rules Card, stays in your Tools tab.",
+    points: ["Ranks mean practice, not trading skill", "Your tools stay with you"],
+    screen: "/images/app/rank-up.webp",
+    alt: "Chapter complete screen: rank E to D and an XP receipt of plus 80",
   },
 ];
 
@@ -134,12 +193,6 @@ export const priceIncludes = [
   "A path selected around your starting habits",
   "Daily practice and a preparation/review routine",
   "Pause and practical tools you build yourself",
-];
-
-/** Rows in the hero phone's daily routine. */
-export const phoneRoutine: { icon: IconName; label: string; time: string }[] = [
-  { icon: "exercise", label: "Movement break", time: "5 min" },
-  { icon: "research", label: "Review one source", time: "5 min" },
 ];
 
 export const faqs = [
