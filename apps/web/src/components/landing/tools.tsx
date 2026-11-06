@@ -4,6 +4,7 @@ import { art } from "@/content/artwork";
 import { ScrollZoom } from "../motion/depth";
 import { Stagger, StaggerItem } from "../motion/reveal";
 import { Label, Painting } from "./painting";
+import { PriceTag } from "./price-tag";
 import { Section, Wrap } from "./section";
 import { Lines, Magnetic, Rule, Unveil } from "../motion/scenes";
 
@@ -71,7 +72,7 @@ export function Pricing() {
     >
       <Wrap className="grid items-center gap-9 md:grid-cols-2 md:gap-[45px] lg:gap-[100px]">
         <div>
-          <Eyebrow className="mb-[22px]">The planned founder offer</Eyebrow>
+          <Eyebrow className="mb-[22px]">Founder offer · Limited</Eyebrow>
           <h2 id="pricing-title" className="text-[46px] tracking-[-0.02em] md:text-[53px]">
             <Lines lines={["A practice.", "Not another feed."]} />
           </h2>
@@ -80,21 +81,25 @@ export function Pricing() {
             watch markets inside Still.
           </p>
           <p className="mt-5 max-w-[370px] text-[13px] text-muted md:mt-6">
-            Join the founder list to hear when the iPhone app is ready and see the final offer
-            before you decide.
+            Founders get the full programme for {price.currency}
+            {price.founder} instead of {price.currency}
+            {price.regular}, applied in the app at launch. Join the list now; you decide when you
+            see the app.
           </p>
         </div>
         <div className="border-t border-[#c9beab] pt-7 md:border-l md:border-t-0 md:pl-[35px] md:pt-0 lg:pl-[70px]">
-          <p className="text-[10px] uppercase tracking-[1.8px] text-muted">
-            56-day programme · Planned founder price
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-[10px] uppercase tracking-[1.8px] text-muted">
+              56-day programme · Founder offer
+            </p>
+            <p className="rounded-full bg-ink px-3 py-1 text-[11px] font-medium text-ivory">
+              Save {Math.round((1 - price.founder / price.regular) * 100)}%
+            </p>
+          </div>
+          <PriceTag />
+          <p className="mt-4 text-xs text-muted">
+            One-time in-app purchase · For the first {price.founderSpots} people on the founder list
           </p>
-          <p className="mt-4 flex items-baseline gap-2.5">
-            <span className="font-serif text-[30px] leading-none">{price.currency}</span>
-            <span className="font-serif text-[78px] leading-[.95] tracking-[-0.025em] md:text-[83px]">
-              {price.founder}
-            </span>
-          </p>
-          <p className="mt-3 text-xs text-muted">One-time in-app purchase at launch</p>
           <ul className="my-6 flex flex-col gap-[11px] text-[13px] text-lead">
             {priceIncludes.map((item) => (
               <li key={item} className="flex items-center gap-2.5">
@@ -105,14 +110,15 @@ export function Pricing() {
           </ul>
           <Magnetic strength={0.15} className="w-full md:max-w-[350px]">
             <ButtonLink href={joinCta.href} className="w-full">
-              {joinCta.label}
+              Join free to lock in {price.currency}
+              {price.founder}
               <Icon name="arrow-right" strokeWidth={1.4} className="text-lg" />
             </ButtonLink>
           </Magnetic>
-          <p className="mt-3 text-xs text-muted">Expected regular price: {price.regular}</p>
           <p className="mt-3 max-w-[350px] text-[11px] text-muted">
-            Pricing is planned and will be confirmed at launch. Joining is free. No checkout or
-            payment on this website.
+            Planned prices, confirmed at launch. The founder price ends after the first{" "}
+            {price.founderSpots} founder buyers. Joining is free; there is no checkout or payment on
+            this website.
           </p>
         </div>
       </Wrap>

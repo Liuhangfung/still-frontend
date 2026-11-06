@@ -5,7 +5,18 @@ export const joinCta = { href: "#join", label: "Join the founder list" };
 
 export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3100";
 
-export const price = { founder: "49", regular: "US$79", currency: "US$" };
+/**
+ * Planned prices (still-backend docs/product-concept/still-pricing.md). The
+ * founder discount is shown off the standard launch price, and it ends at a
+ * real, stated number of buyers: no countdowns or fake urgency.
+ */
+export const price = {
+  currency: "US$",
+  founder: 49,
+  regular: 79,
+  /** Pricing doc: "50 or 100" is still open. Change here once decided. */
+  founderSpots: 100,
+};
 
 export const navLinks = [
   { href: "#app", label: "The app" },
