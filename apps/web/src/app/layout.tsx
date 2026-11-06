@@ -1,36 +1,43 @@
 import type { Metadata, Viewport } from "next";
-import { Bangers, Inter } from "next/font/google";
+import { Cormorant_Garamond, Manrope } from "next/font/google";
 import type { ReactNode } from "react";
 import { MotionProvider } from "@/components/motion/provider";
 import { siteUrl } from "@/content/site";
 import "./globals.css";
 
-const bangers = Bangers({ weight: "400", subsets: ["latin"], variable: "--font-bangers" });
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const serif = Cormorant_Garamond({
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  variable: "--font-serif",
+});
+const sans = Manrope({ subsets: ["latin"], variable: "--font-sans" });
 
+const title = "Still: A steadier mind. A better trading routine.";
 const description =
-  "Still is a 56-day reset for the way you trade: how you think, plan, practise and review. One short quest a day.";
+  "Still is a 56-day practice for retail traders across all markets: one useful task a day to prepare, pause, practise and review.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Still: The 56-Day Trading Reset",
+  title,
   description,
   openGraph: {
-    title: "Still: The 56-Day Trading Reset",
+    title,
     description,
     type: "website",
-    images: ["/images/blog/blog-reset.jpg"],
+    images: ["/images/art/hero.jpg"],
   },
   twitter: { card: "summary_large_image" },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0FA3A3",
+  themeColor: "#F5F2EB",
+  colorScheme: "light",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${bangers.variable} ${inter.variable}`}>
+    <html lang="en" className={`${serif.variable} ${sans.variable}`}>
       <body>
         <MotionProvider>{children}</MotionProvider>
       </body>

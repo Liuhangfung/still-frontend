@@ -5,10 +5,10 @@ import { Wrap } from "./section";
 /** Simple header for pages other than the landing page: logo home + a back link. */
 export function SubpageHeader() {
   return (
-    <header className="border-b border-line bg-white">
-      <Wrap className="flex h-[72px] items-center justify-between">
+    <header className="border-b border-line bg-ivory">
+      <Wrap className="flex min-h-[76px] md:min-h-[90px] items-center justify-between">
         <Brand href="/" />
-        <Link href="/" className="text-sm font-semibold text-muted hover:text-ink">
+        <Link href="/" className="text-link text-muted hover:text-ink">
           ← Back to Still
         </Link>
       </Wrap>

@@ -1,71 +1,126 @@
-import { Card, Chip, Icon } from "@still/ui";
-import { chapters, dailyRoutine, programme } from "@/content/site";
-import { DrawMark, ScrollFill } from "../motion/effects";
-import { Reveal, Stagger, StaggerItem } from "../motion/reveal";
-import { Tilt } from "../motion/tilt";
-import { Section, SectionHead, Wrap } from "./section";
+"use client";
 
+import { Eyebrow, Icon } from "@still/ui";
+import { clsx } from "clsx";
+import Image from "next/image";
+import { useRef, useState, type KeyboardEvent } from "react";
+import { chapters } from "@/content/site";
+import { Section, Wrap } from "./section";
+
+const pad = (n: number) => String(n).padStart(2, "0");
+
+/** Four chapters. Practical titles take priority over mythological names. */
 export function Programme() {
+  const [active, setActive] = useState(0);
+  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+  const c = chapters[active];
+
+  function onKeyDown(e: KeyboardEvent, index: number) {
+    const last = chapters.length - 1;
+    const next =
+      e.key === "ArrowRight"
+        ? (index + 1) % chapters.length
+        : e.key === "ArrowLeft"
+          ? (index + last) % chapters.length
+          : e.key === "Home"
+            ? 0
+            : e.key === "End"
+              ? last
+              : null;
+    if (next === null) return;
+    e.preventDefault();
+    setActive(next);
+    tabs.current[next]?.focus();
+  }
+
   return (
-    <Section id="programme">
+    <Section id="programme" labelledBy="programme-title">
       <Wrap>
-        <SectionHead
-          eyebrow={programme.eyebrow}
-          title={
-            <>
-              56 DAYS. <DrawMark>FOUR WINS.</DrawMark>
-            </>
-          }
-          lead={programme.lead}
-        />
-        <ScrollFill className="relative mb-[30px] h-3.5 overflow-hidden rounded-[10px] border-2 border-ink bg-white">
-          <i className="absolute inset-0 bg-[linear-gradient(90deg,#0FA3A3_0_24%,#3AB7B7_24%_49%,#7DCFCF_49%_74%,#FFC300_74%_100%)]" />
-        </ScrollFill>
-        <Stagger className="grid gap-[22px] sm:grid-cols-2 lg:grid-cols-4" gap={0.14}>
-          {chapters.map((c) => (
-            <StaggerItem key={c.title} from="flip" className="h-full">
-              <Tilt className="h-full rounded-[20px]" max={7}>
-                <Card soft className="flex h-full flex-col gap-2.5 p-6">
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="text-xs font-extrabold uppercase tracking-[1.5px] text-teal-dark">
-                      {c.days}
-                    </span>
-                    <b className="rank-badge flex-none whitespace-nowrap rounded-[10px] border-2 border-ink bg-gold px-2.5 py-0.5 font-display text-[40px] font-normal leading-none text-ink">
-                      {c.rank}
-                    </b>
-                  </div>
-                  <span className="mt-1.5 text-[11px] font-extrabold uppercase tracking-[1.5px] text-muted">
-                    {c.chapter} · {c.name}
-                  </span>
-                  <h3 className="font-display text-[30px] font-normal leading-none tracking-[1px]">
-                    {c.title}
-                  </h3>
-                  <p className="text-sm text-muted">{c.text}</p>
-                  <div className="mt-auto flex items-center gap-2 border-t-[1.5px] border-dashed border-line pt-3.5 text-[13px] font-bold">
-                    <Icon name="inventory" className="text-[17px] text-teal" />
-                    <span>
-                      <span className="font-semibold text-muted">You keep: </span>
-                      {c.output}
-                    </span>
-                  </div>
-                </Card>
-              </Tilt>
-            </StaggerItem>
+        <div className="mb-7 md:mb-[42px] md:flex md:items-end md:justify-between md:gap-12">
+          <div>
+            <Eyebrow className="mb-[18px]">Your 56-day journey</Eyebrow>
+            <h2 id="programme-title" className="section-title">
+              Small steps.
+              <br />
+              Something real to keep.
+            </h2>
+          </div>
+          <p className="mt-5 max-w-[420px] text-[13px] leading-[1.9] text-muted md:mb-1.5 md:mt-0 md:max-w-[330px]">
+            Four chapters, two weeks each. Every chapter helps you build a practical tool—not just
+            finish a lesson.
+          </p>
+        </div>
+
+        <div
+          role="tablist"
+          aria-label="Programme chapters"
+          className="grid grid-cols-2 gap-x-[18px] gap-y-3 md:grid-cols-4 md:border-b md:border-line"
+        >
+          {chapters.map((ch, i) => (
+            <button
+              key={ch.name}
+              ref={(el) => {
+                tabs.current[i] = el;
+              }}
+              type="button"
+              role="tab"
+              id={`chapter-tab-${i}`}
+              aria-selected={i === active}
+              aria-controls="chapter-panel"
+              tabIndex={i === active ? 0 : -1}
+              onClick={() => setActive(i)}
+              onKeyDown={(e) => onKeyDown(e, i)}
+              className={clsx(
+                "min-h-[110px] border-y border-line py-[17px] text-left md:min-h-[118px] md:border-t-0 md:border-b-2 md:px-0.5 md:pb-6 md:pt-2.5",
+                i === active ? "md:border-b-ink" : "md:border-b-transparent"
+              )}
+            >
+              <span
+                className={clsx(
+                  "font-serif text-[29px] leading-none",
+                  i === active ? "text-ink" : "text-[#8a7d66]"
+                )}
+              >
+                {pad(i + 1)}
+              </span>
+              <strong className="mb-[7px] mt-2.5 block font-serif text-[21px] font-medium leading-[1.1] min-[361px]:text-[23px] md:text-[22px] lg:text-[25px]">
+                {ch.name}
+              </strong>
+              <small className="text-[11px] text-muted">{ch.days}</small>
+            </button>
           ))}
-        </Stagger>
-        <Stagger className="mt-10 flex flex-wrap justify-center gap-3" gap={0.06}>
-          {dailyRoutine.map((d) => (
-            <StaggerItem key={d.label} from="pop">
-              <Chip className="transition-transform hover:-translate-y-1 hover:rotate-[-2deg]">
-                <Icon name={d.icon} className="text-teal" />
-                {d.label}
-              </Chip>
-            </StaggerItem>
-          ))}
-        </Stagger>
-        <Reveal delay={0.3}>
-          <p className="mt-4 text-center text-sm text-muted">{programme.daily}</p>
-        </Reveal>
+        </div>
+
+        <div
+          id="chapter-panel"
+          role="tabpanel"
+          aria-labelledby={`chapter-tab-${active}`}
+          tabIndex={0}
+          className="grid items-center gap-[25px] pt-7 md:grid-cols-[1.05fr_.95fr] md:gap-[50px] md:pt-9"
+        >
+          <Image
+            src="/images/art/fresco.jpg"
+            alt="Soft classical ceiling fresco, framing the four-chapter journey"
+            width={900}
+            height={369}
+            sizes="(min-width: 768px) 560px, 100vw"
+            className="h-[185px] w-full rounded-[3px] object-cover md:h-[241px]"
+          />
+          <div>
+            <Eyebrow className="mb-3.5 text-[10px] text-gold-text">
+              Chapter {pad(active + 1)} · {c.days}
+            </Eyebrow>
+            <h3 className="max-w-[370px] text-[32px] md:text-[35px]">{c.title}</h3>
+            <p className="mb-6 mt-4 max-w-[385px] text-[13px] text-muted">{c.text}</p>
+            <p className="flex items-center gap-3 border-t border-line pt-4 text-xs">
+              <Icon name="check" strokeWidth={1.4} className="text-[19px]" />
+              What you build: {c.output}
+            </p>
+          </div>
+        </div>
+        <p className="mt-7 text-xs text-muted">
+          Miss a day? Return with a manageable step. Your completed work stays with you.
+        </p>
       </Wrap>
     </Section>
   );
