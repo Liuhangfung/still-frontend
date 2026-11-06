@@ -28,24 +28,48 @@ export const socials = [
 
 export const markets = ["Stocks", "Forex", "Crypto", "Futures", "Options", "Commodities"];
 
-export const problems: { title: string; text: string; quote?: string }[] = [
+export const problems: {
+  title: string;
+  text: string;
+  quote?: string;
+  art: string;
+  artAlt: string;
+  /** Where to centre the band crop on the painting, so faces are never cut. */
+  artPosition: string;
+}[] = [
   {
     title: "Fear of missing out",
     text: "A price moves. The plan disappears. You enter before checking why.",
     quote: "I’ll just get in before it runs.",
+    art: "/images/art/problems/fomo.jpg",
+    artAlt:
+      "Rococo painting: a young figure lunges from a marble balcony toward a golden staircase of candlestick-chart bars rising into the clouds, a scroll of rules slipping from one hand.",
+    artPosition: "center 33%",
   },
   {
     title: "Trying to win it back",
     text: "A loss turns into a reason to take another trade—or make it bigger.",
     quote: "One more and I’m even.",
+    art: "/images/art/problems/revenge.jpg",
+    artAlt:
+      "Neoclassical painting: a trader throws a second fistful of gold coins across a marble table, his reflection split in a cracked mirror, a falling candlestick chart carved into the stone.",
+    artPosition: "center 26%",
   },
   {
     title: "Trading to feel something",
     text: "You open a position because you’re bored, not because it fits a setup.",
+    art: "/images/art/problems/boredom.jpg",
+    artAlt:
+      "Fresco painting: a figure reclines on clouds with a chin in one hand, holding a dark tablet that shows a single flat gold line, dice spilled beside them.",
+    artPosition: "center 46%",
   },
   {
     title: "A plan that stays in your head",
     text: "No written boundaries to return to when the pressure arrives.",
+    art: "/images/art/problems/unwritten.jpg",
+    artAlt:
+      "A marble bust holds a blank ivory tablet while a gilded candlestick chart dissolves into smoke above its head, an unused stylus on the plinth.",
+    artPosition: "center 32%",
   },
 ];
 
