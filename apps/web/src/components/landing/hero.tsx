@@ -76,7 +76,7 @@ export function Hero() {
           style={reduce ? undefined : { y: copyY, opacity: copyFade }}
         >
           <Eyebrow dot className="mb-6 md:mb-7">
-            An iPhone app for retail traders · 56 days
+            56 days to reset how you trade
           </Eyebrow>
           <h1
             id="hero-title"
