@@ -285,35 +285,55 @@ export const priceIncludes = [
 
 export const faqs = [
   {
-    q: "Is this financial advice?",
-    a: "No. Still is habit training. It never gives signals, price targets or tips, and never tells you what to buy or sell.",
+    q: "How is Still different from a trading course or journal?",
+    a: "Still is built around daily practice, not just watching lessons or recording past trades. You get a clear task, work through it, and build something you can use again—such as a preparation checklist, a research routine or your own Rules Card. The programme connects these steps into a guided 56-day journey.",
   },
   {
-    q: "Do I have to trade to use it?",
-    a: 'No. No quest ever requires a real-money trade. "Not trading today" is always a valid answer and earns the same XP. Week 1 is a no-trade week.',
+    q: "Who is Still for?",
+    a: "Still is for adult retail traders who want a more deliberate way to prepare, research, practise and review. It is especially relevant if you understand the basics but struggle with FOMO, impulsive trades or following your own plan. You do not need to be a professional trader, but Still is not a complete beginner-to-expert course in how to trade.",
   },
   {
-    q: "Which markets is it for?",
-    a: "Crypto first, and the habits apply to any market. US stocks content is coming next.",
+    q: "Which trading markets does Still support?",
+    a: "Still is for traders across all markets—including stocks, forex, crypto, futures, options and commodities. The programme focuses on how you prepare, make decisions and review your process, rather than recommending particular assets. You apply the exercises to the market you trade; Still does not provide live market feeds, trade signals or a strategy for every instrument.",
   },
   {
-    q: "What if I miss a day?",
-    a: "You get an easy Recovery Quest. Progress is never wiped and you are never shamed.",
+    q: "What will I actually do each day?",
+    a: "Each day combines a main quest with a short preparation and review routine. You might map an impulse trigger, check a claim against its source, practise with a historical chart, or write a rule for a situation you find difficult. Every quest explains the action and what finishing it means. Optional life habits include movement, sleep awareness and stepping away from screens.",
   },
   {
-    q: "How much time does it take?",
-    a: "About 10 minutes for the daily routine and 5–15 minutes for the main quest. Every quest has a 5-minute short version for busy days.",
+    q: "How is my programme personalised?",
+    a: "Your starting questionnaire helps identify your experience and the habits you want to work on. Still uses those answers to select a path from its task library, combining shared foundations with relevant focus tasks. Personalisation means choosing useful exercises—not generating trading signals or assessing whether your strategy will be profitable.",
   },
   {
-    q: "When can I use the app?",
-    a: "When it launches on iPhone and Android. People on the founder list hear first and get the founder price. We'll email you the day it's ready.",
+    q: "Do I need to make real trades—or trade every day?",
+    a: "No. No quest requires a real-money trade. You can practise using historical examples, paper trading and reflection. The programme also works on days when your market is closed or you choose not to trade. Progress comes from completing the practice, not from placing more trades.",
+  },
+  {
+    q: "How much time should I set aside?",
+    a: "Plan for around 20–25 minutes for the main quest and daily routine on a typical day. Some exercises take longer, and optional life habits add time. Shorter versions are planned for busy days, with an estimated time shown for each quest so you know what to expect.",
+  },
+  {
+    q: "What happens if I miss a day?",
+    a: "You do not lose the work you have already completed or have to start the programme again. Still is designed to help you return with a manageable recovery task and continue your path. The aim is to build a routine you can return to—not punish you for an imperfect streak.",
+  },
+  {
+    q: "Does Still give signals or guarantee trading results?",
+    a: "No. Still is habit training, not personalised investment advice. It does not tell you what to buy or sell, predict prices or promise profits. XP and ranks reflect programme participation, not verified trading skill. Completing a checklist is not approval that a trade is safe; trading still carries financial risk.",
+  },
+  {
+    q: "Are The System and The Sergeant real coaches?",
+    a: "They are coaching styles inside the app, not human coaches or an AI trading adviser. The System is calm and encouraging. The Sergeant is an optional, more direct style with strong language. They guide the same training; there is no live monitoring or one-to-one coaching included.",
+  },
+  {
+    q: "Do I need to connect my trading account?",
+    a: "No. Still does not connect to your broker or exchange, place orders, or require your trading-account password or API keys. When an exercise involves your market or trading history, you can review it yourself without importing it into Still. Progress is based on what you choose to record, not automatic verification of your trades.",
   },
   {
     q: "What happens after day 56?",
-    a: "You keep your rank, tools and history. If you want to keep going, an optional yearly membership is offered at day 56.",
+    a: "The goal is to finish with a routine and personal tools you can keep using beyond the programme. Under the planned pricing model, viewing your saved tools and history will not require a new programme purchase. Any optional ongoing membership will be explained before you buy; completing the programme will not automatically subscribe you.",
   },
   {
-    q: "How do I pay?",
-    a: "Inside the app, as a one-time in-app purchase on the App Store or Google Play. There is nothing to pay on this website. Refunds go through Apple or Google under their usual rules.",
+    q: "When can I start, and how do I pay?",
+    a: "Still is being built for iPhone first. Join the founder list for launch updates and details of the founder offer. Joining is free. At launch, the 56-day programme is planned as a one-time in-app purchase, with the price shown before you pay. There is no payment on this website.",
   },
 ];
