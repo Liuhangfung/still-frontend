@@ -1,0 +1,508 @@
+[
+  {
+    "id": "01-login",
+    "title": "Sign in / create an account",
+    "group": "onboarding",
+    "summary": "Sign in / create an account",
+    "primary_label": "Sign in",
+    "notes": [
+      "Representative sign-in state with independent illustrative email and masked password values. The account-mode radios are local preview controls; authentication and password visibility show demo notices only, with no credential submission, routing or session storage.",
+      "Email/password access is through Supabase; programme progress and explicit saved rules are distinct from private writing. This screen adds no providers, market schema fields or broker connections and makes no claim beyond the current Chapter 1 / Days 1–14 scope."
+    ]
+  },
+  {
+    "id": "02-questionnaire",
+    "title": "Trading habits and focus assessment",
+    "group": "onboarding",
+    "summary": "Trading habits and focus assessment",
+    "primary_label": "Continue",
+    "notes": [
+      "One representative Question 5 state: ten source-backed choices, with Chasing a sudden move and Trading tired or late selected. Selection limits and count use shared hooks. The supplied design does not declare the option-key mapping; checkbox values preserve the supplied labels rather than inventing API enums.",
+      "Continue is a design-preview notice, not a save or submission. In the implemented flow, this step remains a draft and only the complete final questionnaire is submitted to PUT /v1/questionnaire. No score, XP, account access, step autosave or later-chapter programme is implied."
+    ]
+  },
+  {
+    "id": "03-knowledge-check",
+    "title": "Knowledge check",
+    "group": "onboarding",
+    "summary": "Three-question knowledge check",
+    "primary_label": "Continue",
+    "notes": [
+      "Question 2 of 3 uses native, mutually exclusive radio options a–d, with only the illustrative unsure answer d selected. Progress indicates one answered question, not correctness; this check gives no grade, XP or trade approval.",
+      "Continue represents moving the frontend draft to question 3, not a knowledge-only backend submission. Profile answers are stored only on finishing the full questionnaire; this preview action is disconnected and saves nothing. No later-than-Chapter-1 programme content is promised."
+    ]
+  },
+  {
+    "id": "04-onboarding-setup",
+    "title": "Make room for practice",
+    "group": "onboarding",
+    "summary": "Make room for practice",
+    "primary_label": "Save and continue",
+    "notes": [
+      "Independent illustrative state: 10 minutes, System, Calm mode off, Tap and Evening. Only the source-backed Evening reminder option is rendered; reminder delivery is not implemented. Calm mode remains separate from coach selection, and Sergeant is labelled 18+.",
+      "The main action is a preview notice only. In production, it saves the complete accumulated questionnaire via PUT /v1/questionnaire and proceeds to profile confirmation; it does not start onboarding, Day 1 or award XP. Current programme scope is Chapter 1, Days 1–14. Questionnaire preferences are distinct from private note text, which is not sent to Still."
+    ]
+  },
+  {
+    "id": "05-hunter-profile",
+    "title": "Hunter Profile",
+    "group": "onboarding",
+    "summary": "Hunter Profile confirmation",
+    "primary_label": "Confirm profile",
+    "notes": [
+      "Read-only illustrative questionnaire summary. Whole-questionnaire retake is the supported alternative; confirmation belongs to the next local Awakening step, not programme start. Both preview actions are demo notices only and save nothing.",
+      "Only Chapter 1 · Days 1–14 is available. FOMO and Leverage are scored priorities, not unlocked or scheduled modules; placement is not a skill certificate and no real-money trade is required."
+    ]
+  },
+  {
+    "id": "06-honest-snapshot",
+    "title": "Honest Snapshot",
+    "group": "onboarding",
+    "summary": "Why I Trade and Honest Snapshot",
+    "primary_label": "Continue",
+    "notes": [
+      "Continue is a design-preview notice, not a save or real submission. The implementation must validate 1–3 unique supported motives and four supported answers, stage them in the frontend, and store account cards only after the complete Awakening request succeeds.",
+      "Uses only supplied illustrative ranges and the two supported honest alternatives in each native picker; the input does not enumerate the remaining range options or API enum keys, so none are invented. Samples are independent, and no later-chapter gameplay, account connection or monetary fields are introduced."
+    ]
+  },
+  {
+    "id": "07-goal-contract",
+    "title": "Goal & Hunter Contract",
+    "group": "onboarding",
+    "summary": "56-day behaviour goal and Hunter Contract",
+    "primary_label": "Hold to sign & start",
+    "notes": [
+      "Filled but unsigned, with independent illustrative answers and exact character counts. The 56-day goal horizon does not imply shipped gameplay beyond Chapter 1 / Days 1–14.",
+      "Production signing and starting are atomic and save both goal answers to the account; this button is a demo notice only, with no submission, storage, signing or chapter start. The promises describe process training, not legal consent or permission to trade."
+    ]
+  },
+  {
+    "id": "08-today",
+    "title": "Today",
+    "group": "daily",
+    "summary": "Today hub",
+    "primary_label": "Resume quest",
+    "notes": [
+      "Illustrative, independent state: Chapter 1 Day 5, Rank E / 420 participation XP, saved full-version quest draft with 2 of 5 objectives, and Full routine with 1 of 7 tasks. Resume and task navigation are explicit preview notices, not connected actions; nothing is finished or saved.",
+      "Full/Lite applies only to the independent daily routine; quest version switching and honest no-urge/no-trade answers belong downstream. Event Calendar remains a manual exercise, Fit-to-Trade Gate is not trading clearance, and no live feed, timer, AI, syncing or later-chapter mechanics are implied."
+    ]
+  },
+  {
+    "id": "09-quest-overview",
+    "title": "Trigger Map",
+    "group": "daily",
+    "summary": "Quest briefing and objective progress",
+    "primary_label": "Continue quest",
+    "notes": [
+      "Representative Chapter 1 / Day 4 full-version draft: 1 of 4 objectives complete. Continue targets fill_rows, derived as the first incomplete objective; all objective actions are preview notices, never completion or finish:true. Native version radios change selection only; this fragment explicitly states that the full objective list remains unchanged in the preview.",
+      "Private writing remains in the user's notebook or notes; the future Trigger Map is built from eligible in-app pattern/rule answers, not an uploaded log. The rule is entered in app without money amounts. The 50 EMO XP label is prospective full-version base participation credit, not already earned or trading skill."
+    ]
+  },
+  {
+    "id": "10-secure-base",
+    "title": "Secure your base",
+    "group": "foundations",
+    "summary": "Account-safety and impulse-brake checklist",
+    "primary_label": "Save progress",
+    "notes": [
+      "Representative Day 1 draft: No account yet and Nothing open are valid checked alternatives; brakes and replacement remain Not yet, and Hard Mode is optional and unchecked. Choices are illustrative self-reports, not verified account security or trading clearance.",
+      "Save progress is a disconnected preview action. A real integration must PUT the complete merged Day 1 answers with shortVersion=false and finish=false, confirming only successful server saving; a draft awards no XP or inventory card. No notebook contents or replacement rule are collected here, and the No-Trade Week acceptance body is excluded."
+    ]
+  },
+  {
+    "id": "11-no-trade-accept",
+    "title": "Full or Lite Trial acceptance",
+    "group": "foundations",
+    "summary": "Full or Lite Trial acceptance",
+    "primary_label": "Hold to accept",
+    "notes": [
+      "Preview only: the button displays a demo notice and saves nothing. Product confirmation writes no_trade_week into the existing Day 1 result with finish:false, preserving all other draft answers; acceptance, the seven-day window and +10 DIS participation credit occur only on successful Day 1 finish after required objectives are complete.",
+      "Full is illustratively selected and danger time is 23:30. Lite text is optional; neither option requires a trade. Danger time is a stored preference, not a reminder, and this form does not collect or claim cloud storage for the private urge log."
+    ]
+  },
+  {
+    "id": "12-no-trade-progress",
+    "title": "No-Trade Week",
+    "group": "review",
+    "summary": "Seven-day challenge progress",
+    "primary_label": "Open Rule Check",
+    "notes": [
+      "Read-only, independent illustrative Chapter 1 Full Trial: five kept days, one not kept day, and today's unanswered day; six saved Rule Checks. The preview action represents opening today's existing separate Rule Check, without preselection, submission, or historical backfill. No target screen id was supplied, so navigation remains an explicitly unconnected demo button.",
+      "Ordinary honest Yes and No check-ins each earn +5 DIS; the current +30 DIS clearing bonus still requires seven self-reported kept days and Gate 1 completion. This answer-dependent bonus creates an engineering incentive concern; the design discloses it without changing the mechanic or implying verified trading skill or permission to trade."
+    ]
+  },
+  {
+    "id": "13-baseline-audit",
+    "title": "Trade history audit",
+    "group": "foundations",
+    "summary": "Manual trade-history count audit",
+    "primary_label": "Save & continue",
+    "notes": [
+      "Chapter 1 Day 2, Full mode, Time section only. Counts 1, 0, 2, 6, 1 are independent illustrative samples; Reasons, Feelings, Results and My Typical Trade are not rendered as additional form bodies.",
+      "Save & continue and Save & exit are draft-only demo notices with no backend, storage or XP payment. The intended draft preserves the cumulative answer map and selected shortVersion with finish:false; +10 DIS is participation credit only on quest finish, and external trade history or notebook content is not uploaded."
+    ]
+  },
+  {
+    "id": "14-baseline-pattern",
+    "title": "My Typical Trade",
+    "group": "foundations",
+    "summary": "My Typical Trade pattern confirmation",
+    "primary_label": "Confirm pattern",
+    "notes": [
+      "Chapter 1, Day 2 review state with independent illustrative audit counts and eight source-listed feelings; time and reason selects show only the options supplied by this item, without inventing option keys or alternatives. The sentence is a static preview of the initial selections, not generated analysis or a live update.",
+      "Confirmation is demo-only. Production integration must preserve earlier quest answers, submit explicit typical_trade selections with finish:true, and create the card only after successful completion; independent daily subtasks remain separate. Choices and counts may be server-stored, but no individual trades, amounts or personal story are collected."
+    ]
+  },
+  {
+    "id": "15-leak-lesson",
+    "title": "Spot the leak",
+    "group": "foundations",
+    "summary": "Teaching cards and scenario quiz",
+    "primary_label": "Next scenario",
+    "notes": [
+      "Representative Chapter 1, Day 3 answered state: fictional scenario 1 of 6 with independent illustrative oversized and revenge selections. Progress records participation, not correctness or trading skill; no notes, money amounts or market field are collected.",
+      "Next scenario is a preview-only notice, not a backend submission, quest finish or immediate XP award. Production advancement belongs to the existing quest-result draft flow; +10 DIS XP applies only on quest finish. Teaching-card access is also a preview-only notice because no separate destination id was supplied."
+    ]
+  },
+  {
+    "id": "16-leaks-patch",
+    "title": "My Top 3 Leaks",
+    "group": "foundations",
+    "summary": "Evidence, ranked Top 3 Leaks and written patch",
+    "primary_label": "Save & finish",
+    "notes": [
+      "Illustrative full-version Day 3 state has preceding objectives complete. The three source-backed selections are user-ranked, with native checkboxes and shared local reorder controls; the evidence disclosure shows only supplied supporting self-reports. Preview selection, ranking and the initial For #1 caption are not synchronized to backend state.",
+      "Draft and finish remain separate demo-only actions. In production, only successful whole-quest completion with finish:true creates final top_leaks/first_patch inventory items and grants +60 participation DIS XP. The privacy helper describes production account storage, not this preview; no evening Rule Check integration or later-chapter content is promised."
+    ]
+  },
+  {
+    "id": "17-trigger-map",
+    "title": "Trigger Map",
+    "group": "foundations",
+    "summary": "Private Trigger Log and personal counter-move",
+    "primary_label": "Save map & finish",
+    "notes": [
+      "Representative Chapter 1 Day 4 full-version state with editable independent samples. Pattern selections map to single-item arrays; Leave unanswered omits optional how_often rather than introducing an enum. The short-version alternative omits read_pattern and does not require a real-money trade; preview actions are not connected.",
+      "Notebook reflection content is never uploaded. The in-app counter-move is required and trimmed to 1–200 characters for finish. Integration must upsert every currently answered objective with finish:false for drafts or finish:true for completion, and show success only after returned done state. +10 EMO refers only to this participation step and is paid only on finish."
+    ]
+  },
+  {
+    "id": "18-urge-builder",
+    "title": "My Urge Plan",
+    "group": "foundations",
+    "summary": "Dissect an urge and write a personal Urge Plan",
+    "primary_label": "Save & continue",
+    "notes": [
+      "Illustrative full-version Day 5, Chapter 1 draft: three completed objectives, objective four active, and two required plus up to two optional 200-character steps. Optional fields use native disclosures; no timer or post-completion tool editor is introduced.",
+      "Preview action is disconnected and saves nothing. Production retains the answer set and selected shortVersion, uses urge_plan.style=write and finish:false, and advances only after a valid successful draft save. Account-synced plan text is distinct from local-only reflections; Tools creation and 10 EMO participation XP occur only at quest finish."
+    ]
+  },
+  {
+    "id": "19-urge-reference",
+    "title": "My Urge Plan",
+    "group": "foundations",
+    "summary": "Quick access to my saved Urge Plan",
+    "primary_label": "Back to Today",
+    "notes": [
+      "Read-only Chapter 1 Day 5 reference: story go_up_without_me, need not_left_out, and four independent illustrative user-written steps in ascending order. The day label comes from Q-C1-05@3, not a completion timestamp; no private narrative or editable controls are displayed.",
+      "Back to Today is navigation only to 08-today.html. Reading this plan records no outcome, awards no XP, starts no timer, and grants no permission to trade; no backend or storage behavior is implemented."
+    ]
+  },
+  {
+    "id": "20-money-reality",
+    "title": "Money Reality",
+    "group": "foundations",
+    "summary": "Private Money Page and optional Money Rule",
+    "primary_label": "Finish Money Reality",
+    "notes": [
+      "Illustrative Chapter 1 Day 6 Full review: five checked self-reports and an editable, optional money-free rule. Private notebook amounts and the honest sentence are not collected; notebook disclosures only restate the supplied privacy boundaries, not additional source instructions.",
+      "Finish and calm help are disconnected preview actions. No persistence, submission, XP award or financial clearance is implemented; 60 DIS XP is prospective participation credit and the optional bonus is unclaimed. A production finish must submit the complete current answers map with finish=true and await a successful response before awarding XP. Only completion markers and a deliberately typed optional rule may be sent."
+    ]
+  },
+  {
+    "id": "21-my-feed",
+    "title": "Build Your Feed",
+    "group": "research",
+    "summary": "Audit sources and save My Feed",
+    "primary_label": "Save My Feed",
+    "notes": [
+      "Illustrative completed-audit receipt, three independent source names, reading time and one selected plan. This is a manually curated reference, not a connected feed, reminder or automatic muting tool; private audit notes are not collected here. The provided item omits the backend option keys, so checkbox values retain its exact visible labels rather than inventing schema enums.",
+      "Save My Feed is a demo-only final action, not a draft save. Real completion requires full-mode validation of 3–5 source names, a reading time and 1–3 plan choices, then the complete answered-objective map with finish=true and shortVersion=false. Show saved inventory and actual awarded XP only after server success; +60 RES XP is participation credit, not rank advancement. Back/Close and draft-preservation choices belong to the parent shell."
+    ]
+  },
+  {
+    "id": "22-trading-hours",
+    "title": "Trading Hours",
+    "group": "research",
+    "summary": "Life schedule, trading windows and no-trade zones",
+    "primary_label": "Finish & save rule",
+    "notes": [
+      "Independent illustrative Day 9 / Chapter 1 state in Full / 12-minute mode. Days remain free text; the second window is optional; three of five source no-trade choices are selected, satisfying the at-least-two requirement. This is a personal boundary, not an enforced recurring schedule or market-hours integration.",
+      "Save draft and Finish are distinct preview-only actions. Completion, versioned inventory storage and actual XP require a successful connected finish response; this fragment performs no submission and provides no live monitoring or post-quest Rule Check. Parent supplies the outer shell and shared styling."
+    ]
+  },
+  {
+    "id": "23-fact-or-guess",
+    "title": "Fact or guess?",
+    "group": "research",
+    "summary": "Source-check practice and self-reported score",
+    "primary_label": "Save & continue",
+    "notes": [
+      "Representative Chapter 1 Day 10 aggregate-draft preview: independent illustrative counts of 14 matched first calls out of 20 claims, with Always / never claims selected. Counts and pattern are editable; private claim text stays in the user's notebook. Radio values are descriptive preview identifiers, not verified API enum keys.",
+      "The preview action only displays the shared demo notice. In the intended product flow, Save & continue submits existing answers and score as a draft with finish:false before source-check; it does not finish the quest, award XP or create inventory. No backend calls, automatic grading, future chapters or market integrations are implemented."
+    ]
+  },
+  {
+    "id": "24-research-rules",
+    "title": "Research rules",
+    "group": "research",
+    "summary": "Research rules",
+    "primary_label": "Save & continue",
+    "notes": [
+      "Chapter 1 Day 10 only. The required Check-It Rule and universally available optional AI Use Rule are editable, with independent illustrative values and a 200-character limit; private claim notes are not collected on this screen.",
+      "The primary action is a disconnected design-preview notice. In the source flow it saves a draft with style:write and finish:false using the existing answered-objective map; +10 RES participation credit and the Tools item occur only at quest finish, not draft save."
+    ]
+  },
+  {
+    "id": "25-best-worst",
+    "title": "Best-Self Conditions",
+    "group": "research",
+    "summary": "Process-based comparison and Best-Self Conditions",
+    "primary_label": "Save & finish",
+    "notes": [
+      "Chapter 1, Day 11, full-version step 5: illustrative values and prospective participation XP. Draft and finish are demo-only; real saves must use the returned assignment identity, send every answered objective, use shortVersion:false and bonus:false, and distinguish finish:false from finish:true. No feedback is inferred or draft-success state displayed.",
+      "Private decision stories remain in the notebook and are never serialized; prior objectives use their source-backed completion receipts. Review preserves all 21 option keys for either pattern, with 1–12 unique selections each. Conditions 1–3 are required; trim and validate supplied strings to 1–200 Unicode characters without unsupported control characters, and omit unused condition_4. No backend, storage, or AI integration is implemented."
+    ]
+  },
+  {
+    "id": "26-exit-audit",
+    "title": "The Exit Audit",
+    "group": "research",
+    "summary": "Manual winner/loser exit counts",
+    "primary_label": "Save & continue",
+    "notes": [
+      "Representative short-version state: eight editable aggregate counts, with independent optional winner and loser hold-time categories. Values are illustrative; sample-size guidance is not count reconciliation or verified trading behavior. No assets, dates, money amounts, P&L or private notes are collected.",
+      "The preview action is not connected and saves nothing. Intended integration saves the complete current answer map as a draft with shortVersion=true and finish=false, acknowledges a successful save, then opens the separately scoped Exit Profile; this step neither finishes Day 12 nor awards XP. HTML control names are local preview identifiers, not an asserted backend schema."
+    ]
+  },
+  {
+    "id": "27-exit-profile",
+    "title": "Exit Profile",
+    "group": "research",
+    "summary": "Exit Profile comparison and written Exit Rule",
+    "primary_label": "Save & finish",
+    "notes": [
+      "Chapter 1 Day 12 full-version final step: a production finish uses finish:true and shortVersion:false and requires all earlier objectives; this preview saves nothing and must not show completion, inventory outputs or awarded XP.",
+      "Counts, selected answers and the 68-character rule are independent illustrative samples. Comparison labels map existing raw fields; current Day 12 market scope remains crypto, with no market picker, account connection, trade amounts or execution. The visible character count is the initial sample count, not a live counter."
+    ]
+  },
+  {
+    "id": "28-trader-code",
+    "title": "Trader Code v1",
+    "group": "research",
+    "summary": "Build and order my written Trader Code",
+    "primary_label": "Save Trader Code",
+    "notes": [
+      "Chapter 1 · Day 13 final-stage editor with five independent illustrative rules, native reorder controls, two optional rule fields and a manual-review checkbox. The 60 DIS reward is illustrative; actual XP and saved references must use returned data. No market selector or integration is introduced.",
+      "Save draft remains separate from finish. Production completion submits the full answered objective map with finish=true; inventory creation and actual participation XP occur only after successful completion. Typed code and draft rules are server-visible account data, not private notes. All preview actions are demo-only and save nothing."
+    ]
+  },
+  {
+    "id": "29-week-card",
+    "title": "Week at a glance",
+    "group": "review",
+    "summary": "Week at a glance",
+    "primary_label": "Done",
+    "notes": [
+      "Read-only Week 1 illustration with independent sample values: five Mind Checks average 3.2/5, Wednesday has the strongest urge at 5/5, and four Rule Check answers are recorded. Sleep is self-reported in ranges, grades are neutral self-reports, and missing values are not scores. Only the available Week 1 window is shown; no later gameplay or new filters are introduced.",
+      "Underlying behaviour taps and grades are server-saved, but this preview makes no requests and does not include private writing or money. Done is navigation-only back to the invoking screen in the product; its unconnected preview notice does not save answers, grade a day, complete a Gate objective or award XP."
+    ]
+  },
+  {
+    "id": "30-gate-review",
+    "title": "Gate 1 review",
+    "group": "review",
+    "summary": "Gate 1 reflection and one change",
+    "primary_label": "Finish Gate 1",
+    "notes": [
+      "Independent, unfinished Full-version example. Draft and finish are separate demo-only actions; completion must follow a successful transactional save of the complete answers map with finish=true and selected shortVersion. Private reflection must not enter that map and is not persisted by this preview.",
+      "The supplied item does not enumerate backend option keys, complete choice lists, the Short duration or prerequisite screen IDs. Controls use its illustrated labels with an honest Not sure alternative, not asserted backend keys; prerequisite buttons are non-connected preview actions. Current Chapter 1 participation credit is not permission to trade, and short or partial completion may not create a Week 1 Review item."
+    ]
+  },
+  {
+    "id": "31-boss-check",
+    "title": "Boss check",
+    "group": "review",
+    "summary": "Five-question self-knowledge recall check",
+    "primary_label": "Check & finish",
+    "notes": [
+      "Illustrative pre-validation draft with two native selectors and three editable text answers. Only source-supplied choices are included; the explicit big_green_candle option key is preserved. Sample values and draft status are independent examples, not retrieved data or matching fixtures. Recall text is server-stored in the app, unlike local-only FieldNote writing; this preview saves nothing.",
+      "Check & finish remains a demo-only combined recall check and Day 14 finish action, not a separate validation or draft save. Real integration must submit the whole current quest answers map with finish=true and applicable shortVersion after other required objectives are complete. No report, completion outcome, trading verification, or later-chapter gameplay is depicted."
+    ]
+  },
+  {
+    "id": "32-starting-report",
+    "title": "Starting Report",
+    "group": "review",
+    "summary": "Starting Report and frozen Day 14 tools",
+    "primary_label": "Confirm report",
+    "notes": [
+      "All values are independent illustrative examples. Tools are read-only; the optional Money Rule is honestly missing. Focus checkboxes use the supplied option labels as values because the item declares no separate option keys.",
+      "Confirmation is a disconnected design-preview action. A future implementation must preserve existing quest answers and shortVersion, save starting_report.status=done and the selected pick_leak.leak array via the existing result PUT with finish:false, and must not freeze tools, finish Day 14, award XP or unlock Chapter 2. The historical report is read-only only after Day 14 is finished."
+    ]
+  },
+  {
+    "id": "33-completion-rank-up",
+    "title": "Chapter complete",
+    "group": "review",
+    "summary": "Completion receipt, XP and E-to-D rank-up",
+    "primary_label": "Back to Today",
+    "notes": [
+      "Illustrative full-version Day 14 finished receipt: 80 participation XP (50 objectives + 30 finish), Discipline +60, Emotional Control +20, and share bonus not claimed. E-to-D rank follows chapter-boss completion, not an XP threshold; no reward-claim or editing controls are provided.",
+      "Back to Today is navigation only and does not complete daily subtasks or unlock Chapter 2. Read-only saved-item links navigate to the known Tools inventory screen; private discovery is not included in the snapshot or sent to a server."
+    ]
+  },
+  {
+    "id": "34-stats",
+    "title": "My stats",
+    "group": "review",
+    "summary": "My five stats and current rank",
+    "primary_label": "Return to Today",
+    "notes": [
+      "Read-only, independent illustrative state: rank E, 350 participation XP; DIS 240, RES 0, CHT 0, EMO 110 and LIF 0. No filters, drilldowns, editable totals or competence indicators.",
+      "Chapter 1 Boss completion reaches D, not an XP threshold. Return to Today is frontend navigation only; it does not mutate records, award XP or authorize a trade."
+    ]
+  },
+  {
+    "id": "35-inventory",
+    "title": "My tools",
+    "group": "tools",
+    "summary": "My collected tool library",
+    "primary_label": "Open",
+    "notes": [
+      "Illustrative completed-Chapter-1 inventory: both badge chips appear only when their real inventory keys exist; the five non-badge rows preserve the supplied server order and independent v1 sample values. Native type controls cover all eight kinds; this HTML preview changes the radio selection but does not wire inventory filtering or item retrieval.",
+      "Open is read-only and uses a preview notice, not editing, saving or completion. A connected implementation would retrieve the selected key with GET /v1/inventory/{itemKey}. Tool bodies, private writing and money amounts are excluded; saved choices and rules are not described as local-only or encrypted."
+    ]
+  },
+  {
+    "id": "36-inventory-tool",
+    "title": "Trader Code v1",
+    "group": "tools",
+    "summary": "Saved tool detail and exact-version reference",
+    "primary_label": "View current tool",
+    "notes": [
+      "Read-only Day 14 reference to inventory version 1; the literal v1 in the title is not the authoritative version. Provenance Q-C1-13@2 is retained in the fragment and displayed as Chapter 1 · Day 13. The three illustrative saved lines are independent sample values; no private notebook content, editor, completion or XP controls are exposed.",
+      "View current tool is a preview notice, not a backend call. Production should retrieve the same item key without a version query and reuse this detail in current-read mode without modifying the saved reference."
+    ]
+  },
+  {
+    "id": "37-daily-routine",
+    "title": "Daily routine",
+    "group": "daily",
+    "summary": "Full or Lite daily training checklist",
+    "primary_label": "Continue Event Calendar",
+    "notes": [
+      "Independent illustrative Full state: Mind Check and News Scan are saved, five check-ins are unfinished, and the 3-day streak counts logged Rule Checks. Full/Lite is a native selection control; this fragment does not calculate another routine state or save changes.",
+      "Task-opening actions are navigation-only preview notices because task-form target ids are not supplied. No answers, live calendar, feed, chart, integrations or later-chapter content are exposed; opening a task does not save or award XP."
+    ]
+  },
+  {
+    "id": "38-mind-check",
+    "title": "Mind Check",
+    "group": "daily",
+    "summary": "Mood, urge and sleep check-in",
+    "primary_label": "Save check-in",
+    "notes": [
+      "Illustrative, independent unsaved answers: mood 2, urge 4, sleep 5 to 6 hours. Save is a demo notice only; no persistence or XP award. The parent supplies the Close affordance; leaving does not submit or finish the day.",
+      "The supplied sleep key h5_6 is preserved; other sleep values use display labels pending authoritative frontend mapping, not invented API enums. Only mood, urge and sleep are collected, with no private notes, money fields or readiness verdict. No optional lite state is changed."
+    ]
+  },
+  {
+    "id": "39-market-preparation",
+    "title": "Market preparation",
+    "group": "daily",
+    "summary": "News, event and retrospective market checks",
+    "primary_label": "Save answers",
+    "notes": [
+      "Illustrative, independent Chapter 1 Full-routine state using the My Feed + Check-It Rule variant: Not sure, No claim today, No and Sideways. Market names are explanatory text, not a selector or new persisted market values; no live data, verification, chart or trading action is shown.",
+      "Save answers is a demo-only action; nothing is submitted or saved. Production saving would orchestrate independent existing per-task PUTs for fully answered changed checks, not a batch endpoint or routine-finish action. Unanswered checks remain optional; XP is participation credit, not trading skill or permission to trade."
+    ]
+  },
+  {
+    "id": "40-fit-gate",
+    "title": "Fit-to-Trade Gate",
+    "group": "daily",
+    "summary": "Personal readiness checklist and Not today",
+    "primary_label": "Save Not today",
+    "notes": [
+      "Illustrative independent personalized check, not yet saved: cond_1, cond_2 and code_read are selected; cond_3 is not. Honest negative or empty selections can complete the daily check without trading.",
+      "The save is a preview-only notice, not a submission or XP payment. Later integration must preserve any supplied routine lite flag, save checkmarks rather than private notes, and reconcile the provisional result with edited selections without treating readiness as financial safety clearance."
+    ]
+  },
+  {
+    "id": "41-session-close",
+    "title": "Session Close",
+    "group": "daily",
+    "summary": "No trade, planned or impulsive session check",
+    "primary_label": "Save check-in",
+    "notes": [
+      "The impulsive selection is an illustrative unsaved answer. All three choices remain equally actionable; +5 DIS XP credits participation once per local day, not skill or safety.",
+      "The implemented feature stores the session choice in the Still account; this HTML preview saves nothing and collects no trade details or private notes. The input does not enumerate canonical option keys, so radio values require confirmation before live endpoint wiring."
+    ]
+  },
+  {
+    "id": "42-rule-check",
+    "title": "Rule Check",
+    "group": "daily",
+    "summary": "Evening honesty check and slipped rules",
+    "primary_label": "Save Rule Check",
+    "notes": [
+      "Independent illustrative late-Chapter-1 state: Partly selected, My Exit Rule checked, Trader Code v1 unchecked. Only Chapter 1 / Days 1–14 exists; slipped options show saved titles, not editable rule bodies or private notes.",
+      "Preview-only save: nothing is submitted or marked saved. Production uses PUT /v1/subtasks/today/rule_check with answers.kept=[partly], optional answers.broken=[exit_rule], and the containing routine's lite choice; saved state requires a successful response. Day Log grading is a separate post-save handoff. Ordinary +5 DIS XP is identical across answers and measures participation, not trading skill; the separate seven-day challenge's answer-dependent +30/badge remains an incentive concern, not a reason to favor Yes."
+    ]
+  },
+  {
+    "id": "43-log-calendar",
+    "title": "Day Log",
+    "group": "daily",
+    "summary": "Monthly behaviour-grade calendar",
+    "primary_label": "View day",
+    "notes": [
+      "Independent illustrative November 2026 calendar: Nov 1 A, Nov 2 B, Nov 3 C, Nov 4 E, Nov 5 D; local today is Nov 6. Nov 3 is selected and historically read-only. Future dates are disabled, and blank dates mean no persisted grade, not failure or necessarily no Rule Check. Calendar browsing does not expand Chapter 1 Days 1–14.",
+      "View day is an honest disconnected demo handoff to the separately designed day-detail feature, whose source uses GET /v1/day-logs/{day}; no backend calls, edits, grading, storage or private notes are implemented here. Grades do not affect XP or rank and are not P&L, skill or financial safety. Notes are outside the Day Log API; native local-note storage is not claimed to have shipped."
+    ]
+  },
+  {
+    "id": "44-day-grade",
+    "title": "Judge your day",
+    "group": "daily",
+    "summary": "Judge or review one day",
+    "primary_label": "Save day",
+    "notes": [
+      "Illustrative unsaved C grade follows a partly-kept Rule Check with Exit Rule marked; all A–E alternatives and all eight supplied tag labels remain editable, with tired and rushed checked and a five-tag cap. Only the two tag keys explicitly supplied in the input are encoded; no unsupported API enum mapping is invented.",
+      "Save day is a disconnected demo notice. The collapsed private note is preview-only and never submitted; Rule Check is read-only. Grades do not affect XP or rank or verify trading skill, and no later-Chapter gameplay is implied."
+    ]
+  },
+  {
+    "id": "45-calm-pause",
+    "title": "Calm & pause",
+    "group": "tools",
+    "summary": "Calm coach, pause and welcome back",
+    "primary_label": "Pause programme",
+    "notes": [
+      "Representative state: programme active and Calm coach on. The native switch changes only this preview; no setting is persisted. In production, confirm Pause programme before POST /v1/me/pause and update only from the returned Profile.",
+      "Pausing prevents new quests, daily subtask saves and day grades, but permits finishing an already-open quest and preserves XP, rank and saved tools. Collect no reason or private note text; retain Chapter 1 scope."
+    ]
+  },
+  {
+    "id": "46-profile-settings",
+    "title": "Profile settings",
+    "group": "tools",
+    "summary": "Current profile and supported settings",
+    "primary_label": "Change time zone",
+    "notes": [
+      "Representative saved state with illustrative independent values: onboarding profile fields and Rank E are read-only; Calm mode is off. The native switch is a local preview only, not account persistence, and requests no reason.",
+      "The primary action represents a separately focused IANA picker with independent confirmation; no global Save or backend call is present. Programme pause remains a separate demo-only confirmation flow. Scope remains Chapter 1 / Days 1–14, with no reminders, extra profile editors, or native secure-storage claim."
+    ]
+  }
+]

@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" href="data:," />
+    <title>Still — My tools</title>
+    <link rel="stylesheet" href="../shared/screens.css" />
+    <script src="../shared/preview.js" defer></script>
+  </head>
+  <body>
+    <svg aria-hidden="true" class="sr-only" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <symbol id="i-arrow" viewbox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6"></path></symbol>
+        <symbol id="i-back" viewbox="0 0 24 24"><path d="m15 5-7 7 7 7"></path></symbol>
+        <symbol id="i-chevron" viewbox="0 0 24 24"><path d="m9 6 6 6-6 6"></path></symbol>
+        <symbol id="i-pause" viewbox="0 0 24 24"><path d="M9 5v14M15 5v14"></path></symbol>
+        <symbol id="i-sun" viewbox="0 0 24 24">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path
+            d="M12 2v2M12 20v2M2 12h2M20 12h2m-3-9-1.5 1.5M6.5 17.5 5 19m14 0-1.5-1.5M6.5 6.5 5 5"
+          ></path>
+        </symbol>
+        <symbol id="i-book" viewbox="0 0 24 24">
+          <path d="M12 5C8 2 5 3 3 4v16c3-2 6-1 9 1 3-2 6-3 9-1V4c-2-1-5-2-9 1Zm0 0v16"></path>
+        </symbol>
+        <symbol id="i-log" viewbox="0 0 24 24">
+          <path d="M8 5h12M8 12h12M8 19h12M4 5h.01M4 12h.01M4 19h.01"></path>
+        </symbol>
+        <symbol id="i-tools" viewbox="0 0 24 24">
+          <path d="M12 20s-5-3-5-8C7 6 15 3 21 3c0 8-2 16-9 17Zm-7 2L18 7"></path>
+        </symbol>
+        <symbol id="i-user" viewbox="0 0 24 24">
+          <circle cx="12" cy="8" r="4"></circle>
+          <path d="M4 21c0-5 3-7 8-7s8 2 8 7Z"></path>
+        </symbol>
+        <symbol id="i-clock" viewbox="0 0 24 24">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M12 6v6l4 2"></path>
+        </symbol>
+        <symbol id="i-move" viewbox="0 0 24 24">
+          <circle cx="15" cy="4" r="2"></circle>
+          <path d="m10 8 4-1 3 5 4 1M14 7l-2 7-5 2-3 6m8-8 4 3 3 5M10 8l-4 5"></path>
+        </symbol>
+        <symbol id="i-source" viewbox="0 0 24 24">
+          <path d="M5 3h10l4 4v14H5ZM15 3v5h4M8 12h8M8 16h7"></path>
+        </symbol>
+        <symbol id="i-check" viewbox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></symbol>
+        <symbol id="i-signal" viewbox="0 0 24 24">
+          <path d="M4 20v-4M9 20v-8M14 20V8M19 20V4"></path>
+        </symbol>
+        <symbol id="i-wifi" viewbox="0 0 24 24">
+          <path d="M3 8a15 15 0 0 1 18 0M6 12a10 10 0 0 1 12 0M9 16a5 5 0 0 1 6 0M12 20h.01"></path>
+        </symbol>
+        <symbol id="i-battery" viewbox="0 0 24 24">
+          <rect height="12" rx="3" width="17" x="2" y="6"></rect>
+          <path d="M22 10v4"></path>
+          <rect fill="currentColor" height="6" rx="1" stroke="none" width="11" x="5" y="9"></rect>
+        </symbol>
+      </defs>
+    </svg>
+    <header class="review-top">
+      <div>
+        <h1>35 / My tools</h1>
+        <p>
+          Editable HTML/CSS · Classical editorial · Independent sample state. All saves and account
+          actions are disconnected.
+        </p>
+      </div>
+      <nav class="review-links" aria-label="Design review navigation">
+        <a href="../index.html">All 46 screens</a
+        ><a href="../assets/references/35-inventory.webp" target="_blank" rel="noopener"
+          >Original concept</a
+        >
+      </nav>
+    </header>
+    <main class="preview-layout">
+      <div class="phone">
+        <section class="app-screen" aria-label="My tools">
+          <div class="status" aria-hidden="true">
+            <span>9:41</span
+            ><span class="status-icons"
+              ><svg class="icon"><use href="#i-signal" /></svg
+              ><svg class="icon"><use href="#i-wifi" /></svg
+              ><svg class="icon battery"><use href="#i-battery" /></svg
+            ></span>
+          </div>
+          <header class="app-header">
+            <div></div>
+            <a class="brand" href="08-today.html" aria-label="Still"
+              ><span class="initial">s</span>till</a
+            ><span class="header-detail">Chapter 1</span>
+          </header>
+          <div class="screen-content">
+            <section class="intro">
+              <h1>My tools</h1>
+              <p class="lead">Your personal rules, plans and cards, collected as you go.</p>
+            </section>
+
+            <section class="section" aria-label="Filter tools by type">
+              <div class="summary-line">
+                <fieldset class="segmented">
+                  <legend class="sr-only">Tool type</legend>
+                  <label
+                    ><input type="radio" name="35-inventory-type" value="all" checked /><span
+                      >All</span
+                    ></label
+                  >
+                  <label
+                    ><input type="radio" name="35-inventory-type" value="rules" /><span
+                      >Rules</span
+                    ></label
+                  >
+                  <label
+                    ><input type="radio" name="35-inventory-type" value="plans" /><span
+                      >Plans</span
+                    ></label
+                  >
+                </fieldset>
+                <details class="disclosure">
+                  <summary>More</summary>
+                  <fieldset class="choice-group">
+                    <legend>More tool types</legend>
+                    <label class="choice"
+                      ><input type="radio" name="35-inventory-type" value="cards" /><span
+                        >Cards</span
+                      ></label
+                    >
+                    <label class="choice"
+                      ><input type="radio" name="35-inventory-type" value="profiles" /><span
+                        >Profiles</span
+                      ></label
+                    >
+                    <label class="choice"
+                      ><input type="radio" name="35-inventory-type" value="maps" /><span
+                        >Maps</span
+                      ></label
+                    >
+                    <label class="choice"
+                      ><input type="radio" name="35-inventory-type" value="reports" /><span
+                        >Reports</span
+                      ></label
+                    >
+                    <label class="choice"
+                      ><input type="radio" name="35-inventory-type" value="challenges" /><span
+                        >Challenges</span
+                      ></label
+                    >
+                    <label class="choice"
+                      ><input type="radio" name="35-inventory-type" value="badges" /><span
+                        >Badges</span
+                      ></label
+                    >
+                  </fieldset>
+                </details>
+              </div>
+            </section>
+
+            <section class="section" aria-labelledby="35-inventory-badges">
+              <h2 class="section-title" id="35-inventory-badges">Earned badges</h2>
+              <div class="chips">
+                <span class="badge"
+                  ><svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#B69A64"
+                    stroke-width="1.5"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="8" />
+                    <circle cx="12" cy="12" r="4" />
+                  </svg>
+                  Hard Mode</span
+                >
+                <span class="badge"
+                  ><svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#B69A64"
+                    stroke-width="1.5"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="8" />
+                    <path d="m8 12 3 3 5-6" />
+                  </svg>
+                  Trial cleared</span
+                >
+              </div>
+              <p class="note">Self-reported participation, not trading skill.</p>
+            </section>
+
+            <section class="section" aria-labelledby="35-inventory-versions">
+              <h2 class="section-title" id="35-inventory-versions">Current versions</h2>
+              <ul class="line-list">
+                <li class="line-item">
+                  <div class="summary-line">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.3"
+                      aria-hidden="true"
+                    >
+                      <path d="M6 3h9l3 3v15H6zM15 3v4h3M9 11h6M9 15h6" />
+                    </svg>
+                    <div><strong>My Best-Self Conditions</strong><small>Rule · v1</small></div>
+                  </div>
+                  <button
+                    type="button"
+                    class="text-link"
+                    aria-label="Open My Best-Self Conditions"
+                    data-demo="Design preview only. My Best-Self Conditions opens read-only in the connected app; this preview does not retrieve or change a saved tool."
+                  >
+                    Open
+                  </button>
+                </li>
+                <li class="line-item">
+                  <div class="summary-line">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.3"
+                      aria-hidden="true"
+                    >
+                      <rect x="4" y="5" width="16" height="14" rx="2" />
+                      <path d="M12 5v14M7 9h2M15 15h2" />
+                    </svg>
+                    <div><strong>Best Self / Worst Self</strong><small>Card · v1</small></div>
+                  </div>
+                  <button
+                    type="button"
+                    class="text-link"
+                    aria-label="Open Best Self / Worst Self"
+                    data-demo="Design preview only. Best Self / Worst Self opens read-only in the connected app; this preview does not retrieve or change a saved tool."
+                  >
+                    <span class="chevron" aria-hidden="true">›</span>
+                  </button>
+                </li>
+                <li class="line-item">
+                  <div class="summary-line">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.3"
+                      aria-hidden="true"
+                    >
+                      <path d="M6 3h9l3 3v15H6zM15 3v4h3M9 11h6M9 15h6" />
+                    </svg>
+                    <div><strong>My Check-It Rule</strong><small>Rule · v1</small></div>
+                  </div>
+                  <button
+                    type="button"
+                    class="text-link"
+                    aria-label="Open My Check-It Rule"
+                    data-demo="Design preview only. My Check-It Rule opens read-only in the connected app; this preview does not retrieve or change a saved tool."
+                  >
+                    <span class="chevron" aria-hidden="true">›</span>
+                  </button>
+                </li>
+                <li class="line-item">
+                  <div class="summary-line">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.3"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="8" r="3" />
+                      <path d="M5 21v-2a7 7 0 0 1 14 0v2M4 3h16" />
+                    </svg>
+                    <div><strong>My Exit Profile</strong><small>Profile · v1</small></div>
+                  </div>
+                  <button
+                    type="button"
+                    class="text-link"
+                    aria-label="Open My Exit Profile"
+                    data-demo="Design preview only. My Exit Profile opens read-only in the connected app; this preview does not retrieve or change a saved tool."
+                  >
+                    <span class="chevron" aria-hidden="true">›</span>
+                  </button>
+                </li>
+                <li class="line-item">
+                  <div class="summary-line">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.3"
+                      aria-hidden="true"
+                    >
+                      <path d="M6 3h9l3 3v15H6zM15 3v4h3M9 11h6M9 15h6" />
+                    </svg>
+                    <div><strong>My Exit Rule</strong><small>Rule · v1</small></div>
+                  </div>
+                  <button
+                    type="button"
+                    class="text-link"
+                    aria-label="Open My Exit Rule"
+                    data-demo="Design preview only. My Exit Rule opens read-only in the connected app; this preview does not retrieve or change a saved tool."
+                  >
+                    <span class="chevron" aria-hidden="true">›</span>
+                  </button>
+                </li>
+              </ul>
+            </section>
+
+            <aside class="panel soft">
+              <p class="note">
+                Only saved choices and rules appear here. Private stories, notes and money amounts
+                are not stored in this library.
+              </p>
+            </aside>
+          </div>
+          <footer class="action-dock">
+            <button
+              type="button"
+              class="primary"
+              data-demo="Design preview only. Open would retrieve My Best-Self Conditions for read-only viewing; this preview is not connected and nothing is saved."
+            >
+              Open
+            </button>
+            <p class="caption">My Best-Self Conditions · Read-only preview</p>
+          </footer>
+          <nav class="bottom-tabs" aria-label="App preview navigation">
+            <a class="tab" href="08-today.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-sun" /></svg>Today</a
+            ><a class="tab" href="34-stats.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-book" /></svg>Journey</a
+            ><a class="tab" href="43-log-calendar.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-log" /></svg>Log</a
+            ><a class="tab active" href="35-inventory.html" aria-current="page"
+              ><svg class="icon" aria-hidden="true"><use href="#i-tools" /></svg>Tools</a
+            ><a class="tab" href="46-profile-settings.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-user" /></svg>Me</a
+            >
+          </nav>
+          <div class="home-indicator" aria-hidden="true"></div>
+        </section>
+      </div>
+      <aside class="reference-panel">
+        <h2>Original visual reference</h2>
+        <p>
+          The left side is real editable HTML, not a screenshot. Artwork-only crops support the
+          interface. The reference may contain first-pass wording or layout differences.
+        </p>
+        <img
+          src="../assets/references/35-inventory.webp"
+          alt="Original Still My tools concept"
+          loading="lazy"
+        />
+        <details open>
+          <summary>Feature boundaries</summary>
+          <ul>
+            <li>
+              Illustrative completed-Chapter-1 inventory: both badge chips appear only when their
+              real inventory keys exist; the five non-badge rows preserve the supplied server order
+              and independent v1 sample values. Native type controls cover all eight kinds; this
+              HTML preview changes the radio selection but does not wire inventory filtering or item
+              retrieval.
+            </li>
+            <li>
+              Open is read-only and uses a preview notice, not editing, saving or completion. A
+              connected implementation would retrieve the selected key with GET
+              /v1/inventory/{itemKey}. Tool bodies, private writing and money amounts are excluded;
+              saved choices and rules are not described as local-only or encrypted.
+            </li>
+          </ul>
+        </details>
+      </aside>
+    </main>
+    <p class="preview-notice">
+      Design preview only. Choices and writing remain in this page's memory and reset on reload; no
+      API, tracking, account, purchase or persistent save. Only Chapter 1 / Days 1–14 is currently
+      supported in the reviewed backend. Sample screens are not a continuous account or a complete
+      working app. Artwork is concept-only pending production rights clearance.
+    </p>
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  </body>
+</html>
