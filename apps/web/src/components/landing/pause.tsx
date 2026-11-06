@@ -1,6 +1,7 @@
 "use client";
 
 import { Eyebrow, Icon } from "@still/ui";
+import Image from "next/image";
 import { useState } from "react";
 import { Reveal } from "../motion/reveal";
 import { Wrap } from "./section";
@@ -37,44 +38,51 @@ export function Pause() {
         </div>
 
         <Reveal className="w-full">
-          <div
-            className="mx-auto w-full max-w-[310px] rounded-2xl bg-ivory bg-cover bg-top px-[26px] py-8 text-center text-ink shadow-float"
-            style={{
-              backgroundImage:
-                "linear-gradient(rgba(245,242,235,.8), #F5F2EB 80%), url(/images/art/pause.jpg)",
-            }}
-          >
-            <Eyebrow className="mb-[26px] text-[9px] tracking-[2px]">Pause</Eyebrow>
-            <h3 className="text-[32px] tracking-[-0.015em]">
-              You don’t have to
-              <br />
-              act right now.
-            </h3>
-            <div
-              aria-hidden
-              className="breathe mx-auto mb-4 mt-7 grid h-[61px] w-[61px] place-items-center rounded-full border border-[#91948d]"
-            >
-              <Icon name="pause" strokeWidth={1.4} className="text-2xl" />
+          <div className="mx-auto w-full max-w-[310px] overflow-hidden rounded-2xl bg-ivory text-center text-ink shadow-float">
+            <Image
+              src="/images/art/pause-calm.jpg"
+              alt="Classical painting: a figure sits on a marble step before a still sea at dawn, a bow laid down beside them."
+              width={1000}
+              height={1241}
+              sizes="310px"
+              style={{ objectPosition: "center 44%" }}
+              className="h-[124px] w-full object-cover"
+            />
+            <div className="px-[26px] pb-8 pt-6">
+              <Eyebrow className="mb-[22px] text-[9px] tracking-[2px]">Pause</Eyebrow>
+              <h3 className="text-[32px] tracking-[-0.015em]">
+                You don’t have to
+                <br />
+                act right now.
+              </h3>
+              <div
+                aria-hidden
+                className="breathe mx-auto mb-4 mt-6 grid h-[61px] w-[61px] place-items-center rounded-full border border-[#91948d]"
+              >
+                <Icon name="pause" strokeWidth={1.4} className="text-2xl" />
+              </div>
+              <p className="mb-8 text-xs text-muted">Take one slow breath.</p>
+              <p className="mb-6 font-serif text-[21px] leading-[1.16]">
+                What are you hoping
+                <br />
+                the next trade will fix?
+              </p>
+              <p className="mb-3 mt-4 text-[11px] text-muted">
+                Skipping a trade is a valid choice.
+              </p>
+              <button
+                type="button"
+                onClick={() => setStepped(true)}
+                className="min-h-10 w-full rounded-full border border-ink bg-ink px-2 py-2 font-serif text-[17px] text-ivory hover:bg-ink-soft"
+              >
+                Step away for now
+              </button>
+              <p className="mt-3 min-h-[2.4em] text-[10px] text-muted" aria-live="polite">
+                {stepped
+                  ? "You can step away. No trade is required. This is a preview of the app."
+                  : "This screen does not approve a trade."}
+              </p>
             </div>
-            <p className="mb-8 text-xs text-muted">Take one slow breath.</p>
-            <p className="mb-6 font-serif text-[21px] leading-[1.16]">
-              What are you hoping
-              <br />
-              the next trade will fix?
-            </p>
-            <p className="mb-3 mt-4 text-[11px] text-muted">Skipping a trade is a valid choice.</p>
-            <button
-              type="button"
-              onClick={() => setStepped(true)}
-              className="min-h-10 w-full rounded-full border border-ink bg-ink px-2 py-2 font-serif text-[17px] text-ivory hover:bg-ink-soft"
-            >
-              Step away for now
-            </button>
-            <p className="mt-3 min-h-[2.4em] text-[10px] text-muted" aria-live="polite">
-              {stepped
-                ? "You can step away. No trade is required. This is a preview of the app."
-                : "This screen does not approve a trade."}
-            </p>
           </div>
         </Reveal>
       </Wrap>

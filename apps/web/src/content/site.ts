@@ -28,24 +28,48 @@ export const socials = [
 
 export const markets = ["Stocks", "Forex", "Crypto", "Futures", "Options", "Commodities"];
 
-export const problems: { title: string; text: string; quote?: string }[] = [
+export const problems: {
+  title: string;
+  text: string;
+  quote?: string;
+  art: string;
+  artAlt: string;
+  /** Where to centre the band crop on the painting, so faces are never cut. */
+  artPosition: string;
+}[] = [
   {
     title: "Fear of missing out",
     text: "A price moves. The plan disappears. You enter before checking why.",
     quote: "I’ll just get in before it runs.",
+    art: "/images/art/problems/fomo.jpg",
+    artAlt:
+      "Rococo painting: a young figure lunges from a marble balcony toward a golden staircase of candlestick-chart bars rising into the clouds, a scroll of rules slipping from one hand.",
+    artPosition: "center 33%",
   },
   {
     title: "Trying to win it back",
     text: "A loss turns into a reason to take another trade—or make it bigger.",
     quote: "One more and I’m even.",
+    art: "/images/art/problems/revenge.jpg",
+    artAlt:
+      "Neoclassical painting: a trader throws a second fistful of gold coins across a marble table, his reflection split in a cracked mirror, a falling candlestick chart carved into the stone.",
+    artPosition: "center 26%",
   },
   {
     title: "Trading to feel something",
     text: "You open a position because you’re bored, not because it fits a setup.",
+    art: "/images/art/problems/boredom.jpg",
+    artAlt:
+      "Fresco painting: a figure reclines on clouds with a chin in one hand, holding a dark tablet that shows a single flat gold line, dice spilled beside them.",
+    artPosition: "center 46%",
   },
   {
     title: "A plan that stays in your head",
     text: "No written boundaries to return to when the pressure arrives.",
+    art: "/images/art/problems/unwritten.jpg",
+    artAlt:
+      "A marble bust holds a blank ivory tablet while a gilded candlestick chart dissolves into smoke above its head, an unused stylus on the plinth.",
+    artPosition: "center 32%",
   },
 ];
 
@@ -71,13 +95,27 @@ export const practiceSteps = [
   { title: "Reflect", text: "Notice what to keep." },
 ];
 
-export const chapters = [
+export const chapters: {
+  name: string;
+  days: string;
+  title: string;
+  text: string;
+  output: string;
+  art: string;
+  artAlt: string;
+  /** Where to centre the panel band crop, so faces are never cut. */
+  artPosition: string;
+}[] = [
   {
     name: "Know yourself",
     days: "Days 1–14",
     title: "Understand what sets you off.",
     text: "Look at the moments behind your impulsive trades. Name the triggers and write a more deliberate response, without shame.",
     output: "Your Trigger Map",
+    art: "/images/art/programme/01-know-yourself.jpg",
+    artAlt:
+      "Classical painting: a woman kneels at the edge of a still marble pool, gold rings spreading from her fingers, her own shadow standing tall on the wall behind her.",
+    artPosition: "center 46%",
   },
   {
     name: "Build a method",
@@ -85,6 +123,10 @@ export const chapters = [
     title: "Put your method into words.",
     text: "Define when you trade, when you do not, and the risk boundaries you intend to follow. Build a checklist around your own plan.",
     output: "Your own trading plan",
+    art: "/images/art/programme/02-build-a-method.jpg",
+    artAlt:
+      "Neoclassical painting: an architect bends over a marble drafting table with brass compasses, a ruled tablet marked with faint gold candlestick lines, half-built columns behind him.",
+    artPosition: "center 44%",
   },
   {
     name: "Practise",
@@ -92,6 +134,10 @@ export const chapters = [
     title: "Practise without risking money.",
     text: "Use historical charts and paper exercises to work through decisions. Reflect on the process, not just an outcome.",
     output: "A practice journal",
+    art: "/images/art/programme/03-practise.jpg",
+    artAlt:
+      "Neoclassical painting: an athlete in a marble hall squares up to his own long shadow, a gilded candlestick chart glowing inside it.",
+    artPosition: "center 42%",
   },
   {
     name: "Make it last",
@@ -99,25 +145,52 @@ export const chapters = [
     title: "Make the routine your own.",
     text: "Bring your rules into one card and a manageable daily routine. Prepare for the days when old habits return.",
     output: "Your Rules Card",
+    art: "/images/art/programme/04-make-it-last.jpg",
+    artAlt:
+      "Classical painting: a weaver at an upright loom, ivory cloth carrying a repeated row of small gold candlestick marks, a gold thread running from the basket at her feet.",
+    artPosition: "center 45%",
   },
 ];
 
-export const tools = [
+export const tools: {
+  title: string;
+  text: string;
+  art: string;
+  artAlt: string;
+  /** Where to centre the band crop on the painting. */
+  artPosition: string;
+}[] = [
   {
     title: "Your Trigger Map",
     text: "The situations that set you off—and what you intend to do instead.",
+    art: "/images/art/tools/01-trigger-map.jpg",
+    artAlt:
+      "Still life: an aged map of ink contour lines on a marble table, gilded pins joined by one gold thread, a hand about to place another pin.",
+    artPosition: "center 46%",
   },
   {
     title: "Your preparation checklist",
     text: "A written set of questions to ask before acting. Not a guarantee that a trade is safe.",
+    art: "/images/art/tools/02-checklist.jpg",
+    artAlt:
+      "Still life: a pale wax tablet ruled with empty lines and small gold ticks, a bronze stylus resting across it, a clay oil lamp burning low.",
+    artPosition: "center 52%",
   },
   {
     title: "Your practice journal",
     text: "A simple way to reflect on your process and bring patterns into a weekly review.",
+    art: "/images/art/tools/03-journal.jpg",
+    artAlt:
+      "Still life: an open book of blank ivory pages on white linen, a quill and brass inkwell, a single white flower pressed across the page.",
+    artPosition: "center 54%",
   },
   {
     title: "Your Rules Card",
     text: "Your plan, condensed into something you can actually return to.",
+    art: "/images/art/tools/04-rules-card.jpg",
+    artAlt:
+      "Still life: a small ivory tablet with a gilded edge set in a plaster niche, lit by a tiny oil lamp, a laurel sprig on the shelf, a hand just leaving it.",
+    artPosition: "center 48%",
   },
 ];
 

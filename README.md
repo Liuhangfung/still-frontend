@@ -52,6 +52,13 @@ v1 (teal + gold JoJo-style comic, Bangers + Inter) is retired. The live site in 
 
 [`docs/ui-design/landing-v3.html`](docs/ui-design/landing-v3.html) is the design the live site in `apps/web` is built from. Page text lives in `apps/web/src/content/site.ts`; artwork crops are in `apps/web/public/images/art/` (concept-only until rights are cleared). `ui-design/landing-v2.html` is the retired comic version. `landing-v1.html` is the earlier dark version, kept for reference.
 
+Paintings run through the page: one per “If this feels familiar” problem
+([`images/art/problems/`](apps/web/public/images/art/problems/)), one per programme chapter
+([`images/art/programme/`](apps/web/public/images/art/programme/)), one still life per tool
+([`images/art/tools/`](apps/web/public/images/art/tools/)) and a dawn scene for Pause
+(`images/art/pause-calm.jpg`). Symbolism, the shared style recipe and regeneration notes:
+[landing art](docs/art-landing.md).
+
 [`docs/ui-design/landing-v3.html`](docs/ui-design/landing-v3.html) is the classical editorial landing concept matching the v8 app design. It is self-contained and opens offline, with responsive layouts, chapter tabs, FAQ accordions and a clearly non-submitting signup preview. It is the design source for the live site; artwork remains concept-only pending production rights clearance.
 
 Open any `.html` file directly in a browser. The older comic previews use Google Fonts (Bangers, Inter), so an internet connection is needed for their full look. The classical v8 app and v3 landing previews embed their fonts and artwork and work offline.

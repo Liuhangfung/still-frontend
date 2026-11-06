@@ -1,4 +1,5 @@
 import { Eyebrow } from "@still/ui";
+import Image from "next/image";
 import { markets, problems } from "@/content/site";
 import { Stagger, StaggerItem } from "../motion/reveal";
 import { Section, Wrap } from "./section";
@@ -31,7 +32,7 @@ export function Problems() {
   return (
     <Section labelledBy="problem-title">
       <Wrap className="grid gap-9 md:grid-cols-2 md:gap-[45px] lg:gap-[90px]">
-        <div>
+        <div className="md:sticky md:top-10 md:self-start">
           <Eyebrow className="mb-[22px]">If this feels familiar</Eyebrow>
           <h2 id="problem-title" className="section-title max-w-[460px]">
             The hard part isn’t finding another signal. It’s following your own plan.
@@ -49,6 +50,15 @@ export function Problems() {
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <div>
+                  <Image
+                    src={p.art}
+                    alt={p.artAlt}
+                    width={1200}
+                    height={900}
+                    sizes="(min-width: 1024px) 470px, (min-width: 768px) 44vw, 92vw"
+                    style={{ objectPosition: p.artPosition }}
+                    className="mb-4 h-[124px] w-full rounded-[2px] border border-line object-cover md:h-[150px] lg:h-[176px]"
+                  />
                   <h3 className="text-[26px] tracking-[-0.01em]">{p.title}</h3>
                   <p className="mt-2 max-w-[340px] text-[13px] text-muted">{p.text}</p>
                   {p.quote && (
