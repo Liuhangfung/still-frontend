@@ -4,74 +4,29 @@
  * so they are free for commercial use. Credits are shown as museum labels and
  * on /credits.
  */
+/**
+ * A painting on the site. Public-domain works carry `artist`, `year` and
+ * `source` and get a museum label; Still's own commissioned paintings
+ * (docs/art-landing.md) leave them out and show no label.
+ */
 export type Artwork = {
   src: string;
   width: number;
   height: number;
   title: string;
-  artist: string;
-  year: string;
+  artist?: string;
+  year?: string;
   alt: string;
   /** One line tying the myth to the idea it illustrates. */
   myth?: string;
   /** CSS object-position for crops. */
   focus?: string;
-  source: string;
+  source?: string;
 };
 
 const commons = (file: string) => `https://commons.wikimedia.org/wiki/File:${file}`;
 
 export const art = {
-  icarus: {
-    src: "/images/myth/icarus.jpg",
-    width: 1352,
-    height: 1600,
-    title: "The Lament for Icarus",
-    artist: "Herbert James Draper",
-    year: "1898",
-    alt: "Nymphs mourning the fallen Icarus, his great wings spread across the rocks",
-    myth: "Icarus flew higher because he could, not because he should.",
-    focus: "50% 35%",
-    source: commons("Herbert_Draper_-_The_Lament_for_Icarus_-_Google_Art_Project.jpg"),
-  },
-  sisyphus: {
-    src: "/images/myth/sisyphus.jpg",
-    width: 1381,
-    height: 1600,
-    title: "Sisyphus",
-    artist: "Titian",
-    year: "1548–49",
-    alt: "Sisyphus straining to carry an enormous boulder uphill",
-    myth: "Sisyphus pushed the same stone back up, forever. Winning it back works the same way.",
-    focus: "50% 30%",
-    source: commons("Titian_-_Sisyphus_-_Madrid_-_Prado.jpg"),
-  },
-  pandora: {
-    src: "/images/myth/pandora.jpg",
-    width: 937,
-    height: 1600,
-    title: "Pandora",
-    artist: "John William Waterhouse",
-    year: "1896",
-    alt: "Pandora kneeling by a stream, lifting the lid of a golden box",
-    myth: "Pandora opened the box because it was there.",
-    focus: "50% 30%",
-    source: commons("John_William_Waterhouse_-_Pandora,_1896.jpg"),
-  },
-  ariadne: {
-    src: "/images/myth/ariadne.jpg",
-    width: 876,
-    height: 1024,
-    title: "Ariadne Helping Theseus by Giving him a Ball of Thread",
-    artist: "Johann Heinrich Tischbein",
-    year: "1779",
-    alt: "Ariadne handing Theseus a ball of thread before he enters the labyrinth",
-    myth: "Theseus only found his way out because the thread was real, not remembered.",
-    focus: "50% 40%",
-    source: commons(
-      "Johann_Heinrich_Tischbein_-_Ariadne_Helping_Theseus_by_Giving_him_a_Ball_of_Thread,_1779.jpg"
-    ),
-  },
   delphi: {
     src: "/images/myth/delphi.jpg",
     width: 757,
@@ -83,54 +38,6 @@ export const art = {
     myth: "Even the oracle spoke in riddles. Confidence is not evidence.",
     focus: "50% 22%",
     source: commons("John_Collier_-_Priestess_of_Delphi_-_Google_Art_Project.jpg"),
-  },
-  narcissus: {
-    src: "/images/myth/narcissus.jpg",
-    width: 1600,
-    height: 912,
-    title: "Echo and Narcissus",
-    artist: "John William Waterhouse",
-    year: "1903",
-    alt: "Narcissus lying by a pool, staring at his reflection while Echo watches",
-    myth: "Know yourself, but look honestly, not admiringly.",
-    focus: "60% 50%",
-    source: commons("John_William_Waterhouse_-_Echo_and_Narcissus_-_Google_Art_Project.jpg"),
-  },
-  athena: {
-    src: "/images/myth/athena.jpg",
-    width: 1600,
-    height: 1583,
-    title: "Pallas Athene",
-    artist: "Gustav Klimt",
-    year: "1898",
-    alt: "Athena in a golden helmet and scaled armour, holding a spear",
-    myth: "Athena, goddess of strategy: a plan made before the battle.",
-    focus: "50% 30%",
-    source: commons("Klimt_-_Pallas_Athene.jpeg"),
-  },
-  heracles: {
-    src: "/images/myth/heracles.jpg",
-    width: 1600,
-    height: 1137,
-    title: "The Choice of Heracles",
-    artist: "Annibale Carracci",
-    year: "1596",
-    alt: "Heracles seated between Virtue and Pleasure, choosing his path",
-    myth: "Heracles practised the hard choice before it mattered.",
-    focus: "50% 40%",
-    source: commons("Annibale_Carracci_-_The_Choice_of_Heracles_-_WGA4416.jpg"),
-  },
-  penelope: {
-    src: "/images/myth/penelope.jpg",
-    width: 900,
-    height: 612,
-    title: "Penelope and the Suitors",
-    artist: "John William Waterhouse",
-    year: "1912",
-    alt: "Penelope at her loom, keeping to her work while suitors crowd the window",
-    myth: "Penelope kept her routine for years while everyone pushed her to decide.",
-    focus: "40% 50%",
-    source: commons("JohnWilliamWaterhouse-PenelopeandtheSuitors(1912).jpg"),
   },
   sirens: {
     src: "/images/myth/sirens.jpg",
@@ -144,18 +51,6 @@ export const art = {
     focus: "50% 45%",
     source: commons("John_William_Waterhouse_-_Ulysses_and_the_Sirens_-_Google_Art_Project.jpg"),
   },
-  vulcan: {
-    src: "/images/myth/vulcan.jpg",
-    width: 1600,
-    height: 1242,
-    title: "Apollo in the Forge of Vulcan",
-    artist: "Diego Velázquez",
-    year: "1630",
-    alt: "Apollo visiting Vulcan's forge, where smiths shape armour at the anvil",
-    myth: "In Vulcan’s forge, every tool was made by hand.",
-    focus: "50% 45%",
-    source: commons("Vel%C3%A1zquez_-_La_Fragua_de_Vulcano_(Museo_del_Prado,_1630).jpg"),
-  },
   olympus: {
     src: "/images/myth/olympus.jpg",
     width: 1112,
@@ -168,6 +63,128 @@ export const art = {
     source: commons("El_Olimpo_(Triunfo_de_Venus).jpg"),
   },
 } satisfies Record<string, Artwork>;
+
+/**
+ * Still's own paintings by the design team (docs/art-landing.md): problems,
+ * chapters, tools and the Pause plate. Each keeps the myth line it is paired
+ * with on the page.
+ */
+const studioArt = (
+  file: string,
+  title: string,
+  alt: string,
+  focus: string,
+  myth?: string,
+  size: [number, number] = [1200, 900]
+): Artwork => ({
+  src: `/images/art/${file}`,
+  width: size[0],
+  height: size[1],
+  title,
+  alt,
+  focus,
+  myth,
+});
+
+export const studio = {
+  fomo: studioArt(
+    "problems/fomo.jpg",
+    "Fear of missing out",
+    "Rococo painting: a young figure lunges from a marble balcony toward a golden staircase of candlestick-chart bars rising into the clouds, a scroll of rules slipping from one hand.",
+    "center 33%",
+    "Icarus flew higher because he could, not because he should."
+  ),
+  revenge: studioArt(
+    "problems/revenge.jpg",
+    "Trying to win it back",
+    "Neoclassical painting: a trader throws a second fistful of gold coins across a marble table, his reflection split in a cracked mirror, a falling candlestick chart carved into the stone.",
+    "center 26%",
+    "Sisyphus pushed the same stone back up, forever. Winning it back works the same way."
+  ),
+  boredom: studioArt(
+    "problems/boredom.jpg",
+    "Trading to feel something",
+    "Fresco painting: a figure reclines on clouds with a chin in one hand, holding a dark tablet that shows a single flat gold line, dice spilled beside them.",
+    "center 46%",
+    "Pandora opened the box because it was there."
+  ),
+  unwritten: studioArt(
+    "problems/unwritten.jpg",
+    "A plan that stays in your head",
+    "A marble bust holds a blank ivory tablet while a gilded candlestick chart dissolves into smoke above its head, an unused stylus on the plinth.",
+    "center 32%",
+    "Theseus only found his way out because the thread was real, not remembered."
+  ),
+  knowYourself: studioArt(
+    "programme/01-know-yourself.jpg",
+    "Know yourself",
+    "Classical painting: a woman kneels at the edge of a still marble pool, gold rings spreading from her fingers, her own shadow standing tall on the wall behind her.",
+    "center 46%",
+    "Know yourself, but look honestly, not admiringly.",
+    [1200, 896]
+  ),
+  buildMethod: studioArt(
+    "programme/02-build-a-method.jpg",
+    "Build a method",
+    "Neoclassical painting: an architect bends over a marble drafting table with brass compasses, a ruled tablet marked with faint gold candlestick lines, half-built columns behind him.",
+    "center 44%",
+    "Athena, goddess of strategy: a plan made before the battle."
+  ),
+  practise: studioArt(
+    "programme/03-practise.jpg",
+    "Practise",
+    "Neoclassical painting: an athlete in a marble hall squares up to his own long shadow, a gilded candlestick chart glowing inside it.",
+    "center 42%",
+    "Heracles practised the hard choice before it mattered."
+  ),
+  makeItLast: studioArt(
+    "programme/04-make-it-last.jpg",
+    "Make it last",
+    "Classical painting: a weaver at an upright loom, ivory cloth carrying a repeated row of small gold candlestick marks, a gold thread running from the basket at her feet.",
+    "center 45%",
+    "Penelope kept her routine for years while everyone pushed her to decide."
+  ),
+  triggerMap: studioArt(
+    "tools/01-trigger-map.jpg",
+    "Your Trigger Map",
+    "Still life: an aged map of ink contour lines on a marble table, gilded pins joined by one gold thread, a hand about to place another pin.",
+    "center 46%",
+    undefined,
+    [1200, 896]
+  ),
+  checklist: studioArt(
+    "tools/02-checklist.jpg",
+    "Your preparation checklist",
+    "Still life: a pale wax tablet ruled with empty lines and small gold ticks, a bronze stylus resting across it, a clay oil lamp burning low.",
+    "center 52%",
+    undefined,
+    [1200, 896]
+  ),
+  journal: studioArt(
+    "tools/03-journal.jpg",
+    "Your practice journal",
+    "Still life: an open book of blank ivory pages on white linen, a quill and brass inkwell, a single white flower pressed across the page.",
+    "center 54%",
+    undefined,
+    [1200, 896]
+  ),
+  rulesCard: studioArt(
+    "tools/04-rules-card.jpg",
+    "Your Rules Card",
+    "Still life: a small ivory tablet with a gilded edge set in a plaster niche, lit by a tiny oil lamp, a laurel sprig on the shelf, a hand just leaving it.",
+    "center 48%",
+    undefined,
+    [1200, 896]
+  ),
+  pauseCalm: studioArt(
+    "pause-calm.jpg",
+    "Pause",
+    "Classical painting: a figure sits on a marble step before a still sea at dawn, a bow laid down beside them.",
+    "center 44%",
+    undefined,
+    [1000, 1241]
+  ),
+};
 
 export const athenaModel = {
   title: "Head from the statue Athena Hope",

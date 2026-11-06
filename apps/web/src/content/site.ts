@@ -1,4 +1,4 @@
-import { art, type Artwork } from "./artwork";
+import { studio, type Artwork } from "./artwork";
 
 /** Payment happens only in the app (App Store / Google Play). The site collects the founder list. */
 export const joinCta = { href: "#join", label: "Join the founder list" };
@@ -52,24 +52,24 @@ export const markets = ["Stocks", "Forex", "Crypto", "Futures", "Options", "Comm
 export const problems: { title: string; text: string; quote?: string; art: Artwork }[] = [
   {
     title: "Fear of missing out",
-    art: art.icarus,
+    art: studio.fomo,
     text: "A price moves. The plan disappears. You enter before checking why.",
     quote: "I’ll just get in before it runs.",
   },
   {
     title: "Trying to win it back",
-    art: art.sisyphus,
+    art: studio.revenge,
     text: "A loss turns into a reason to take another trade—or make it bigger.",
     quote: "One more and I’m even.",
   },
   {
     title: "Trading to feel something",
-    art: art.pandora,
+    art: studio.boredom,
     text: "You open a position because you’re bored, not because it fits a setup.",
   },
   {
     title: "A plan that stays in your head",
-    art: art.ariadne,
+    art: studio.unwritten,
     text: "No written boundaries to return to when the pressure arrives.",
   },
 ];
@@ -158,7 +158,7 @@ export const practiceSteps = [
 export const chapters = [
   {
     name: "Know yourself",
-    art: art.narcissus,
+    art: studio.knowYourself,
     days: "Days 1–14",
     title: "Understand what sets you off.",
     text: "Look at the moments behind your impulsive trades. Name the triggers and write a more deliberate response, without shame.",
@@ -166,7 +166,7 @@ export const chapters = [
   },
   {
     name: "Build a method",
-    art: art.athena,
+    art: studio.buildMethod,
     days: "Days 15–28",
     title: "Put your method into words.",
     text: "Define when you trade, when you do not, and the risk boundaries you intend to follow. Build a checklist around your own plan.",
@@ -174,7 +174,7 @@ export const chapters = [
   },
   {
     name: "Practise",
-    art: art.heracles,
+    art: studio.practise,
     days: "Days 29–42",
     title: "Practise without risking money.",
     text: "Use historical charts and paper exercises to work through decisions. Reflect on the process, not just an outcome.",
@@ -182,7 +182,7 @@ export const chapters = [
   },
   {
     name: "Make it last",
-    art: art.penelope,
+    art: studio.makeItLast,
     days: "Days 43–56",
     title: "Make the routine your own.",
     text: "Bring your rules into one card and a manageable daily routine. Prepare for the days when old habits return.",
@@ -190,21 +190,25 @@ export const chapters = [
   },
 ];
 
-export const tools = [
+export const tools: { title: string; text: string; art: Artwork }[] = [
   {
     title: "Your Trigger Map",
+    art: studio.triggerMap,
     text: "The situations that set you off—and what you intend to do instead.",
   },
   {
     title: "Your preparation checklist",
+    art: studio.checklist,
     text: "A written set of questions to ask before acting. Not a guarantee that a trade is safe.",
   },
   {
     title: "Your practice journal",
+    art: studio.journal,
     text: "A simple way to reflect on your process and bring patterns into a weekly review.",
   },
   {
     title: "Your Rules Card",
+    art: studio.rulesCard,
     text: "Your plan, condensed into something you can actually return to.",
   },
 ];

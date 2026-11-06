@@ -13,6 +13,8 @@ export function Label({
   dark?: boolean;
   className?: string;
 }) {
+  // Still's own paintings have no painter or year to credit.
+  if (!art.artist) return null;
   return (
     <p
       className={clsx(

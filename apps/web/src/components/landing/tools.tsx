@@ -1,9 +1,7 @@
 import { ButtonLink, Eyebrow, Icon } from "@still/ui";
 import { joinCta, price, priceIncludes, tools } from "@/content/site";
-import { art } from "@/content/artwork";
-import { ScrollZoom } from "../motion/depth";
 import { Stagger, StaggerItem } from "../motion/reveal";
-import { Label, Painting } from "./painting";
+import { Painting } from "./painting";
 import { PriceTag } from "./price-tag";
 import { Section, Wrap } from "./section";
 import { Lines, Magnetic, Rule, Unveil } from "../motion/scenes";
@@ -25,22 +23,14 @@ export function Tools() {
             decision feels difficult.
           </p>
         </div>
-        <figure className="mb-10 md:mb-14">
-          <Unveil className="rounded-[3px]">
-            <ScrollZoom from={1.25} className="h-[220px] rounded-[3px] md:h-[380px]">
-              <Painting art={art.vulcan} sizes="(min-width: 1180px) 1108px, 100vw" />
-            </ScrollZoom>
-          </Unveil>
-          <figcaption className="mt-3 flex flex-col gap-1 md:flex-row md:items-baseline md:justify-between">
-            <span className="font-serif text-[17px]">{art.vulcan.myth}</span>
-            <Label art={art.vulcan} />
-          </figcaption>
-        </figure>
-        <Stagger className="grid md:grid-cols-2 md:gap-x-[70px]">
+        <Stagger className="grid md:grid-cols-2 md:gap-x-[70px] md:gap-y-4">
           {tools.map((t, i) => (
             <StaggerItem key={t.title}>
+              <Unveil className="mb-5 mt-2 h-[150px] rounded-[3px] md:h-[190px] lg:h-[215px]">
+                <Painting art={t.art} sizes="(min-width: 768px) 520px, 100vw" />
+              </Unveil>
               <Rule />
-              <article className="flex items-start gap-[18px] py-[25px]">
+              <article className="flex items-start gap-[18px] pb-[30px] pt-[22px]">
                 <span className="min-w-[31px] font-serif text-[29px] leading-none text-[#857a68]">
                   {String(i + 1).padStart(2, "0")}
                 </span>

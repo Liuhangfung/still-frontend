@@ -23,9 +23,10 @@ export default function CreditsPage() {
             The myths on this page.
           </h1>
           <p className="mt-5 max-w-[560px] text-[15px] leading-[1.8] text-lead">
-            The paintings and the 3D Athena on the Still website are public-domain works, shared by
-            the museums and archives below through Wikimedia Commons. The app preview and the hero
-            ceiling are original Still concept art.
+            The museum paintings and the 3D Athena on the Still website are public-domain works,
+            shared by the museums and archives below through Wikimedia Commons. The paintings for
+            the problems, chapters, tools and Pause, the hero ceiling and the app preview are
+            original Still artwork.
           </p>
           <ul className="mt-10">
             {works.map((w) => (

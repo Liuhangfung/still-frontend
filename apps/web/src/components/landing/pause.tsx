@@ -2,12 +2,12 @@
 
 import { Eyebrow, Icon } from "@still/ui";
 import { useState } from "react";
-import { art } from "@/content/artwork";
+import { art, studio } from "@/content/artwork";
 import { Parallax, Tilt } from "../motion/depth";
 import { Reveal } from "../motion/reveal";
 import { Label, Painting } from "./painting";
 import { Wrap } from "./section";
-import { Lines } from "../motion/scenes";
+import { Lines, Unveil } from "../motion/scenes";
 
 /** A pause is a useful outcome, not a game reward. */
 export function Pause() {
@@ -52,50 +52,49 @@ export function Pause() {
 
         <Reveal className="w-full">
           <Tilt max={6} className="mx-auto w-full max-w-[310px]">
-            <div
-              className="mx-auto w-full max-w-[310px] rounded-2xl bg-ivory bg-cover bg-top px-[26px] py-8 text-center text-ink shadow-float"
-              style={{
-                backgroundImage:
-                  "linear-gradient(rgba(245,242,235,.8), #F5F2EB 80%), url(/images/art/pause.jpg)",
-              }}
-            >
-              <Eyebrow className="mb-[26px] text-[9px] tracking-[2px]">Pause</Eyebrow>
-              <h3 className="text-[32px] tracking-[-0.015em]">
-                You don’t have to
-                <br />
-                act right now.
-              </h3>
-              <div aria-hidden className="relative mx-auto mb-4 mt-7 h-[61px] w-[61px]">
-                <span className="ripple absolute inset-0 rounded-full border border-[#91948d]" />
-                <span
-                  className="ripple absolute inset-0 rounded-full border border-[#91948d]"
-                  style={{ animationDelay: "3.5s" }}
-                />
-                <div className="breathe relative grid h-full w-full place-items-center rounded-full border border-[#91948d] bg-ivory/60">
-                  <Icon name="pause" strokeWidth={1.4} className="text-2xl" />
+            <div className="mx-auto w-full max-w-[310px] overflow-hidden rounded-2xl bg-ivory text-center text-ink shadow-float">
+              <Unveil className="h-[124px]">
+                <Painting art={studio.pauseCalm} sizes="310px" />
+              </Unveil>
+              <div className="px-[26px] pb-8 pt-6">
+                <Eyebrow className="mb-[22px] text-[9px] tracking-[2px]">Pause</Eyebrow>
+                <h3 className="text-[32px] tracking-[-0.015em]">
+                  You don’t have to
+                  <br />
+                  act right now.
+                </h3>
+                <div aria-hidden className="relative mx-auto mb-4 mt-7 h-[61px] w-[61px]">
+                  <span className="ripple absolute inset-0 rounded-full border border-[#91948d]" />
+                  <span
+                    className="ripple absolute inset-0 rounded-full border border-[#91948d]"
+                    style={{ animationDelay: "3.5s" }}
+                  />
+                  <div className="breathe relative grid h-full w-full place-items-center rounded-full border border-[#91948d] bg-ivory/60">
+                    <Icon name="pause" strokeWidth={1.4} className="text-2xl" />
+                  </div>
                 </div>
+                <p className="mb-8 text-xs text-muted">Take one slow breath.</p>
+                <p className="mb-6 font-serif text-[21px] leading-[1.16]">
+                  What are you hoping
+                  <br />
+                  the next trade will fix?
+                </p>
+                <p className="mb-3 mt-4 text-[11px] text-muted">
+                  Skipping a trade is a valid choice.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setStepped(true)}
+                  className="min-h-10 w-full rounded-full border border-ink bg-ink px-2 py-2 font-serif text-[17px] text-ivory hover:bg-ink-soft"
+                >
+                  Step away for now
+                </button>
+                <p className="mt-3 min-h-[2.4em] text-[10px] text-muted" aria-live="polite">
+                  {stepped
+                    ? "You can step away. No trade is required. This is a preview of the app."
+                    : "This screen does not approve a trade."}
+                </p>
               </div>
-              <p className="mb-8 text-xs text-muted">Take one slow breath.</p>
-              <p className="mb-6 font-serif text-[21px] leading-[1.16]">
-                What are you hoping
-                <br />
-                the next trade will fix?
-              </p>
-              <p className="mb-3 mt-4 text-[11px] text-muted">
-                Skipping a trade is a valid choice.
-              </p>
-              <button
-                type="button"
-                onClick={() => setStepped(true)}
-                className="min-h-10 w-full rounded-full border border-ink bg-ink px-2 py-2 font-serif text-[17px] text-ivory hover:bg-ink-soft"
-              >
-                Step away for now
-              </button>
-              <p className="mt-3 min-h-[2.4em] text-[10px] text-muted" aria-live="polite">
-                {stepped
-                  ? "You can step away. No trade is required. This is a preview of the app."
-                  : "This screen does not approve a trade."}
-              </p>
             </div>
           </Tilt>
         </Reveal>
