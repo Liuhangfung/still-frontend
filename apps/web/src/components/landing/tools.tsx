@@ -1,4 +1,5 @@
 import { ButtonLink, Eyebrow, Icon } from "@still/ui";
+import Image from "next/image";
 import { joinCta, price, priceIncludes, tools } from "@/content/site";
 import { Stagger, StaggerItem } from "../motion/reveal";
 import { Section, Wrap } from "./section";
@@ -25,13 +26,24 @@ export function Tools() {
         <Stagger className="grid md:grid-cols-2 md:gap-x-[70px]">
           {tools.map((t, i) => (
             <StaggerItem key={t.title}>
-              <article className="flex items-start gap-[18px] border-t border-line py-[25px]">
-                <span className="min-w-[31px] font-serif text-[29px] leading-none text-[#857a68]">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <div>
-                  <h3 className="text-[27px]">{t.title}</h3>
-                  <p className="mt-2.5 max-w-[350px] text-[13px] text-muted">{t.text}</p>
+              <article className="border-t border-line py-[25px]">
+                <Image
+                  src={t.art}
+                  alt={t.artAlt}
+                  width={1200}
+                  height={900}
+                  sizes="(min-width: 768px) 44vw, 92vw"
+                  style={{ objectPosition: t.artPosition }}
+                  className="mb-5 h-[150px] w-full rounded-[2px] border border-line object-cover md:h-[190px] lg:h-[215px]"
+                />
+                <div className="flex items-start gap-[18px]">
+                  <span className="min-w-[31px] font-serif text-[29px] leading-none text-[#857a68]">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div>
+                    <h3 className="text-[27px]">{t.title}</h3>
+                    <p className="mt-2.5 max-w-[350px] text-[13px] text-muted">{t.text}</p>
+                  </div>
                 </div>
               </article>
             </StaggerItem>

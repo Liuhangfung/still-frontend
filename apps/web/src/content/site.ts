@@ -152,22 +152,45 @@ export const chapters: {
   },
 ];
 
-export const tools = [
+export const tools: {
+  title: string;
+  text: string;
+  art: string;
+  artAlt: string;
+  /** Where to centre the band crop on the painting. */
+  artPosition: string;
+}[] = [
   {
     title: "Your Trigger Map",
     text: "The situations that set you off—and what you intend to do instead.",
+    art: "/images/art/tools/01-trigger-map.jpg",
+    artAlt:
+      "Still life: an aged map of ink contour lines on a marble table, gilded pins joined by one gold thread, a hand about to place another pin.",
+    artPosition: "center 46%",
   },
   {
     title: "Your preparation checklist",
     text: "A written set of questions to ask before acting. Not a guarantee that a trade is safe.",
+    art: "/images/art/tools/02-checklist.jpg",
+    artAlt:
+      "Still life: a pale wax tablet ruled with empty lines and small gold ticks, a bronze stylus resting across it, a clay oil lamp burning low.",
+    artPosition: "center 52%",
   },
   {
     title: "Your practice journal",
     text: "A simple way to reflect on your process and bring patterns into a weekly review.",
+    art: "/images/art/tools/03-journal.jpg",
+    artAlt:
+      "Still life: an open book of blank ivory pages on white linen, a quill and brass inkwell, a single white flower pressed across the page.",
+    artPosition: "center 54%",
   },
   {
     title: "Your Rules Card",
     text: "Your plan, condensed into something you can actually return to.",
+    art: "/images/art/tools/04-rules-card.jpg",
+    artAlt:
+      "Still life: a small ivory tablet with a gilded edge set in a plaster niche, lit by a tiny oil lamp, a laurel sprig on the shelf, a hand just leaving it.",
+    artPosition: "center 48%",
   },
 ];
 

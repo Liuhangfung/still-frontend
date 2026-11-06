@@ -1,12 +1,16 @@
-# Landing art: allegories for problems and chapters
+# Landing art: allegories, still lifes and one quiet pause
 
-Two series of paintings for the landing page, in the classical v2 register. Each has one job: make a
-trading behaviour legible as a *human* behaviour before the visitor reads the heading.
+Paintings for the landing page, in the classical v2 register. Each has one job: make a trading
+behaviour legible as a *human* behaviour before the visitor reads the heading.
 
 The trading element is always a painted object — a gilded candlestick staircase, a chart incised into
 marble, a chart glowing inside a shadow — never a screenshot, never a phone UI. Charts are gold,
 never green or red, so nothing reads as a P&L screen
 ([brand colours §6](brand-colors.md#6-meaning-rules-important-for-a-trading-app)).
+
+There are three series, with a deliberate division of labour: **figures** for behaviour (problems,
+chapters), **objects** for the things you keep (tools), and **one figure with a view** for stepping
+away (Pause).
 
 ## Series 1 · Problems (`apps/web/public/images/art/problems/`)
 
@@ -22,8 +26,8 @@ Used by `Problems` in `apps/web/src/components/landing/problems.tsx`, one per it
 
 ## Series 2 · Chapters (`apps/web/public/images/art/programme/`)
 
-Used by `Programme` in `apps/web/src/components/landing/programme.tsx`. The chapter tabs now crossfade
-between four paintings; before this, all four chapters shared `fresco.jpg`.
+Used by `Programme` in `apps/web/src/components/landing/programme.tsx`. The chapter tabs crossfade
+between four paintings; before this, all four shared `fresco.jpg`.
 
 | Chapter | File | Painting | Reading |
 | --- | --- | --- | --- |
@@ -31,6 +35,27 @@ between four paintings; before this, all four chapters shared `fresco.jpg`.
 | Build a method · Days 15–28 | `02-build-a-method.jpg` | An architect with brass compasses over a ruled marble tablet, faint gold candlestick lines incised into it, half-built columns and a plumb line behind. | A method is drawn before it is used. Structure, not prediction. |
 | Practise · Days 29–42 | `03-practise.jpg` | An athlete squares up to his own long shadow; inside the shadow glimmers a chalked gilded chart. Oil flask and strigil on the step. | The only opponent in practice is your own reaction — and nothing is at stake. |
 | Make it last · Days 43–56 | `04-make-it-last.jpg` | A weaver at an upright loom, ivory cloth carrying a repeated row of small gold candlestick marks, one gold thread rising from the basket at her feet. A dog asleep. | A routine is repetition: one thread, many rows, kept daily. |
+
+## Series 3 · Tools (`apps/web/public/images/art/tools/`)
+
+Used by `Tools` in `apps/web/src/components/landing/tools.tsx`. These are still lifes rather than
+figures, because a tool is an object you keep. Each is the artefact named in the copy, painted in gold
+and stone, with at most a hand entering the frame.
+
+| Tool | File | Painting | Reading |
+| --- | --- | --- | --- |
+| Your Trigger Map | `01-trigger-map.jpg` | An aged contour map on marble, gilded pins joined by one gold thread, a hand about to place another pin. | Mapping the situations that set you off, one marked point at a time. |
+| Your preparation checklist | `02-checklist.jpg` | A pale wax tablet ruled with *empty* lines and small gold ticks, a bronze stylus, a clay lamp burning low. | Questions asked before acting; three answered, the rest still open. |
+| Your practice journal | `03-journal.jpg` | An open book of blank pages on linen, quill and brass inkwell, one white flower pressed across the page. | Pages you fill yourself. The flower is the review, not the result. |
+| Your Rules Card | `04-rules-card.jpg` | A small ivory tablet with a gilded edge set in a plaster niche, a lamp beside it, a hand just leaving its edge. | The plan condensed small enough to return to, kept where you can see it. |
+
+## Pause (`apps/web/public/images/art/pause.jpg` → `pause-calm.jpg`)
+
+`pause-calm.jpg` (portrait, 1000 × 1241) replaces the old washed-out background inside the Pause card.
+A figure sits on a marble step before a completely still sea at dawn, an unstrung bow laid down beside
+her — the moment of choosing not to trade. It is shown as a visible art band at the top of the card
+(`h-[124px]`), which is how the brand spec treats Pause in the app: `pause.jpg` is no longer
+referenced by the site.
 
 ## Shared style recipe
 
@@ -47,22 +72,24 @@ references alongside the new images.
 > Avoid: green or red chart colours, green foliage or forest settings, neon, modern app interface,
 > text, letters, numbers, signature, watermark, harsh contrast, cartoon, 3D render.
 
-Three rules learned by repainting:
+Rules learned by repainting:
 
 1. **Charts are gold, never green or red** — these are behaviour pictures, not P&L pictures.
-2. **No green scenery.** A first attempt at “Know yourself” set the scene in a lush grove; the green
-   dominated the frame and broke the ivory/sky series. Keep foliage out or reduce it to a single
-   branch.
-3. **Keep the lighting pale.** A candlelit gambling interior reads as a different series; the first
-   “Trying to win it back” was repainted in daylight marble for exactly that reason.
+2. **No lettering, ever.** The image models happily letter a map, a journal page or a tablet. Words
+   belong to the HTML around the art: explicitly ask for blank pages and contour lines only.
+3. **No green scenery.** A first attempt at “Know yourself” set the scene in a lush grove; the green
+   dominated the frame and broke the ivory/sky series. Keep foliage out, or reduce it to one branch.
+4. **Keep the lighting pale.** A candlelit gambling interior, and a first checklist under heavy
+   chiaroscuro, read as a different series; both were repainted in daylight marble.
 
 ## Display and files
 
-- Source generations are ~2176 × 1632; delivered files are downsampled to 1200 px wide, 4:3,
-  progressive JPEG q82 (lightest 108 KB, heaviest 245 KB).
-- Problems render as bands `h-[124px] md:h-[150px] lg:h-[176px]`; programme panels render at
-  `h-[185px] md:h-[285px]`. Both crop the 4:3 frame, so every item carries an `artPosition` focal
-  point in `site.ts`; update it if a new composition moves the face.
+- Source generations are ~2400 × 1792; delivered files are downsampled to 1200 px wide (1000 px for
+  the Pause portrait), 4:3, progressive JPEG q82 (94–245 KB).
+- Problems render as bands `h-[124px] md:h-[150px] lg:h-[176px]`; programme panels at
+  `h-[185px] md:h-[285px]`; tools at `h-[150px] md:h-[190px] lg:h-[215px]`; the Pause plate is
+  `h-[124px]`. All of them crop the 4:3 frame, so every item carries an `artPosition` focal point in
+  `site.ts`; update it if a new composition moves the subject.
 - Alt text describes the scene and its meaning in one sentence; inactive chapter images are
   `aria-hidden` with empty alt.
 - Copy, alt text and focal points all live in `apps/web/src/content/site.ts`.
@@ -70,5 +97,5 @@ Three rules learned by repainting:
 ## Regenerating
 
 Pass the other paintings plus `hero.jpg` and `task.jpg` as references, keep the 4:3 framing, then
-resize to 1200 × 900 and export progressive JPEG at q82. Add `art`, `artAlt` and `artPosition` to the
-matching entry in `site.ts`.
+resize to 1200 px wide and export progressive JPEG at q82. Add `art`, `artAlt` and `artPosition` to
+the matching entry in `site.ts`.
