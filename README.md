@@ -45,6 +45,8 @@ Import the repo in Vercel and set **Root Directory** to `apps/web` (framework: N
 
 `ui-design/landing-v2.html` is the design the live site in `apps/web` is built from. Page text lives in `apps/web/src/content/site.ts`. `landing-v1.html` is the earlier dark version, kept for reference.
 
-Open any `.html` file directly in a browser. The headings use Google Fonts (Bangers, Inter), so an internet connection is needed for the full look.
+[`docs/ui-design/landing-v3.html`](docs/ui-design/landing-v3.html) is the classical editorial landing concept matching the v8 app design. It is self-contained and opens offline, with responsive layouts, chapter tabs, FAQ accordions and a clearly non-submitting signup preview. It does not replace the live landing; artwork remains concept-only pending production rights clearance.
+
+Open any `.html` file directly in a browser. The older comic previews use Google Fonts (Bangers, Inter), so an internet connection is needed for their full look. The classical v8 app and v3 landing previews embed their fonts and artwork and work offline.
 
 Backend and product docs: [still-backend](https://github.com/Liuhangfung/still-backend).
