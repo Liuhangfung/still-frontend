@@ -7,7 +7,7 @@
     "primary_label": "Sign in",
     "notes": [
       "Representative sign-in state with independent illustrative email and masked password values. The account-mode radios are local preview controls; authentication and password visibility show demo notices only, with no credential submission, routing or session storage.",
-      "Email/password access is through Supabase; programme progress and explicit saved rules are distinct from private writing. This screen adds no providers, market schema fields or broker connections and makes no claim beyond the current Chapter 1 / Days 1–14 scope."
+      "Email/password access is through Supabase; programme progress and explicit saved rules are distinct from private writing, which syncs end-to-end encrypted. This screen adds no providers, market schema fields or broker connections and makes no claim beyond the current Chapter 1 / Days 1–14 scope."
     ]
   },
   {
@@ -40,7 +40,7 @@
     "primary_label": "Save and continue",
     "notes": [
       "Independent illustrative state: 10 minutes, System, Calm mode off, Tap and Evening. Only the source-backed Evening reminder option is rendered; reminder delivery is not implemented. Calm mode remains separate from coach selection, and Sergeant is labelled 18+.",
-      "The main action is a preview notice only. In production, it saves the complete accumulated questionnaire via PUT /v1/questionnaire and proceeds to profile confirmation; it does not start onboarding, Day 1 or award XP. Current programme scope is Chapter 1, Days 1–14. Questionnaire preferences are distinct from private note text, which is not sent to Still."
+      "The main action is a preview notice only. In production, it saves the complete accumulated questionnaire via PUT /v1/questionnaire and proceeds to profile confirmation; it does not start onboarding, Day 1 or award XP. Current programme scope is Chapter 1, Days 1–14. Questionnaire preferences are distinct from private note text, which syncs end-to-end encrypted."
     ]
   },
   {
@@ -95,7 +95,7 @@
     "primary_label": "Continue quest",
     "notes": [
       "Representative Chapter 1 / Day 4 full-version draft: 1 of 4 objectives complete. Continue targets fill_rows, derived as the first incomplete objective; all objective actions are preview notices, never completion or finish:true. Native version radios change selection only; this fragment explicitly states that the full objective list remains unchanged in the preview.",
-      "Private writing remains in the user's notebook or notes; the future Trigger Map is built from eligible in-app pattern/rule answers, not an uploaded log. The rule is entered in app without money amounts. The 50 EMO XP label is prospective full-version base participation credit, not already earned or trading skill."
+      "Private writing stays in the user's notebook, or syncs end-to-end encrypted; the future Trigger Map is built from eligible in-app pattern/rule answers, not an uploaded log. The rule is entered in app without money amounts. The 50 EMO XP label is prospective full-version base participation credit, not already earned or trading skill."
     ]
   },
   {
