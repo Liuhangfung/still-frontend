@@ -1,0 +1,1331 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" href="data:," />
+    <title>Still — Notes</title>
+    <script src="../shared/preview.js" defer></script>
+    <link rel="stylesheet" href="../shared/screens.css" />
+    <style>
+      /* Notes: the user's own words on paper glass over the painting,
+         ordered by the moment each one is for, not by what kind it is. */
+      :root {
+        --glass: #fffdf8b3;
+        --glass-strong: #fffdf8e0;
+        --edge: #ffffffd9;
+        --shade: 0 18px 40px -24px #3a2d1a73;
+        --gold-text: #76654b;
+        --gold-soft: #e9d9b0;
+        --text-2: #59554f;
+        --text-3: #7a756b;
+      }
+      .app-screen {
+        position: relative;
+        isolation: isolate;
+        background: var(--ivory);
+      }
+      /* The painting, darkened at the top for the heading, fading to ivory. */
+      /* Soft warm light further down, so the glass always has something to
+         frost. Painted as the scroller's own background so it moves with it. */
+      .screen-content {
+        position: relative;
+        isolation: isolate;
+        background:
+          radial-gradient(280px 220px at 100% 640px, #e8cf9a8c, transparent 70%),
+          radial-gradient(260px 220px at 0% 1060px, #aabac473, transparent 70%),
+          radial-gradient(280px 220px at 100% 1460px, #e8cf9a73, transparent 70%),
+          radial-gradient(260px 200px at 0% 1900px, #aabac466, transparent 70%);
+        background-repeat: no-repeat;
+        background-attachment: local;
+      }
+      .screen-content::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 420px;
+        z-index: -1;
+        -webkit-mask-image: linear-gradient(180deg, #000 50%, transparent 100%);
+        mask-image: linear-gradient(180deg, #000 50%, transparent 100%);
+        background:
+          linear-gradient(180deg, #1d1a16b3 0%, #1d1a1666 38%, #1d1a1626 70%, #1d1a1600 100%),
+          url("../assets/art/task.jpg") 42% 0 / auto 100% no-repeat;
+      }
+      .app-screen > .status {
+        position: absolute;
+        inset: 0 0 auto;
+        z-index: 4;
+        color: var(--ivory);
+        transition:
+          background 0.25s,
+          color 0.25s;
+      }
+      .app-screen > .status.solid {
+        color: var(--ink);
+        background: #f5f2ebd9;
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+      }
+      .screen-content {
+        padding-top: 0;
+        padding-bottom: 110px;
+      }
+      .glass {
+        background: var(--glass);
+        border: 1px solid var(--edge);
+        border-radius: 22px;
+        backdrop-filter: blur(22px) saturate(160%);
+        -webkit-backdrop-filter: blur(22px) saturate(160%);
+        box-shadow: var(--shade);
+      }
+      button {
+        font: inherit;
+        color: inherit;
+      }
+      [hidden] {
+        display: none !important;
+      }
+
+      /* heading on the painting */
+      .head {
+        color: var(--ivory);
+        padding-top: 70px;
+      }
+      .kicker {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 10px;
+        letter-spacing: 1.8px;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: var(--gold-soft);
+        margin: 0 0 8px;
+      }
+      .kicker::after {
+        content: "";
+        width: 34px;
+        height: 1px;
+        background: #e9d9b080;
+      }
+      .head h1 {
+        font: 500 34px/1.04 var(--serif);
+        letter-spacing: -0.5px;
+        margin: 0 0 18px;
+        text-shadow: 0 2px 18px #0007;
+      }
+      .head h1 em {
+        color: var(--gold-soft);
+      }
+      .search {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        height: 44px;
+        padding: 0 14px;
+        border-radius: 99px;
+        background: #fffdf826;
+        border: 1px solid #ffffff4d;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+      }
+      .search .icon {
+        width: 17px;
+        height: 17px;
+        color: #f5f2ebcc;
+      }
+      .search input {
+        flex: 1;
+        min-width: 0;
+        border: 0;
+        background: none;
+        outline: none;
+        font: 14px var(--sans);
+        color: var(--ivory);
+      }
+      .search input::placeholder {
+        color: #f5f2ebb3;
+      }
+      .moments {
+        display: flex;
+        gap: 7px;
+        overflow-x: auto;
+        margin: 12px -21px 18px;
+        padding: 2px 21px;
+        scrollbar-width: none;
+      }
+      .moments button {
+        flex: none;
+        height: 34px;
+        padding: 0 14px;
+        border-radius: 99px;
+        border: 1px solid #ffffff59;
+        background: #1d1a1640;
+        color: var(--ivory);
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+      .moments button[aria-pressed="true"] {
+        background: var(--ivory);
+        color: var(--ink);
+        border-color: var(--ivory);
+      }
+
+      /* sections */
+      .part {
+        margin: 0 0 22px;
+      }
+      .part-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin: 0 2px 10px;
+      }
+      .part-head h2 {
+        margin: 0;
+        font: 500 21px/1.1 var(--serif);
+      }
+      .part-head span {
+        font-size: 11px;
+        color: var(--text-3);
+      }
+      .moment {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 10px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: var(--gold-text);
+        margin: 0 0 10px;
+      }
+      .moment::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #c9a961;
+        box-shadow: 0 0 0 3px #c9a96133;
+      }
+      .used {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .used span {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 10.5px;
+        font-weight: 600;
+        color: var(--text-2);
+        padding: 5px 9px;
+        border-radius: 99px;
+        background: #ffffff8c;
+        border: 1px solid #e6dfd1;
+      }
+      .used .icon {
+        width: 12px;
+        height: 12px;
+        color: var(--gold-text);
+      }
+      .ghost-button,
+      .ink-button {
+        min-height: 44px;
+        border-radius: 99px;
+        padding: 0 18px;
+        font-weight: 600;
+        font-size: 13.5px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .ink-button {
+        border: 0;
+        background: var(--ink);
+        color: var(--ivory);
+      }
+      .ghost-button {
+        border: 1px solid #d9d1c1;
+        background: #ffffffa6;
+        color: var(--ink);
+      }
+      .ink-button .icon,
+      .ghost-button .icon {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* Before you trade: the Trader Code, in the user's own words */
+      .code {
+        padding: 18px 18px 16px;
+        position: relative;
+        overflow: hidden;
+      }
+      .code::before {
+        content: "\201C";
+        position: absolute;
+        right: 14px;
+        top: -18px;
+        font: 400 120px/1 var(--serif);
+        color: #c9a96133;
+        pointer-events: none;
+      }
+      .code h3 {
+        margin: 0 0 12px;
+        font: 500 25px/1.1 var(--serif);
+      }
+      .code ol {
+        list-style: none;
+        margin: 0 0 14px;
+        padding: 0;
+        display: grid;
+        gap: 9px;
+      }
+      .code li {
+        display: grid;
+        grid-template-columns: 26px 1fr;
+        align-items: baseline;
+        font: 400 17px/1.3 var(--serif);
+      }
+      .code li b {
+        font: 600 12px/1 var(--serif);
+        color: var(--gold-text);
+        letter-spacing: 0.5px;
+      }
+      .code .foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        border-top: 1px solid #e6dfd1;
+        padding-top: 12px;
+      }
+      .code .version {
+        font-size: 10.5px;
+        color: var(--text-3);
+        margin-top: 8px;
+      }
+
+      /* When the urge comes: the plan, as a thread of steps */
+      .plan {
+        padding: 18px;
+      }
+      .plan h3 {
+        margin: 0 0 12px;
+        font: 500 22px/1.1 var(--serif);
+      }
+      .thread {
+        list-style: none;
+        margin: 0 0 16px;
+        padding: 0;
+        position: relative;
+      }
+      .thread::before {
+        content: "";
+        position: absolute;
+        left: 11px;
+        top: 12px;
+        bottom: 12px;
+        width: 1px;
+        background: linear-gradient(#c9a961, #aabac4);
+      }
+      .thread li {
+        position: relative;
+        display: grid;
+        grid-template-columns: 24px 1fr;
+        gap: 12px;
+        align-items: center;
+        padding: 6px 0;
+        font-size: 14px;
+        line-height: 1.35;
+      }
+      .thread li span {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font: 600 12px/1 var(--serif);
+        background: var(--glass-strong);
+        border: 1px solid #d9c9a3;
+        color: var(--gold-text);
+        z-index: 1;
+      }
+      .plan .foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .plan .count {
+        font-size: 11.5px;
+        color: var(--text-2);
+        line-height: 1.35;
+      }
+      .plan .count strong {
+        font: 500 20px/1 var(--serif);
+        color: var(--ink);
+        display: block;
+      }
+
+      /* Rules you keep: one sentence each, When … I … */
+      .rules {
+        display: grid;
+        gap: 9px;
+      }
+      .rule {
+        position: relative;
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 14px 16px 13px 20px;
+        cursor: pointer;
+        border-radius: 18px;
+      }
+      .rule::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 16px;
+        bottom: 16px;
+        width: 3px;
+        border-radius: 0 3px 3px 0;
+        background: linear-gradient(#d8b96a, #b69a64);
+      }
+      .rule small {
+        display: block;
+        font-size: 10px;
+        letter-spacing: 1.4px;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: var(--text-3);
+        margin-bottom: 6px;
+      }
+      .rule p {
+        margin: 0 0 9px;
+        font: 400 17px/1.3 var(--serif);
+      }
+      .rule p i {
+        font-style: normal;
+        font: 600 11px/1 var(--sans);
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: var(--gold-text);
+        margin-right: 4px;
+      }
+      .more {
+        width: 100%;
+        margin-top: 9px;
+      }
+
+      /* Where you started: records, as index cards on a shelf */
+      .shelf {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 9px;
+        margin: 0 0 10px;
+      }
+      .record {
+        padding: 0;
+        overflow: hidden;
+        text-align: left;
+        cursor: pointer;
+        border-radius: 18px;
+        background: var(--glass-strong);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+      }
+      .record .art {
+        height: 78px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+      }
+      .record .art em {
+        position: absolute;
+        left: 8px;
+        bottom: 8px;
+        font: 600 10px/1 var(--sans);
+        font-style: normal;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--ink);
+        background: var(--glass-strong);
+        border-radius: 99px;
+        padding: 5px 8px;
+      }
+      .record div:last-child {
+        padding: 10px 12px 12px;
+      }
+      .record h4 {
+        margin: 0 0 4px;
+        font: 500 16px/1.15 var(--serif);
+      }
+      .record p {
+        margin: 0;
+        font-size: 11px;
+        line-height: 1.4;
+        color: var(--text-2);
+      }
+      .record:disabled {
+        opacity: 1;
+      }
+      .record.waiting {
+        cursor: default;
+        background: #fffdf880;
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 96px 1fr;
+        align-items: center;
+      }
+      .record.waiting .art {
+        height: 100%;
+        min-height: 72px;
+      }
+      .record.waiting .art {
+        filter: grayscale(0.8) blur(2px);
+        opacity: 0.55;
+      }
+      .shelf-note {
+        font-size: 11.5px;
+        color: var(--text-3);
+        margin: 0 2px;
+      }
+
+      /* Written by you */
+      .own {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 9px;
+      }
+      .own button {
+        text-align: left;
+        padding: 14px;
+        min-height: 128px;
+        cursor: pointer;
+        border-radius: 18px;
+        display: flex;
+        flex-direction: column;
+      }
+      .own h4 {
+        margin: 0 0 6px;
+        font: 500 16px/1.15 var(--serif);
+      }
+      .own p {
+        margin: 0;
+        font-size: 12px;
+        line-height: 1.4;
+        color: var(--text-2);
+        flex: 1;
+      }
+      .own small {
+        font-size: 10.5px;
+        color: var(--text-3);
+        margin-top: 10px;
+      }
+      .own .add {
+        border: 1.5px dashed #cdbf9f;
+        background: #fffdf866;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        color: var(--gold-text);
+        font-weight: 600;
+        font-size: 12.5px;
+      }
+      .own .add .icon {
+        width: 22px;
+        height: 22px;
+      }
+      .nothing {
+        padding: 18px;
+        font-size: 13px;
+        color: var(--text-2);
+        text-align: center;
+      }
+      .caption.page {
+        text-align: center;
+        color: var(--text-3);
+        margin: 8px 6px 0;
+      }
+
+      .dock {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 64px;
+        padding: 26px 21px 10px;
+        background: linear-gradient(180deg, #f5f2eb00, #f5f2ebf2 45%);
+        z-index: 3;
+      }
+      .dock .ink-button {
+        width: 100%;
+        min-height: 52px;
+        font-size: 15px;
+      }
+
+      /* the sheet: opening, following or writing a note */
+      .scrim {
+        position: absolute;
+        inset: 0;
+        background: #1d1a1659;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s;
+        z-index: 6;
+      }
+      .sheet {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        max-height: 90%;
+        overflow-y: auto;
+        background: #f8f5eee8;
+        backdrop-filter: blur(30px) saturate(160%);
+        -webkit-backdrop-filter: blur(30px) saturate(160%);
+        border-top: 1px solid #fff;
+        border-radius: 26px 26px 0 0;
+        padding: 10px 21px 26px;
+        transform: translateY(102%);
+        transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+        z-index: 7;
+        box-shadow: 0 -20px 50px -30px #3a2d1a99;
+      }
+      .app-screen.open .scrim {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .app-screen.open .sheet {
+        transform: none;
+      }
+      .handle {
+        width: 40px;
+        height: 4px;
+        border-radius: 4px;
+        background: #20201d33;
+        margin: 0 auto 16px;
+      }
+      .sheet h2 {
+        font: 500 29px/1.05 var(--serif);
+        margin: 0 0 8px;
+      }
+      .sheet .lead {
+        margin: 0 0 16px;
+      }
+      .lines {
+        display: grid;
+        gap: 8px;
+        margin: 0 0 16px;
+      }
+      .line {
+        padding: 12px 14px;
+        border-radius: 14px;
+        background: #ffffffb3;
+        border: 1px solid #ebe4d6;
+      }
+      .line small {
+        display: block;
+        font-size: 10.5px;
+        font-weight: 600;
+        color: var(--text-3);
+        margin-bottom: 4px;
+      }
+      .line span,
+      .line textarea {
+        font: 400 17px/1.35 var(--serif);
+      }
+      .line textarea {
+        width: 100%;
+        border: 0;
+        background: none;
+        resize: none;
+        padding: 0;
+        outline: none;
+        color: var(--ink);
+        box-sizing: border-box;
+      }
+      .line:has(textarea) {
+        border-color: #c9a961;
+        box-shadow: 0 0 0 3px #c9a9612e;
+      }
+      .sheet .meta {
+        font-size: 11.5px;
+        color: var(--text-3);
+        margin: 12px 0 0;
+        line-height: 1.5;
+      }
+      .sheet .actions {
+        display: grid;
+        gap: 8px;
+        margin-top: 18px;
+      }
+      .sheet .actions button {
+        width: 100%;
+        min-height: 50px;
+      }
+
+      /* reading mode: the code, one line at a time */
+      .reading li {
+        opacity: 0;
+        transform: translateY(6px);
+        animation: rise 0.7s ease-out forwards;
+        font: 400 22px/1.3 var(--serif);
+        padding: 12px 0;
+        border-bottom: 1px solid #e6dfd1;
+        list-style: none;
+        display: grid;
+        grid-template-columns: 32px 1fr;
+      }
+      .reading {
+        padding: 0;
+        margin: 0;
+      }
+      .reading li b {
+        font: 600 13px/1.9 var(--serif);
+        color: var(--gold-text);
+      }
+      @keyframes rise {
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      /* following the urge plan */
+      .progress {
+        display: flex;
+        gap: 5px;
+        margin: 0 0 18px;
+      }
+      .progress i {
+        flex: 1;
+        height: 3px;
+        border-radius: 3px;
+        background: #e1d9c8;
+      }
+      .progress i.on {
+        background: #b69a64;
+      }
+      .step-now {
+        font: 400 27px/1.2 var(--serif);
+        margin: 4px 0 8px;
+        min-height: 98px;
+      }
+      .choices {
+        display: grid;
+        gap: 8px;
+      }
+      .choices button {
+        text-align: left;
+        padding: 14px 16px;
+        border-radius: 16px;
+        border: 1px solid #e1d9c8;
+        background: #ffffffb3;
+        cursor: pointer;
+      }
+      .choices button strong {
+        display: block;
+        font: 500 17px/1.2 var(--serif);
+      }
+      .choices button span {
+        font-size: 11.5px;
+        color: var(--text-2);
+      }
+
+      /* writing a note */
+      .kinds {
+        display: grid;
+        gap: 7px;
+        margin: 0 0 14px;
+      }
+      .kinds button {
+        text-align: left;
+        padding: 11px 14px;
+        border-radius: 14px;
+        border: 1px solid #e1d9c8;
+        background: #ffffffa6;
+        cursor: pointer;
+      }
+      .kinds button strong {
+        font: 500 16px/1.2 var(--serif);
+      }
+      .kinds button span {
+        display: block;
+        font-size: 11px;
+        color: var(--text-2);
+        margin-top: 2px;
+      }
+      .kinds button[aria-pressed="true"] {
+        border-color: var(--ink);
+        background: #fff;
+        box-shadow: inset 0 0 0 1px var(--ink);
+      }
+      .write-field {
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #e1d9c8;
+        background: #fff;
+        border-radius: 14px;
+        padding: 12px 14px;
+        font: 400 17px/1.35 var(--serif);
+        color: var(--ink);
+        resize: none;
+        outline: none;
+        margin-bottom: 8px;
+      }
+      .write-field:focus {
+        border-color: #c9a961;
+        box-shadow: 0 0 0 3px #c9a9612e;
+      }
+      .write-label {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-2);
+        margin: 4px 0 6px;
+      }
+      .saved-flash {
+        animation: flash 1.4s ease-out;
+      }
+      @keyframes flash {
+        0% {
+          box-shadow:
+            0 0 0 3px #c9a961aa,
+            var(--shade);
+        }
+        100% {
+          box-shadow: var(--shade);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <svg aria-hidden="true" class="sr-only" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <symbol id="i-search" viewbox="0 0 24 24">
+          <circle cx="11" cy="11" r="6.5"></circle>
+          <path d="m20 20-4.2-4.2"></path>
+        </symbol>
+        <symbol id="i-plus" viewbox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></symbol>
+        <symbol id="i-gate" viewbox="0 0 24 24">
+          <path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6Z"></path>
+          <path d="m9 12 2 2 4-4"></path>
+        </symbol>
+        <symbol id="i-moon" viewbox="0 0 24 24">
+          <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"></path>
+        </symbol>
+        <symbol id="i-step" viewbox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></symbol>
+        <symbol id="i-lock" viewbox="0 0 24 24">
+          <rect height="10" rx="2" width="14" x="5" y="11"></rect>
+          <path d="M8 11V8a4 4 0 0 1 8 0v3"></path>
+        </symbol>
+        <symbol id="i-read" viewbox="0 0 24 24">
+          <path d="M3 5h7a3 3 0 0 1 3 3v12a3 3 0 0 0-3-3H3ZM21 5h-7a3 3 0 0 0-3 3v12a3 3 0 0 1 3-3h7Z"></path>
+        </symbol>
+        <symbol id="i-sun" viewbox="0 0 24 24">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"></path>
+        </symbol>
+        <symbol id="i-log" viewbox="0 0 24 24">
+          <path d="M8 5h12M8 12h12M8 19h12M4 5h.01M4 12h.01M4 19h.01"></path>
+        </symbol>
+        <symbol id="i-notes" viewbox="0 0 24 24">
+          <path d="M6 3h9l4 4v14H6Z"></path>
+          <path d="M15 3v4h4M9 11h7M9 15h7M9 19h4"></path>
+        </symbol>
+        <symbol id="i-user" viewbox="0 0 24 24">
+          <circle cx="12" cy="8" r="4"></circle>
+          <path d="M4 21c0-5 3-7 8-7s8 2 8 7Z"></path>
+        </symbol>
+        <symbol id="i-signal" viewbox="0 0 24 24">
+          <path d="M4 20v-4M9 20v-8M14 20V8M19 20V4"></path>
+        </symbol>
+        <symbol id="i-wifi" viewbox="0 0 24 24">
+          <path d="M3 8a15 15 0 0 1 18 0M6 12a10 10 0 0 1 12 0M9 16a5 5 0 0 1 6 0M12 20h.01"></path>
+        </symbol>
+        <symbol id="i-battery" viewbox="0 0 24 24">
+          <rect height="12" rx="3" width="17" x="2" y="6"></rect>
+          <path d="M22 10v4"></path>
+          <rect fill="currentColor" height="6" rx="1" stroke="none" width="11" x="5" y="9"></rect>
+        </symbol>
+      </defs>
+    </svg>
+    <header class="review-top">
+      <div>
+        <h1>51 / Notes</h1>
+        <p>
+          The Tools tab, renamed Notes. Your own words on glass over the painting, ordered by the
+          moment each one is for. Search, filter, open a note, follow the urge plan, read the
+          code, or write a note of your own. Nothing is saved.
+        </p>
+      </div>
+      <nav class="review-links" aria-label="Design review navigation">
+        <a href="../index.html">All screens</a>
+      </nav>
+    </header>
+    <main class="preview-layout">
+      <div class="phone">
+        <section class="app-screen" id="screen" aria-label="Notes">
+          <div class="status" aria-hidden="true">
+            <span>9:41</span
+            ><span class="status-icons"
+              ><svg class="icon"><use href="#i-signal" /></svg
+              ><svg class="icon"><use href="#i-wifi" /></svg
+              ><svg class="icon battery"><use href="#i-battery" /></svg
+            ></span>
+          </div>
+          <div class="screen-content" id="scroller">
+            <header class="head">
+              <p class="kicker">Notes</p>
+              <h1>Your own words,<br /><em>when you need them.</em></h1>
+              <label class="search">
+                <svg class="icon" aria-hidden="true"><use href="#i-search" /></svg>
+                <input id="search" type="search" placeholder="Search your notes" aria-label="Search your notes" />
+              </label>
+              <div class="moments" role="group" aria-label="Show" id="moments">
+                <button type="button" aria-pressed="true" data-show="all">All</button>
+                <button type="button" aria-pressed="false" data-show="trade">Before you trade</button>
+                <button type="button" aria-pressed="false" data-show="urge">When the urge comes</button>
+                <button type="button" aria-pressed="false" data-show="rules">Rules</button>
+                <button type="button" aria-pressed="false" data-show="records">Where you started</button>
+                <button type="button" aria-pressed="false" data-show="own">Yours</button>
+              </div>
+            </header>
+
+            <section class="part" data-part="trade" aria-label="Before you trade">
+              <article class="glass code" data-note="trader_code">
+                <p class="moment">Read before you trade</p>
+                <h3>Trader Code</h3>
+                <ol id="code-lines"></ol>
+                <div class="foot">
+                  <div class="used">
+                    <span><svg class="icon"><use href="#i-gate" /></svg>Fit-to-Trade Gate</span>
+                    <span><svg class="icon"><use href="#i-moon" /></svg>Rule Check</span>
+                  </div>
+                  <button type="button" class="ink-button" id="read-code">
+                    <svg class="icon" aria-hidden="true"><use href="#i-read" /></svg>Read
+                  </button>
+                </div>
+                <p class="version">Version 2 · rewritten 3 Nov · the Day 13 version is kept</p>
+              </article>
+            </section>
+
+            <section class="part" data-part="urge" aria-labelledby="urge-title">
+              <div class="part-head"><h2 id="urge-title">When the urge comes</h2></div>
+              <article class="glass plan" data-note="urge_plan" id="plan">
+                <p class="moment">Follow your own steps</p>
+                <h3>Urge Plan</h3>
+                <ol class="thread" id="plan-steps"></ol>
+                <div class="foot">
+                  <p class="count" id="plan-count"></p>
+                  <button type="button" class="ink-button" id="follow">
+                    Follow my plan<svg class="icon" aria-hidden="true"><use href="#i-step" /></svg>
+                  </button>
+                </div>
+              </article>
+            </section>
+
+            <section class="part" data-part="rules" aria-labelledby="rules-title">
+              <div class="part-head">
+                <h2 id="rules-title">Rules you keep</h2>
+                <span id="rules-count"></span>
+              </div>
+              <div class="rules" id="rules"></div>
+              <button type="button" class="ghost-button more" id="more-rules"></button>
+            </section>
+
+            <section class="part" data-part="records" aria-labelledby="records-title">
+              <div class="part-head">
+                <h2 id="records-title">Where you started</h2>
+                <span>Day 12 of 56</span>
+              </div>
+              <div class="shelf" id="shelf"></div>
+              <p class="shelf-note">Records, kept as they were. Day 14 compares against them.</p>
+            </section>
+
+            <section class="part" data-part="own" aria-labelledby="own-title">
+              <div class="part-head"><h2 id="own-title">Written by you</h2></div>
+              <div class="own" id="own"></div>
+            </section>
+
+            <div class="glass nothing" id="nothing" hidden></div>
+
+            <p class="caption page">
+              Private to you. Notes are your own words, never advice, and never hold a trade, a price or
+              an amount.
+            </p>
+          </div>
+
+          <div class="dock">
+            <button type="button" class="ink-button" id="write">
+              <svg class="icon" aria-hidden="true"><use href="#i-plus" /></svg>Write a note
+            </button>
+          </div>
+
+          <nav class="bottom-tabs" aria-label="App preview navigation">
+            <a class="tab" href="47-routine-deck.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-sun" /></svg>Today</a
+            ><a class="tab" href="49-mindset.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-read" /></svg>Mindset</a
+            ><a class="tab" href="50-day-log.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-log" /></svg>Log</a
+            ><a class="tab active" href="51-notes.html" aria-current="page"
+              ><svg class="icon" aria-hidden="true"><use href="#i-notes" /></svg>Notes</a
+            ><a class="tab" href="46-profile-settings.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-user" /></svg>Me</a
+            >
+          </nav>
+          <div class="home-indicator" aria-hidden="true"></div>
+
+          <div class="scrim" id="scrim"></div>
+          <article class="sheet" id="sheet" inert aria-live="polite">
+            <div class="handle" aria-hidden="true"></div>
+            <div id="sheet-body"></div>
+          </article>
+        </section>
+      </div>
+      <aside class="reference-panel">
+        <h2>Why it changes</h2>
+        <p>
+          Tools read like old homework: a grid of titles, and the words were one tap away. Notes
+          puts the words on the page and orders them by the moment each is for, the way the
+          programme uses them: read before you trade, followed when the urge comes, kept as rules,
+          compared against later.
+        </p>
+        <details open>
+          <summary>What is on the page</summary>
+          <ul>
+            <li><b>Before you trade</b>: the Trader Code (use <code>read</code>), in full, with where it is asked.</li>
+            <li><b>When the urge comes</b>: the Urge Plan (use <code>run</code>). Following it records taps and how it ended, never a trade.</li>
+            <li><b>Rules you keep</b>: every <code>rule</code> as one sentence, <i>When …, I …</i>, with the daily check that asks about it.</li>
+            <li><b>Where you started</b>: <code>reference</code> records as index cards. Locked ones wait for their day.</li>
+            <li><b>Written by you</b>: notes the user writes themselves.</li>
+          </ul>
+        </details>
+        <details open>
+          <summary>The rename</summary>
+          <ul>
+            <li>The tab, the heading and the dock say Notes. "Tool" stays in the docs and the API (<code>/v1/inventory</code>), so nothing on the server changes.</li>
+            <li>Counts of follows are plain counts. No streaks, and a missed follow is not a broken one.</li>
+          </ul>
+        </details>
+      </aside>
+    </main>
+    <p class="preview-notice">
+      Design preview only. Nothing is saved or sent. Artwork is concept-only pending production
+      rights clearance.
+    </p>
+
+    <script>
+      (() => {
+        const CODE = {
+          lines: [
+            "I trade only inside my hours.",
+            "I know my exit before I enter, and I don't move it.",
+            "Two losses in a day and I am done.",
+            "Tired, angry or bored, I don't trade.",
+          ],
+        };
+        const PLAN = {
+          steps: ["Put the phone face down.", "Walk to the window for five minutes.", "Write the urge in my Urge Log."],
+          followed: 3,
+        };
+        const RULES = [
+          { key: "trading_hours", title: "Trading Hours", when: "it is before 10:00 or after 15:30", i: "keep the charts closed", used: ["gate", "Fit-to-Trade Gate"], day: 9, v: 1, edit: true },
+          { key: "exit_rule", title: "Exit Rule", when: "I enter a trade", i: "already know where I get out, and I leave it there", used: ["moon", "Evening Rule Check"], day: 12, v: 1, edit: true },
+          { key: "first_patch", title: "First Patch", when: "I have just closed a loss", i: "wait thirty minutes before anything else", used: ["moon", "Evening Rule Check"], day: 4, v: 2, edit: true },
+          { key: "best_self_conditions", title: "Best-Self Conditions", when: "I sit down to trade", i: "have slept, eaten, and nothing is bothering me", used: ["gate", "Fit-to-Trade Gate"], day: 11, v: 1, edit: true },
+          { key: "money_rule", title: "Money Rule", when: "what I set aside for trading is gone", i: "stop until next month", used: null, day: 6, v: 1, edit: true, note: "No amounts are ever stored here." },
+          { key: "check_it_rule", title: "Check-It Rule", when: "I hear a tip that sounds certain", i: "find two sources before I believe it", used: null, day: 10, v: 1, edit: true },
+          { key: "week_1_change", title: "Week 2 Change", when: "the market opens", i: "read my code before I look at a chart", used: null, day: 7, v: 1, edit: true },
+        ];
+        const RECORDS = [
+          { key: "hunter_profile", title: "Hunter Profile", day: "Day 0", art: "thumb1", text: "The Chaser. Trades to win back the last loss.", lines: [["Your type", "The Chaser"], ["What drives it", "Winning back the last loss"], ["What helps", "A hard stop for the day"]] },
+          { key: "honest_snapshot", title: "Honest Snapshot", day: "Day 0", art: "thumb2", text: "Four answers. Your baseline.", lines: [["Trades in a usual week", "Around 20"], ["Trades you planned", "About half"], ["Sleep before a bad day", "Under 6 hours"], ["Hours on charts", "3 to 4 a day"]] },
+          { key: "trigger_map", title: "Trigger Map", day: "Day 3", art: "thumb3", text: "Boredom, six times. After a loss, four.", lines: [["Boredom", "6 times"], ["After a loss", "4 times"], ["A tip online", "2 times"]] },
+          { key: "top_leaks", title: "Top 3 Leaks", day: "Day 4", art: "thumb4", text: "Revenge trades, moving stops, late nights.", lines: [["First", "Revenge trades"], ["Second", "Moving my stop"], ["Third", "Trading late at night"]] },
+          { key: "starting_report", title: "Starting Report", day: "Day 14", art: "thumb2", text: "Opens on Day 14, against where you began.", waiting: true },
+        ];
+        const OWN = [
+          { key: "own_1", title: "What my best days share", text: "Slept seven hours. No news before nine. One coffee.", date: "Written 8 Nov" },
+          { key: "own_2", title: "On a news day", text: "I sit out the first hour after the numbers come out.", date: "Written 5 Nov" },
+        ];
+
+        const $ = (id) => document.getElementById(id);
+        const screen = $("screen");
+        const icon = (name) => `<svg class="icon" aria-hidden="true"><use href="#i-${name}" /></svg>`;
+        const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+        const roman = ["I", "II", "III", "IV", "V", "VI"];
+        let show = "all";
+        let query = "";
+        let allRules = false;
+        let justSaved = null;
+
+        function render() {
+          $("code-lines").innerHTML = CODE.lines.map((l, n) => `<li><b>${roman[n]}</b><span>${esc(l)}</span></li>`).join("");
+          $("plan-steps").innerHTML = PLAN.steps.map((s, n) => `<li><span>${n + 1}</span>${esc(s)}</li>`).join("");
+          $("plan-count").innerHTML =
+            PLAN.followed > 0
+              ? `<strong>${PLAN.followed}</strong>time${PLAN.followed === 1 ? "" : "s"} followed this week`
+              : "Not followed this week. It is here when you need it.";
+
+          const rules = RULES.filter((r) => matches([r.title, r.when, r.i]));
+          const shown = allRules || query ? rules : rules.slice(0, 4);
+          $("rules").innerHTML = shown
+            .map(
+              (r) => `<button type="button" class="glass rule ${justSaved === r.key ? "saved-flash" : ""}" data-note="${r.key}" data-open="${r.key}">
+                <small>${esc(r.title)}</small>
+                <p><i>When</i>${esc(r.when)}, I ${esc(r.i)}.</p>
+                ${r.used ? `<div class="used"><span>${icon(r.used[0])}${r.used[1]} asks this</span></div>` : ""}
+              </button>`,
+            )
+            .join("");
+          $("rules-count").textContent = `${RULES.length} rules`;
+          $("more-rules").hidden = !!query || rules.length <= 4;
+          $("more-rules").textContent = allRules ? "Show fewer" : `Show ${rules.length - 4} more`;
+
+          $("shelf").innerHTML = RECORDS.filter((r) => matches([r.title, r.text]))
+            .map(
+              (r) => `<button type="button" class="glass record ${r.waiting ? "waiting" : ""}" data-note="${r.key}" ${r.waiting ? "disabled" : `data-open="${r.key}"`} aria-label="${r.title}, ${r.day}${r.waiting ? ", not yet" : ""}">
+                <div class="art" style="background-image:url('../assets/art/${r.art}.jpg')"><em>${r.waiting ? `${icon("lock").replace('class="icon"', 'class="icon" style="width:10px;height:10px;vertical-align:-1px"')} ` : ""}${r.day}</em></div>
+                <div><h4>${r.title}</h4><p>${esc(r.text)}</p></div>
+              </button>`,
+            )
+            .join("");
+
+          const own = OWN.filter((o) => matches([o.title, o.text]));
+          $("own").innerHTML =
+            own
+              .map(
+                (o) => `<button type="button" class="glass ${justSaved === o.key ? "saved-flash" : ""}" data-note="${o.key}" data-open="${o.key}"><h4>${esc(o.title)}</h4><p>${esc(o.text)}</p><small>${o.date}</small></button>`,
+              )
+              .join("") ;
+
+          // which parts show
+          const codeHit = matches(["Trader Code", ...CODE.lines]);
+          const planHit = matches(["Urge Plan", ...PLAN.steps]);
+          const parts = {
+            trade: codeHit,
+            urge: planHit,
+            rules: rules.length > 0,
+            records: $("shelf").children.length > 0,
+            own: own.length > 0,
+          };
+          let any = false;
+          document.querySelectorAll("[data-part]").forEach((el) => {
+            const name = el.dataset.part;
+            const on = (show === "all" || show === name) && parts[name];
+            el.hidden = !on;
+            any ||= on;
+          });
+          $("nothing").hidden = any;
+          $("nothing").textContent = query ? `No note mentions “${query}”.` : "Nothing here yet.";
+        }
+        const matches = (texts) => !query || texts.some((t) => t.toLowerCase().includes(query.toLowerCase()));
+
+        // ---- the sheet
+        function open(html) {
+          $("sheet-body").innerHTML = html;
+          $("sheet").inert = false;
+          $("sheet").scrollTop = 0;
+          screen.classList.add("open");
+        }
+        function close() {
+          screen.classList.remove("open");
+          $("sheet").inert = true;
+        }
+
+        function openNote(key) {
+          const rule = RULES.find((r) => r.key === key);
+          if (rule) {
+            open(`<p class="moment">A rule you keep</p><h2>${rule.title}</h2>
+              <p class="lead">${rule.used ? `Your ${rule.used[1]} asks about it.` : "One sentence, in your own words."}</p>
+              <div class="lines" id="rule-lines">
+                <div class="line"><small>When</small><span>${esc(rule.when)}</span></div>
+                <div class="line"><small>I</small><span>${esc(rule.i)}</span></div>
+              </div>
+              ${rule.used ? `<div class="used"><span>${icon(rule.used[0])}${rule.used[1]}</span></div>` : ""}
+              <p class="meta">${rule.note ? `${rule.note} ` : ""}Version ${rule.v} · written on Day ${rule.day}. A rewrite keeps the earlier version.</p>
+              <div class="actions"><button type="button" class="ink-button" id="rewrite" data-key="${key}">Rewrite in my own words</button><button type="button" class="ghost-button" data-close>Close</button></div>`);
+            return;
+          }
+          const rec = RECORDS.find((r) => r.key === key);
+          if (rec) {
+            open(`<p class="moment">${rec.day} · a record</p><h2>${rec.title}</h2>
+              <p class="lead">${esc(rec.text)}</p>
+              <div class="lines">${rec.lines.map(([l, v]) => `<div class="line"><small>${l}</small><span>${esc(v)}</span></div>`).join("")}</div>
+              <p class="meta">${icon("lock").replace('class="icon"', 'class="icon" style="width:12px;height:12px;vertical-align:-2px"')} A record of where you started, kept as it was. Redo its quest to make a new one; this one stays.</p>
+              <div class="actions"><button type="button" class="ghost-button" data-close>Close</button></div>`);
+            return;
+          }
+          const own = OWN.find((o) => o.key === key);
+          if (own) {
+            open(`<p class="moment">${own.date}</p><h2>${esc(own.title)}</h2>
+              <div class="lines"><div class="line"><span>${esc(own.text)}</span></div></div>
+              <div class="actions"><button type="button" class="ghost-button" data-close>Close</button></div>`);
+          }
+        }
+
+        function readCode() {
+          open(`<p class="moment">Before you trade</p><h2>Trader Code</h2>
+            <p class="lead">Read it slowly. Your own words.</p>
+            <ol class="reading">${CODE.lines.map((l, n) => `<li style="animation-delay:${0.25 + n * 0.55}s"><b>${roman[n]}</b><span>${esc(l)}</span></li>`).join("")}</ol>
+            <div class="actions"><button type="button" class="ink-button" data-close>I've read it</button></div>`);
+        }
+
+        let step = 0;
+        function follow() {
+          if (step < PLAN.steps.length) {
+            open(`<p class="moment">Urge Plan · step ${step + 1} of ${PLAN.steps.length}</p>
+              <div class="progress">${PLAN.steps.map((_, n) => `<i class="${n <= step ? "on" : ""}"></i>`).join("")}</div>
+              <p class="step-now">${esc(PLAN.steps[step])}</p>
+              <p class="lead">Take your time. The urge passes; this is how you let it.</p>
+              <div class="actions"><button type="button" class="ink-button" id="next-step">${step === PLAN.steps.length - 1 ? "Done" : "Done, next step"}</button><button type="button" class="ghost-button" data-close>Stop here</button></div>`);
+          } else {
+            open(`<p class="moment">Urge Plan · how did it end?</p><h2>You followed your plan.</h2>
+              <p class="lead">Only that you followed it is kept. Nothing about a trade.</p>
+              <div class="choices">
+                <button type="button" data-end><strong>The urge passed</strong><span>Good. That was you, not luck.</span></button>
+                <button type="button" data-end><strong>It's still here</strong><span>That's all right. The breathing page is one tap away.</span></button>
+              </div>`);
+          }
+        }
+
+        let kind = "note";
+        function write() {
+          kind = "note";
+          renderWrite();
+        }
+        function renderWrite(keep) {
+          const title = keep?.title ?? "";
+          const a = keep?.a ?? "";
+          const b = keep?.b ?? "";
+          open(`<p class="moment">A note of your own</p><h2>Write a note</h2>
+            <div class="kinds" role="group" aria-label="Kind of note">
+              <button type="button" data-kind="note" aria-pressed="${kind === "note"}"><strong>Just a note</strong><span>Anything you want to keep.</span></button>
+              <button type="button" data-kind="rule" aria-pressed="${kind === "rule"}"><strong>A rule</strong><span>When something happens, what you do.</span></button>
+            </div>
+            <label class="write-label" for="w-title">Title</label>
+            <input class="write-field" id="w-title" value="${esc(title)}" placeholder="${kind === "rule" ? "Name it, e.g. Friday Rule" : "e.g. What helps on bad days"}" />
+            ${
+              kind === "rule"
+                ? `<label class="write-label" for="w-a">When</label><textarea class="write-field" id="w-a" rows="2" placeholder="it's Friday afternoon">${esc(a)}</textarea>
+                   <label class="write-label" for="w-b">I</label><textarea class="write-field" id="w-b" rows="2" placeholder="close the app and go outside">${esc(b)}</textarea>`
+                : `<label class="write-label" for="w-a">Your note</label><textarea class="write-field" id="w-a" rows="4" placeholder="In your own words">${esc(a)}</textarea>`
+            }
+            <p class="meta">Yours alone. Never a trade, a price or an amount.</p>
+            <div class="actions"><button type="button" class="ink-button" id="save-note">Save</button><button type="button" class="ghost-button" data-close>Cancel</button></div>`);
+        }
+
+        // ---- events
+        screen.addEventListener("click", (e) => {
+          const t = e.target;
+          const pick = t.closest("[data-show]");
+          if (pick) {
+            show = pick.dataset.show;
+            document.querySelectorAll("[data-show]").forEach((b) => b.setAttribute("aria-pressed", b === pick));
+            render();
+            return;
+          }
+          if (t.closest("[data-close]")) return close();
+          const openEl = t.closest("[data-open]");
+          if (openEl) return openNote(openEl.dataset.open);
+          if (t.closest("[data-write]")) return write();
+          const k = t.closest("[data-kind]");
+          if (k) {
+            const keep = { title: $("w-title").value, a: $("w-a")?.value ?? "", b: $("w-b")?.value ?? "" };
+            kind = k.dataset.kind;
+            return renderWrite(keep);
+          }
+          if (t.closest("#next-step")) {
+            step += 1;
+            return follow();
+          }
+          if (t.closest("[data-end]")) {
+            PLAN.followed += 1;
+            step = 0;
+            close();
+            render();
+            $("plan").classList.remove("saved-flash");
+            void $("plan").offsetWidth;
+            $("plan").classList.add("saved-flash");
+            return;
+          }
+          if (t.closest("#rewrite")) {
+            const rule = RULES.find((r) => r.key === t.closest("#rewrite").dataset.key);
+            $("rule-lines").innerHTML = `
+              <div class="line"><small>When</small><textarea rows="2" id="re-a">${esc(rule.when)}</textarea></div>
+              <div class="line"><small>I</small><textarea rows="2" id="re-b">${esc(rule.i)}</textarea></div>`;
+            t.closest("#rewrite").outerHTML = `<button type="button" class="ink-button" id="save-rewrite" data-key="${rule.key}">Save as version ${rule.v + 1}</button>`;
+            $("re-a").focus();
+            return;
+          }
+          if (t.closest("#save-rewrite")) {
+            const rule = RULES.find((r) => r.key === t.closest("#save-rewrite").dataset.key);
+            rule.when = $("re-a").value.trim() || rule.when;
+            rule.i = $("re-b").value.trim() || rule.i;
+            rule.v += 1;
+            justSaved = rule.key;
+            close();
+            render();
+            justSaved = null;
+            return;
+          }
+          if (t.closest("#save-note")) {
+            const title = $("w-title").value.trim();
+            const a = $("w-a").value.trim();
+            if (kind === "rule") {
+              const b = $("w-b").value.trim();
+              if (!a || !b) return;
+              const key = `own_rule_${Date.now()}`;
+              RULES.unshift({ key, title: title || "My rule", when: a, i: b, used: null, day: 12, v: 1, edit: true });
+              justSaved = key;
+            } else {
+              if (!a) return;
+              const key = `own_${Date.now()}`;
+              OWN.unshift({ key, title: title || "A note", text: a, date: "Written today" });
+              justSaved = key;
+            }
+            close();
+            render();
+            justSaved = null;
+          }
+        });
+        $("read-code").addEventListener("click", readCode);
+        $("follow").addEventListener("click", () => {
+          step = 0;
+          follow();
+        });
+        $("write").addEventListener("click", write);
+        $("more-rules").addEventListener("click", () => {
+          allRules = !allRules;
+          render();
+        });
+        $("search").addEventListener("input", (e) => {
+          query = e.target.value.trim();
+          render();
+        });
+        $("scrim").addEventListener("click", close);
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") close();
+        });
+        const scroller = $("scroller");
+        const status = document.querySelector(".app-screen > .status");
+        scroller.addEventListener("scroll", () => status.classList.toggle("solid", scroller.scrollTop > 180), { passive: true });
+
+        render();
+        const params = new URLSearchParams(location.search);
+        if (params.has("focus")) requestAnimationFrame(() => (scroller.scrollTop = Number(params.get("focus")) || 380));
+      })();
+    </script>
+  </body>
+</html>

@@ -132,6 +132,17 @@
     ]
   },
   {
+    "id": "51-notes",
+    "title": "Notes",
+    "group": "tools",
+    "summary": "The Tools tab renamed Notes: your own words, set out by the moment each is for",
+    "primary_label": "Write a note",
+    "notes": [
+      "Concept replacement for My tools (35). Only the name the user sees changes: the tab, heading and buttons say Notes; the API (/v1/inventory) and the code keep tool. Paper glass over the eye painting, which scrolls away with the heading; search and moment chips filter the page.",
+      "Sections by use: Read before you trade (lines numbered I, II, III, and a reading sheet), When the urge comes (steps as a thread, a weekly count with no streak, Follow my plan), Rules you keep (When set apart, and which check asks it), Where you started (records with art and their day), Written by you. Notes never hold a trade, a price or an amount. No backend change."
+    ]
+  },
+  {
     "id": "10-secure-base",
     "title": "Secure your base",
     "group": "foundations",
