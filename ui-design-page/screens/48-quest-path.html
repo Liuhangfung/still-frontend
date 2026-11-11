@@ -1,0 +1,1237 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" href="data:," />
+    <title>Still — Quest · path</title>
+    <script src="../shared/preview.js" defer></script>
+    <link rel="stylesheet" href="../shared/screens.css" />
+    <style>
+      .app-screen {
+        position: relative;
+      }
+      .app-screen > .status {
+        position: absolute;
+        inset: 0 0 auto;
+        z-index: 4;
+        color: var(--ivory);
+        transition:
+          background 0.2s,
+          color 0.2s;
+      }
+      .app-screen > .status.solid {
+        background: var(--ivory);
+        color: var(--ink);
+        box-shadow: 0 1px 0 var(--line);
+      }
+      .screen-content {
+        padding-top: 0;
+      }
+
+      /* hero: the quest's painting, title on the art */
+      .hero {
+        position: relative;
+        margin: 0 -21px;
+        height: 318px;
+        background: url("../assets/art/today.jpg") 50% 30% / cover;
+        color: var(--ivory);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 0 21px 50px;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          #20201d8c 0%,
+          #20201d14 22%,
+          #20201d80 50%,
+          #20201de8 100%
+        );
+      }
+      .hero > * {
+        position: relative;
+      }
+      .hero-top {
+        position: absolute;
+        top: 44px;
+        left: 16px;
+        right: 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .chip-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        min-height: 36px;
+        padding: 0 12px 0 8px;
+        border-radius: 999px;
+        border: 0;
+        background: #f5f2ebe0;
+        color: var(--ink);
+        font: 600 13px var(--sans);
+        backdrop-filter: blur(8px);
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .chip-button .icon {
+        width: 16px;
+        height: 16px;
+      }
+      .hero-stat {
+        font: 700 10px var(--sans);
+        letter-spacing: 1.3px;
+        text-transform: uppercase;
+        background: #20201d99;
+        color: #cdb27f;
+        border-radius: 999px;
+        padding: 6px 10px;
+        backdrop-filter: blur(8px);
+      }
+      .hero .kicker {
+        font: 700 10px var(--sans);
+        letter-spacing: 1.6px;
+        text-transform: uppercase;
+        color: #d9c08c;
+        margin: 0 0 6px;
+        text-shadow: 0 1px 6px #20201d;
+      }
+      .hero h1 {
+        font: 500 40px/0.98 var(--serif);
+        margin: 0 0 8px;
+        letter-spacing: -0.5px;
+        text-shadow: 0 2px 14px #20201d99;
+      }
+      .hero .goal {
+        margin: 0;
+        font-size: 13px;
+        line-height: 1.45;
+        color: #f5f2ebd9;
+        max-width: 31ch;
+      }
+      .hero-progress {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 14px;
+        font-size: 11px;
+        color: #f5f2ebcc;
+      }
+      .hero-progress .dashes {
+        display: flex;
+        gap: 4px;
+        flex: 1;
+      }
+      .hero-progress .dashes span {
+        flex: 1;
+        height: 3px;
+        border-radius: 2px;
+        background: #f5f2eb40;
+      }
+      .hero-progress .dashes span.done {
+        background: #cdb27f;
+      }
+
+      /* the coach's line, an epigraph lifted onto the art */
+      .epigraph {
+        position: relative;
+        margin: -30px 0 18px;
+        background: #faf8f2;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 14px 16px 12px 18px;
+        box-shadow: 0 10px 24px #20201d14;
+      }
+      .epigraph::before {
+        content: "“";
+        position: absolute;
+        left: 12px;
+        top: -6px;
+        font: 500 54px/1 var(--serif);
+        color: var(--gold);
+      }
+      .epigraph q {
+        display: block;
+        quotes: none;
+        font: italic 400 19px/1.25 var(--serif);
+        padding-left: 14px;
+      }
+      .epigraph small {
+        display: block;
+        padding-left: 14px;
+        margin-top: 6px;
+        font-size: 10px;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      /* Full / Short */
+      .version {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 4px;
+      }
+      .version h2 {
+        font: 500 22px/1.1 var(--serif);
+        margin: 0;
+      }
+      .segmented.compact {
+        margin: 0;
+        flex: none;
+        flex-wrap: nowrap;
+      }
+      .segmented.compact label {
+        min-width: 0;
+      }
+      .segmented.compact span {
+        min-height: 30px;
+        padding: 5px 9px;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+      .version-note {
+        font-size: 11px;
+        color: var(--muted);
+        margin: 0 0 14px;
+        min-height: 16px;
+      }
+
+      /* the path */
+      .path {
+        list-style: none;
+        margin: 0 0 22px;
+        padding: 0;
+        position: relative;
+      }
+      .stop {
+        position: relative;
+        display: grid;
+        grid-template-columns: 34px 1fr;
+        gap: 10px;
+        padding-bottom: 14px;
+      }
+      .stop::before {
+        content: "";
+        position: absolute;
+        left: 16px;
+        top: 30px;
+        bottom: -2px;
+        width: 2px;
+        background: repeating-linear-gradient(180deg, #cfc6b4 0 4px, transparent 4px 8px);
+      }
+      .stop:last-child::before {
+        display: none;
+      }
+      .stop.done::before {
+        background: var(--gold);
+      }
+      .node {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font: 600 13px var(--sans);
+        background: var(--ivory);
+        border: 1.5px solid #c9c0ae;
+        color: var(--muted);
+        position: relative;
+        z-index: 1;
+      }
+      .done .node {
+        background: var(--gold);
+        border-color: var(--gold);
+        color: #fff;
+      }
+      .done .node .icon {
+        width: 16px;
+        height: 16px;
+        stroke-width: 2.6;
+      }
+      .next .node {
+        background: var(--ink);
+        border-color: var(--ink);
+        color: var(--ivory);
+        box-shadow: 0 0 0 5px #b69a6433;
+      }
+      .stop-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 44px;
+        padding: 2px 4px 2px 0;
+        border: 0;
+        background: none;
+        width: 100%;
+        text-align: left;
+        cursor: pointer;
+        color: inherit;
+        font: inherit;
+      }
+      .stop-row .text {
+        flex: 1;
+        min-width: 0;
+      }
+      .stop-row strong {
+        display: block;
+        font: 500 17px/1.2 var(--serif);
+      }
+      .stop-row small {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .done .stop-row strong {
+        color: #59554f;
+      }
+      .stop-row .chev {
+        width: 16px;
+        height: 16px;
+        color: #a39c8f;
+        flex: none;
+      }
+      .how {
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+      }
+      .how .icon {
+        width: 12px;
+        height: 12px;
+      }
+      .xp {
+        color: #76654b;
+        font-weight: 600;
+      }
+      .stop.skipped {
+        opacity: 0.42;
+      }
+      .stop.skipped .stop-row {
+        cursor: default;
+      }
+
+      /* the stop you're on: a card with its own painting */
+      .next-card {
+        border-radius: 18px;
+        overflow: hidden;
+        background: #faf8f2;
+        border: 1px solid #d9cdb4;
+        box-shadow: 0 12px 26px #20201d17;
+        margin-top: -2px;
+      }
+      .next-art {
+        height: 96px;
+        background: url("../assets/art/task.jpg") 42% 38% / cover;
+        position: relative;
+      }
+      .next-art .pill {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        background: #20201dcc;
+        color: #cdb27f;
+        border-radius: 999px;
+        padding: 4px 9px;
+        font: 700 9px var(--sans);
+        letter-spacing: 1.3px;
+        text-transform: uppercase;
+      }
+      .next-body {
+        padding: 12px 14px 14px;
+      }
+      .next-body h3 {
+        font: 500 22px/1.08 var(--serif);
+        margin: 0 0 4px;
+      }
+      .next-body p {
+        margin: 0 0 10px;
+        font-size: 12.5px;
+        line-height: 1.45;
+        color: #59554f;
+      }
+      .next-body .meta {
+        display: flex;
+        gap: 10px;
+        font-size: 11px;
+        color: var(--muted);
+        margin-bottom: 12px;
+      }
+      .begin {
+        width: 100%;
+        min-height: 44px;
+        border: 0;
+        border-radius: 12px;
+        background: var(--ink);
+        color: var(--ivory);
+        font: 600 14px var(--sans);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        cursor: pointer;
+      }
+      .begin .icon {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* what you take away */
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin: 6px 0 10px;
+      }
+      .section-head h2 {
+        font: 500 22px/1.1 var(--serif);
+        margin: 0;
+      }
+      .section-head span {
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .relics {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+      .relic {
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        background: #faf8f2;
+        position: relative;
+      }
+      .relic-art {
+        height: 86px;
+        background-size: cover;
+        filter: grayscale(0.85) brightness(0.92);
+        transition: filter 0.6s;
+      }
+      .relic.earned .relic-art {
+        filter: none;
+      }
+      .relic-lock {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: #f5f2ebe6;
+        display: grid;
+        place-items: center;
+      }
+      .relic-lock .icon {
+        width: 13px;
+        height: 13px;
+      }
+      .relic.earned .relic-lock {
+        background: var(--gold);
+        color: #fff;
+      }
+      .relic-body {
+        padding: 9px 11px 11px;
+      }
+      .relic-body small {
+        display: block;
+        font: 700 9px var(--sans);
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: #76654b;
+        margin-bottom: 2px;
+      }
+      .relic-body strong {
+        font: 500 16px/1.15 var(--serif);
+      }
+      .reward-line {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border-radius: 14px;
+        padding: 12px 14px;
+        background: #efe7d6;
+        border: 1px solid #dccca9;
+        margin-bottom: 10px;
+      }
+      .laurel {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: var(--gold);
+        color: #fff;
+        display: grid;
+        place-items: center;
+        font: 600 12px var(--sans);
+        flex: none;
+      }
+      .reward-line p {
+        margin: 0;
+        font-size: 12px;
+        line-height: 1.35;
+        color: #59554f;
+      }
+      .reward-line b {
+        color: var(--ink);
+        font-weight: 600;
+      }
+      .side-quest {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border: 1px dashed #c9bda4;
+        border-radius: 14px;
+        padding: 11px 14px;
+        margin-bottom: 8px;
+        font-size: 12px;
+        color: #59554f;
+      }
+      .side-quest strong {
+        display: block;
+        color: var(--ink);
+        font: 500 15px/1.2 var(--serif);
+      }
+
+      /* dock */
+      .quest-dock {
+        border-top: 0;
+        padding-top: 8px;
+      }
+      .continue {
+        width: 100%;
+        min-height: 54px;
+        border: 0;
+        border-radius: 14px;
+        background: var(--ink);
+        color: var(--ivory);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0 8px 0 16px;
+        text-align: left;
+        cursor: pointer;
+        font: inherit;
+      }
+      .continue .text {
+        flex: 1;
+        min-width: 0;
+      }
+      .continue small {
+        display: block;
+        font: 700 9.5px var(--sans);
+        letter-spacing: 1.3px;
+        text-transform: uppercase;
+        color: #cdb27f;
+      }
+      .continue strong {
+        display: block;
+        font: 500 17px/1.2 var(--serif);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .continue .go {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: var(--ivory);
+        color: var(--ink);
+        display: grid;
+        place-items: center;
+        flex: none;
+      }
+      .continue .go .icon {
+        width: 18px;
+        height: 18px;
+      }
+      .continue.finish {
+        background: var(--gold);
+        color: #fff;
+      }
+      .continue.finish small {
+        color: #fff;
+        opacity: 0.85;
+      }
+
+      /* sheets */
+      .scrim {
+        position: absolute;
+        inset: 0;
+        background: #20201d55;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s;
+        z-index: 5;
+      }
+      .scrim.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .sheet {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        max-height: 90%;
+        overflow-y: auto;
+        background: var(--ivory);
+        border-radius: 24px 24px 0 0;
+        padding: 10px 22px 26px;
+        transform: translateY(105%);
+        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        z-index: 6;
+      }
+      .sheet.open {
+        transform: none;
+      }
+      .grabber {
+        width: 38px;
+        height: 5px;
+        border-radius: 3px;
+        background: #cbc5ba;
+        margin: 0 auto 12px;
+      }
+      .sheet h2 {
+        font: 500 28px/1.05 var(--serif);
+        margin: 2px 0 8px;
+      }
+      .sheet .lead {
+        margin-bottom: 12px;
+      }
+      .example {
+        border-left: 2px solid var(--gold);
+        padding-left: 12px;
+        margin: 10px 0 16px;
+        font-size: 12.5px;
+        color: #59554f;
+      }
+      .example b {
+        display: block;
+        font-size: 10px;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: #76654b;
+        margin-bottom: 2px;
+      }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: 0 0 14px;
+        padding: 0;
+        border: 0;
+      }
+      .tags legend {
+        font-weight: 600;
+        font-size: 13px;
+        margin-bottom: 8px;
+      }
+      .tags label {
+        position: relative;
+      }
+      .tags input {
+        position: absolute;
+        opacity: 0;
+      }
+      .tags span {
+        display: inline-flex;
+        align-items: center;
+        min-height: 36px;
+        padding: 0 12px;
+        border-radius: 999px;
+        border: 1px solid #cfc8bb;
+        background: #faf8f3;
+        font-size: 12.5px;
+        cursor: pointer;
+      }
+      .tags input:checked + span {
+        background: var(--ink);
+        border-color: var(--ink);
+        color: var(--ivory);
+      }
+      .tags input:focus-visible + span {
+        outline: 2px solid var(--gold);
+        outline-offset: 2px;
+      }
+      .sheet-actions {
+        display: grid;
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .sheet .private {
+        font-size: 11px;
+        color: var(--muted);
+        margin: 0;
+      }
+      .receipt-art {
+        height: 140px;
+        border-radius: 16px;
+        background: url("../assets/art/today.jpg") 50% 30% / cover;
+        margin-bottom: 14px;
+        position: relative;
+        overflow: hidden;
+      }
+      .receipt-art::after {
+        content: "+60 EMO";
+        position: absolute;
+        right: 12px;
+        bottom: 12px;
+        background: var(--gold);
+        color: #fff;
+        font: 700 12px var(--sans);
+        border-radius: 999px;
+        padding: 6px 10px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .sheet,
+        .scrim,
+        .relic-art {
+          transition: opacity 0.2s;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <svg aria-hidden="true" class="sr-only" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <symbol id="i-arrow" viewbox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6"></path></symbol>
+        <symbol id="i-chevron" viewbox="0 0 24 24"><path d="m9 6 6 6-6 6"></path></symbol>
+        <symbol id="i-back" viewbox="0 0 24 24"><path d="m15 5-7 7 7 7"></path></symbol>
+        <symbol id="i-check" viewbox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></symbol>
+        <symbol id="i-lock" viewbox="0 0 24 24">
+          <rect x="5" y="11" width="14" height="9" rx="2"></rect>
+          <path d="M8 11V8a4 4 0 0 1 8 0v3"></path>
+        </symbol>
+        <symbol id="i-tap" viewbox="0 0 24 24">
+          <path d="M9 11V5a2 2 0 0 1 4 0v6m0-1a2 2 0 0 1 4 0v4c0 4-3 7-6 7s-5-2-6-4l-2-4a2 2 0 0 1 3-2l2 2"></path>
+        </symbol>
+        <symbol id="i-pen" viewbox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4ZM13 7l4 4"></path></symbol>
+        <symbol id="i-read" viewbox="0 0 24 24">
+          <path d="M12 5C8 2 5 3 3 4v16c3-2 6-1 9 1 3-2 6-3 9-1V4c-2-1-5-2-9 1Zm0 0v16"></path>
+        </symbol>
+        <symbol id="i-note" viewbox="0 0 24 24">
+          <path d="M6 3h12v18H6zM9 7h6M9 11h6M9 15h4"></path>
+        </symbol>
+        <symbol id="i-sun" viewbox="0 0 24 24">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path
+            d="M12 2v2M12 20v2M2 12h2M20 12h2m-3-9-1.5 1.5M6.5 17.5 5 19m14 0-1.5-1.5M6.5 6.5 5 5"
+          ></path>
+        </symbol>
+        <symbol id="i-book" viewbox="0 0 24 24">
+          <path d="M12 5C8 2 5 3 3 4v16c3-2 6-1 9 1 3-2 6-3 9-1V4c-2-1-5-2-9 1Zm0 0v16"></path>
+        </symbol>
+        <symbol id="i-log" viewbox="0 0 24 24">
+          <path d="M8 5h12M8 12h12M8 19h12M4 5h.01M4 12h.01M4 19h.01"></path>
+        </symbol>
+        <symbol id="i-tools" viewbox="0 0 24 24">
+          <path d="M12 20s-5-3-5-8C7 6 15 3 21 3c0 8-2 16-9 17Zm-7 2L18 7"></path>
+        </symbol>
+        <symbol id="i-user" viewbox="0 0 24 24">
+          <circle cx="12" cy="8" r="4"></circle>
+          <path d="M4 21c0-5 3-7 8-7s8 2 8 7Z"></path>
+        </symbol>
+        <symbol id="i-signal" viewbox="0 0 24 24">
+          <path d="M4 20v-4M9 20v-8M14 20V8M19 20V4"></path>
+        </symbol>
+        <symbol id="i-wifi" viewbox="0 0 24 24">
+          <path d="M3 8a15 15 0 0 1 18 0M6 12a10 10 0 0 1 12 0M9 16a5 5 0 0 1 6 0M12 20h.01"></path>
+        </symbol>
+        <symbol id="i-battery" viewbox="0 0 24 24">
+          <rect height="12" rx="3" width="17" x="2" y="6"></rect>
+          <path d="M22 10v4"></path>
+          <rect fill="currentColor" height="6" rx="1" stroke="none" width="11" x="5" y="9"></rect>
+        </symbol>
+      </defs>
+    </svg>
+    <header class="review-top">
+      <div>
+        <h1>48 / Quest · path</h1>
+        <p>
+          A redesign of the quest overview (screen 09). Tap the up-next card to open an objective,
+          mark it done, and watch the path move on. Try Short. Nothing is saved.
+        </p>
+      </div>
+      <nav class="review-links" aria-label="Design review navigation">
+        <a href="../index.html">All screens</a
+        ><a href="09-quest-overview.html">Current quest (list)</a>
+      </nav>
+    </header>
+    <main class="preview-layout">
+      <div class="phone">
+        <section class="app-screen" aria-label="Quest: Inside the Urge">
+          <div class="status" aria-hidden="true">
+            <span>9:41</span
+            ><span class="status-icons"
+              ><svg class="icon"><use href="#i-signal" /></svg
+              ><svg class="icon"><use href="#i-wifi" /></svg
+              ><svg class="icon battery"><use href="#i-battery" /></svg
+            ></span>
+          </div>
+          <div class="screen-content" id="scroller">
+            <section class="hero" aria-labelledby="quest-title">
+              <div class="hero-top">
+                <a class="chip-button" href="47-routine-deck.html"
+                  ><svg class="icon" aria-hidden="true"><use href="#i-back" /></svg>Today</a
+                >
+                <span class="hero-stat">EMO day</span>
+              </div>
+              <p class="kicker">Chapter 1 · Day 5 · Main quest</p>
+              <h1 id="quest-title">Inside the Urge</h1>
+              <p class="goal">
+                What your urge to trade is made of, and your own plan for when it comes.
+              </p>
+              <div class="hero-progress">
+                <div class="dashes" id="dashes" aria-hidden="true"></div>
+                <span id="hero-count">2 of 5</span>
+              </div>
+            </section>
+
+            <figure class="epigraph">
+              <q>An urge is not an order. Today we open it up and see what's inside.</q>
+              <small>Your coach</small>
+            </figure>
+
+            <section aria-labelledby="path-title">
+              <div class="version">
+                <h2 id="path-title">Your path</h2>
+                <fieldset class="segmented compact">
+                  <legend class="sr-only">Quest version</legend>
+                  <label
+                    ><input type="radio" name="version" value="full" checked /><span
+                      >Full · 15 min</span
+                    ></label
+                  >
+                  <label
+                    ><input type="radio" name="version" value="short" /><span
+                      >Short · 5 min</span
+                    ></label
+                  >
+                </fieldset>
+              </div>
+              <p class="version-note" id="version-note" aria-live="polite"></p>
+              <ol class="path" id="path"></ol>
+            </section>
+
+            <section aria-labelledby="takeaway-title">
+              <div class="section-head">
+                <h2 id="takeaway-title">You'll take away</h2>
+                <span>Saved to Tools</span>
+              </div>
+              <div class="relics">
+                <div class="relic" id="relic-profile">
+                  <div
+                    class="relic-art"
+                    style="background-image: url('../assets/art/thumb2.jpg')"
+                  ></div>
+                  <span class="relic-lock" aria-hidden="true"
+                    ><svg class="icon"><use href="#i-lock" /></svg
+                  ></span>
+                  <div class="relic-body">
+                    <small>Profile</small><strong>My Urge Profile</strong>
+                  </div>
+                </div>
+                <div class="relic" id="relic-plan">
+                  <div
+                    class="relic-art"
+                    style="background-image: url('../assets/art/thumb3.jpg')"
+                  ></div>
+                  <span class="relic-lock" aria-hidden="true"
+                    ><svg class="icon"><use href="#i-lock" /></svg
+                  ></span>
+                  <div class="relic-body">
+                    <small>Plan</small><strong>My Urge Plan</strong>
+                  </div>
+                </div>
+              </div>
+              <div class="reward-line">
+                <span class="laurel" aria-hidden="true">EMO</span>
+                <p>
+                  <b id="xp-line">Up to 60 EMO</b> for showing up: 10 per step, 10 for finishing.
+                  Participation, not trading skill.
+                </p>
+              </div>
+              <div class="side-quest">
+                <div>
+                  <strong>Side quest · Say it in one sentence</strong>
+                  Explain your urge story to a friend, or your notebook. +10 EMO, optional.
+                </div>
+              </div>
+              <p class="caption">No real-money trade needed. Private writing stays on your phone.</p>
+            </section>
+          </div>
+          <footer class="action-dock quest-dock">
+            <button type="button" class="continue" id="continue">
+              <span class="text"><small id="continue-kicker"></small><strong id="continue-title"></strong></span>
+              <span class="go" aria-hidden="true"
+                ><svg class="icon"><use href="#i-arrow" /></svg
+              ></span>
+            </button>
+          </footer>
+          <nav class="bottom-tabs" aria-label="App preview navigation">
+            <a class="tab active" href="47-routine-deck.html" aria-current="page"
+              ><svg class="icon" aria-hidden="true"><use href="#i-sun" /></svg>Today</a
+            ><a class="tab" href="34-stats.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-book" /></svg>Journey</a
+            ><a class="tab" href="43-log-calendar.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-log" /></svg>Log</a
+            ><a class="tab" href="35-inventory.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-tools" /></svg>Tools</a
+            ><a class="tab" href="46-profile-settings.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-user" /></svg>Me</a
+            >
+          </nav>
+          <div class="home-indicator" aria-hidden="true"></div>
+
+          <div class="scrim" id="scrim"></div>
+          <div class="sheet" id="sheet" inert role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+            <div class="grabber" aria-hidden="true"></div>
+            <div id="sheet-body"></div>
+          </div>
+        </section>
+      </div>
+      <aside class="reference-panel">
+        <h2>Why it changes</h2>
+        <p>
+          Screen 09 reads like a worksheet: a heading, a radio, a numbered list, a "You'll make"
+          list. Same content here, shaped like a quest: a place (the painting), a voice (the coach),
+          a road (the steps) and something to carry home (the tools).
+        </p>
+        <details open>
+          <summary>What's on the screen</summary>
+          <ul>
+            <li>
+              <b>Painted hero.</b> The quest's painting full-bleed, with the title on the art, the
+              goal in one line and gold dashes for progress. The back chip floats on the art.
+            </li>
+            <li>
+              <b>The coach's line</b> as an epigraph card lifted onto the painting, not a grey
+              aside.
+            </li>
+            <li>
+              <b>Your path.</b> Steps on a gold trail. Done steps get a gold tick and a solid line;
+              the step you're on opens into a card with its own crop, the instructions in two lines
+              and one Begin button; later steps stay quiet. How each is answered shows as an icon:
+              read, tap, write, or notebook.
+            </li>
+            <li>
+              <b>Short</b> fades the steps it leaves out ("Not in Short") instead of hiding them,
+              so the path keeps its shape.
+            </li>
+            <li>
+              <b>You'll take away</b> shows the two tools as framed, greyed paintings with a lock.
+              Finishing colours them in and swaps the lock for a tick.
+            </li>
+            <li>
+              <b>The dock</b> names the next step ("Up next · Find your urge story"), and turns gold
+              as "Finish quest" once every step is done.
+            </li>
+          </ul>
+        </details>
+        <details open>
+          <summary>Rules kept</summary>
+          <ul>
+            <li>
+              Opening a step never completes it; reading never counts as doing. Steps can be done
+              in any order: every row opens, only the highlight follows the first open one.
+            </li>
+            <li>
+              XP is described as "up to" and participation only; the finish receipt shows what the
+              server actually paid.
+            </li>
+            <li>
+              Notebook steps still offer the app: writing stays on the phone, end-to-end encrypted
+              if synced.
+            </li>
+          </ul>
+        </details>
+        <details open>
+          <summary>In the iOS app</summary>
+          <ul>
+            <li>
+              Reuses <code>ArtCrop</code>, the art scrim colours and the painted resume bar from
+              screen 47. The objective screen itself (fields) is unchanged in this pass.
+            </li>
+            <li>
+              The trail and nodes are decoration: VoiceOver reads each step as "Step 3 of 5, Find
+              your urge story, 3 minutes, in app, not done". Status is never colour alone (tick,
+              number, words).
+            </li>
+            <li>No backend change: everything here is already in the quest payload.</li>
+          </ul>
+        </details>
+      </aside>
+    </main>
+    <p class="preview-notice">
+      Design preview only. Nothing is saved or sent and no XP is awarded. Artwork is concept-only
+      pending production rights clearance.
+    </p>
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+    <script>
+      (() => {
+        const how = {
+          read: { icon: "i-read", label: "Read" },
+          tap: { icon: "i-tap", label: "Tap" },
+          write: { icon: "i-pen", label: "In app" },
+          notebook: { icon: "i-note", label: "Notebook or app" },
+        };
+        const steps = [
+          {
+            key: "urge_card",
+            title: "What an urge is made of",
+            min: 2,
+            how: "read",
+            short: false,
+            art: "50% 30%",
+            text: "Read one card. Trigger → story → feeling → body → the real need → the action. You can notice an urge and not obey it.",
+            example:
+              "Big green candle → “It's going without me!” → panic → thumb on the app → need: not to feel left behind → buy.",
+          },
+          {
+            key: "take_apart",
+            title: "Take apart one real urge",
+            min: 4,
+            how: "notebook",
+            short: true,
+            art: "20% 40%",
+            text: "Pick one recent urge. Write its five parts: trigger · thought · feeling · body · what I really wanted.",
+            example:
+              "Lost a trade at 23:30. “I can win it back in 10 minutes.” Angry, hot. Couldn't put the phone down. Wanted: to not feel stupid.",
+          },
+          {
+            key: "urge_story",
+            title: "Find your urge story and real need",
+            min: 3,
+            how: "tap",
+            short: false,
+            art: "42% 38%",
+            text: "Tap the thoughts that come up most when you want to trade, then the real need behind them.",
+            example: "“I'll win it back quickly” + “It'll go up without me”. Need: relief after a loss. Fact or guess: guess.",
+            tags: [
+              "“It'll go up without me”",
+              "“I'll win it back quickly”",
+              "“Just a small one”",
+              "“This time is different”",
+              "“Everyone's making money”",
+            ],
+          },
+          {
+            key: "urge_plan",
+            title: "Design your Urge Plan",
+            min: 4,
+            how: "write",
+            short: true,
+            art: "80% 35%",
+            text: "Two to four steps to follow when the urge comes: name the story, check your rule, delay the decision.",
+            example: "1. Name it: that's the win-it-back voice. 2. Check: does this break my No-Trade Week? 3. Write it down, wait 10 minutes.",
+          },
+          {
+            key: "catch_live",
+            title: "Catch one live",
+            min: 2,
+            how: "tap",
+            short: false,
+            art: "65% 60%",
+            text: "Next time an urge comes today, follow your plan. In the evening, tap how it went. “No urge today” counts too.",
+            example: "22:50, after a pump post. Named it, wrote it down, waited. Gone by 23:10.",
+          },
+        ];
+        const done = new Set(["urge_card", "take_apart"]);
+        let short = false;
+
+        const path = document.getElementById("path");
+        const sheet = document.getElementById("sheet");
+        const sheetBody = document.getElementById("sheet-body");
+        const scrim = document.getElementById("scrim");
+        const cont = document.getElementById("continue");
+        let lastFocus = null;
+
+        const inSet = (s) => !short || s.short;
+        const set = () => steps.filter(inSet);
+        const next = () => set().find((s) => !done.has(s.key));
+        const icon = (id) => `<svg class="icon" aria-hidden="true"><use href="#${id}" /></svg>`;
+
+        function render() {
+          const active = set();
+          const doneCount = active.filter((s) => done.has(s.key)).length;
+          const up = next();
+
+          document.getElementById("dashes").innerHTML = active
+            .map((s) => `<span class="${done.has(s.key) ? "done" : ""}"></span>`)
+            .join("");
+          document.getElementById("hero-count").textContent = `${doneCount} of ${active.length}`;
+          document.getElementById("version-note").textContent = short
+            ? "Short keeps steps 2 and 4. The others stay on the path, faded."
+            : "Any order works. The highlight follows the first open step.";
+          document.getElementById("xp-line").textContent = `Up to ${active.length * 10 + 10} EMO`;
+
+          path.innerHTML = steps
+            .map((s, i) => {
+              const isDone = done.has(s.key);
+              const skipped = !inSet(s);
+              const isNext = up && s.key === up.key;
+              const h = how[s.how];
+              const meta = `<span>${s.min} min</span><span class="how">${icon(h.icon)}${h.label}</span>${
+                isDone ? '<span class="xp">+10 EMO</span>' : ""
+              }${skipped ? "<span>Not in Short</span>" : ""}`;
+              const node = `<span class="node" aria-hidden="true">${isDone ? icon("i-check") : i + 1}</span>`;
+              const state = isDone ? "done" : "not done";
+              if (isNext) {
+                return `<li class="stop next">${node}
+                  <div class="next-card">
+                    <div class="next-art" style="background-position:${s.art}"><span class="pill">Up next · step ${i + 1}</span></div>
+                    <div class="next-body">
+                      <h3>${s.title}</h3>
+                      <p>${s.text}</p>
+                      <div class="meta">${meta}</div>
+                      <button type="button" class="begin" data-open="${s.key}"
+                        aria-label="Begin step ${i + 1} of ${steps.length}: ${s.title}">Begin${icon("i-arrow")}</button>
+                    </div>
+                  </div></li>`;
+              }
+              return `<li class="stop ${isDone ? "done" : ""} ${skipped ? "skipped" : ""}">${node}
+                <button type="button" class="stop-row" data-open="${s.key}" ${skipped ? "disabled" : ""}
+                  aria-label="Step ${i + 1} of ${steps.length}, ${s.title}, ${s.min} minutes, ${h.label}, ${skipped ? "not in Short" : state}">
+                  <span class="text"><strong>${s.title}</strong><small>${meta}</small></span>
+                  ${skipped ? "" : `<svg class="icon chev" aria-hidden="true"><use href="#i-chevron" /></svg>`}
+                </button></li>`;
+            })
+            .join("");
+
+          const allDone = !up;
+          cont.classList.toggle("finish", allDone);
+          document.getElementById("continue-kicker").textContent = allDone
+            ? `All ${active.length} steps done`
+            : doneCount === 0
+              ? `Start · step ${steps.indexOf(up) + 1} of ${steps.length}`
+              : `Up next · step ${steps.indexOf(up) + 1} of ${steps.length}`;
+          document.getElementById("continue-title").textContent = allDone
+            ? "Finish quest"
+            : up.title;
+          cont.setAttribute(
+            "aria-label",
+            allDone ? "Finish quest" : `Continue with ${up.title}`,
+          );
+        }
+
+        function openSheet(html) {
+          lastFocus = document.activeElement;
+          sheetBody.innerHTML = html;
+          sheet.inert = false;
+          sheet.classList.add("open");
+          scrim.classList.add("open");
+          sheet.querySelector("button, input")?.focus({ preventScroll: true });
+        }
+        function closeSheet() {
+          sheet.classList.remove("open");
+          scrim.classList.remove("open");
+          sheet.inert = true;
+          lastFocus?.focus?.({ preventScroll: true });
+        }
+
+        function openStep(key) {
+          const s = steps.find((x) => x.key === key);
+          const i = steps.indexOf(s);
+          const isDone = done.has(key);
+          const h = how[s.how];
+          const tags = s.tags
+            ? `<fieldset class="tags"><legend>Your most common urge stories</legend>${s.tags
+                .map((t) => `<label><input type="checkbox" /><span>${t}</span></label>`)
+                .join("")}</fieldset>`
+            : "";
+          const privateNote =
+            s.how === "notebook"
+              ? `<p class="private">Write it in your notebook, or here: in-app writing stays on this phone.</p>`
+              : "";
+          openSheet(`
+            <p class="eyebrow">Step ${i + 1} of ${steps.length} · ${s.min} min · ${h.label}</p>
+            <h2 id="sheet-title">${s.title}</h2>
+            <p class="lead">${s.text}</p>
+            <div class="example"><b>For example</b>${s.example}</div>
+            ${tags}${privateNote}
+            <div class="sheet-actions">
+              ${
+                isDone
+                  ? `<button type="button" class="secondary" data-act="close">Close</button>`
+                  : `<button type="button" class="primary" data-act="done" data-key="${key}">Mark done</button>
+                     <button type="button" class="secondary" data-act="close">Not now</button>`
+              }
+            </div>`);
+        }
+
+        function openFinish() {
+          openSheet(`
+            <div class="receipt-art" aria-hidden="true"></div>
+            <p class="eyebrow">Quest finished</p>
+            <h2 id="sheet-title">Inside the Urge.</h2>
+            <p class="lead">My Urge Profile and My Urge Plan are in Tools. An Urge button stays on Today from now on.</p>
+            <p class="private">In the app the receipt shows what the server paid; this preview awards nothing.</p>
+            <div class="sheet-actions">
+              <button type="button" class="primary" data-act="close">Back to Today</button>
+            </div>`);
+          for (const id of ["relic-profile", "relic-plan"]) {
+            const relic = document.getElementById(id);
+            relic.classList.add("earned");
+            relic.querySelector(".relic-lock use").setAttribute("href", "#i-check");
+          }
+        }
+
+        path.addEventListener("click", (e) => {
+          const b = e.target.closest("[data-open]");
+          if (b && !b.disabled) openStep(b.dataset.open);
+        });
+        sheet.addEventListener("click", (e) => {
+          const b = e.target.closest("[data-act]");
+          if (!b) return;
+          if (b.dataset.act === "done") {
+            done.add(b.dataset.key);
+            closeSheet();
+            render();
+            const target = path.querySelector(".next") ?? path.lastElementChild;
+            target?.scrollIntoView({ block: "center", behavior: "smooth" });
+            cont.focus({ preventScroll: true });
+          } else closeSheet();
+        });
+        scrim.addEventListener("click", closeSheet);
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && sheet.classList.contains("open")) closeSheet();
+        });
+        cont.addEventListener("click", () => {
+          const up = next();
+          if (up) openStep(up.key);
+          else openFinish();
+        });
+        document.querySelectorAll('input[name="version"]').forEach((r) =>
+          r.addEventListener("change", () => {
+            short = r.value === "short" && r.checked;
+            render();
+          }),
+        );
+        const scroller = document.getElementById("scroller");
+        const status = document.querySelector(".app-screen > .status");
+        scroller.addEventListener(
+          "scroll",
+          () => status.classList.toggle("solid", scroller.scrollTop > 250),
+          { passive: true },
+        );
+        render();
+      })();
+    </script>
+  </body>
+</html>

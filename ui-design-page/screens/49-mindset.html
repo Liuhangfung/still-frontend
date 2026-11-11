@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" href="data:," />
+    <title>Still — Mindset</title>
+    <script src="../shared/preview.js" defer></script>
+    <link rel="stylesheet" href="../shared/screens.css" />
+    <style>
+      .app-screen {
+        position: relative;
+      }
+      .app-screen > .status {
+        position: absolute;
+        inset: 0 0 auto;
+        z-index: 4;
+        color: var(--ivory);
+        transition:
+          background 0.2s,
+          color 0.2s;
+      }
+      .app-screen > .status.solid {
+        background: var(--ivory);
+        color: var(--ink);
+        box-shadow: 0 1px 0 var(--line);
+      }
+      .screen-content {
+        padding-top: 0;
+      }
+      h2.section {
+        font: 500 22px/1.1 var(--serif);
+        margin: 0;
+      }
+      .section-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        margin: 30px 0 4px;
+      }
+      .section-head span {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .section-lead {
+        margin: 0 0 14px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      /* hero: today's line, set on the painting like a frontispiece */
+      .hero {
+        position: relative;
+        margin: 0 -21px;
+        min-height: 400px;
+        background: url("../assets/art/journey.jpg") 50% 35% / cover;
+        color: var(--ivory);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 0 24px 46px;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          #20201d8c 0%,
+          #20201d10 24%,
+          #20201d73 52%,
+          #20201df0 100%
+        );
+      }
+      .hero > * {
+        position: relative;
+      }
+      .hero .kicker {
+        font: 700 10px var(--sans);
+        letter-spacing: 1.6px;
+        text-transform: uppercase;
+        color: #d9c08c;
+        margin: 0 0 40px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .hero .kicker::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #d9c08c66;
+      }
+      .hero blockquote {
+        margin: 0;
+        position: relative;
+        padding-left: 4px;
+      }
+      .hero blockquote::before {
+        content: "“";
+        position: absolute;
+        left: -10px;
+        top: -34px;
+        font: 500 72px/1 var(--serif);
+        color: #cdb27f;
+      }
+      .hero blockquote p {
+        margin: 0;
+        font: italic 400 27px/1.18 var(--serif);
+        text-shadow: 0 2px 14px #20201d99;
+      }
+      .hero cite {
+        display: block;
+        margin-top: 14px;
+        font: normal 600 12px var(--sans);
+        letter-spacing: 0.3px;
+        color: #f5f2ebd9;
+      }
+      .hero cite small {
+        display: block;
+        font-weight: 400;
+        color: #f5f2eb99;
+        margin-top: 2px;
+      }
+
+      /* today's piece: the opening, like the first page of a book */
+      .opening {
+        margin-top: -18px;
+        position: relative;
+        background: #faf8f2;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 20px 20px 16px;
+        box-shadow: 0 12px 28px #20201d14;
+        cursor: pointer;
+        text-align: left;
+        width: 100%;
+        color: inherit;
+        font: inherit;
+      }
+      .opening .eyebrow {
+        margin: 0 0 6px;
+        color: #8a7243;
+      }
+      .opening h3 {
+        font: 500 25px/1.08 var(--serif);
+        margin: 0 0 12px;
+      }
+      .opening .first {
+        margin: 0;
+        font: 400 16px/1.55 var(--serif);
+        color: #3b3a35;
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .opening .first::first-letter {
+        float: left;
+        font: 500 50px/0.82 var(--serif);
+        color: var(--gold);
+        padding: 6px 8px 0 0;
+      }
+      .opening .more {
+        margin-top: 14px;
+        padding-top: 12px;
+        border-top: 1px solid var(--line);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .opening .more span:first-child {
+        font-weight: 400;
+        color: var(--muted);
+      }
+      .opening .more .icon {
+        width: 16px;
+        height: 16px;
+        vertical-align: -3px;
+      }
+
+      /* ideas so far: one framed card per day reached */
+      .voices {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        margin: 0 -21px 14px;
+        padding: 0 21px 2px;
+        scrollbar-width: none;
+      }
+      .voice {
+        flex: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 38px;
+        padding: 0 14px 0 4px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: #faf8f2;
+        font: 600 13px var(--sans);
+        color: var(--ink);
+        cursor: pointer;
+      }
+      .voice .bust {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-size: cover;
+        filter: grayscale(1) contrast(1.05);
+      }
+      .voice[aria-pressed="true"] {
+        background: var(--ink);
+        border-color: var(--ink);
+        color: var(--ivory);
+      }
+      .voice[aria-pressed="true"] .bust {
+        filter: none;
+      }
+      .voice.all {
+        padding-left: 14px;
+      }
+      .shelf {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        margin: 0 -21px;
+        padding: 2px 21px 8px;
+        scrollbar-width: none;
+      }
+      .idea {
+        flex: none;
+        display: flex;
+        flex-direction: column;
+        align-self: flex-start;
+        width: 168px;
+        scroll-snap-align: start;
+        border: 0;
+        padding: 0;
+        background: none;
+        text-align: left;
+        cursor: pointer;
+        color: inherit;
+        font: inherit;
+      }
+      .idea .frame {
+        position: relative;
+        height: 214px;
+        border-radius: 14px;
+        background-size: cover;
+        overflow: hidden;
+        box-shadow:
+          0 0 0 1px #20201d14,
+          0 8px 18px #20201d1f;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 12px;
+        color: var(--ivory);
+      }
+      .idea .frame::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, #20201d00 25%, #20201d99 55%, #20201df2 100%);
+      }
+      .idea .frame > * {
+        position: relative;
+      }
+      .idea .numeral {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        min-width: 28px;
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: #20201dcc;
+        text-align: center;
+        font: 500 13px var(--serif);
+        letter-spacing: 1px;
+        color: #e3cf9f;
+      }
+      .idea .frame strong {
+        font: 500 18px/1.1 var(--serif);
+      }
+      .idea .by {
+        display: block;
+        margin-top: 8px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .idea .line {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        margin: 4px 0 0;
+        font: italic 400 14px/1.35 var(--serif);
+        color: #3b3a35;
+      }
+      .caption.quiet {
+        margin: 26px 0 8px;
+        text-align: center;
+      }
+
+      /* the reader: full screen, set like a page */
+      .reader {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        background: #faf8f2;
+        overflow-y: auto;
+        transform: translateX(100%);
+        transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+        scrollbar-width: none;
+      }
+      .reader.open {
+        transform: none;
+      }
+      .reader-art {
+        position: relative;
+        height: 250px;
+        background-size: cover;
+      }
+      .reader-art::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, #20201d66 0%, #20201d00 40%, #faf8f2 100%);
+      }
+      .reader-bar {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        height: 0;
+      }
+      .reader-bar .row {
+        display: flex;
+        justify-content: space-between;
+        padding: 44px 16px 0;
+      }
+      .chip-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        min-height: 36px;
+        padding: 0 12px 0 8px;
+        border-radius: 999px;
+        border: 0;
+        background: #f5f2ebe6;
+        color: var(--ink);
+        font: 600 13px var(--sans);
+        backdrop-filter: blur(8px);
+        cursor: pointer;
+        box-shadow: 0 1px 0 #20201d14;
+      }
+      .chip-button.round {
+        padding: 0 12px;
+        font-family: var(--serif);
+        font-size: 15px;
+      }
+      .chip-button .icon {
+        width: 16px;
+        height: 16px;
+      }
+      .page {
+        position: relative;
+        margin-top: -70px;
+        padding: 0 26px 48px;
+      }
+      .page .eyebrow {
+        color: #8a7243;
+        margin: 0 0 8px;
+      }
+      .page h1 {
+        font: 500 32px/1.04 var(--serif);
+        margin: 0 0 18px;
+        letter-spacing: -0.3px;
+      }
+      .pull {
+        margin: 0 0 22px;
+        padding: 2px 0 2px 16px;
+        border-left: 2px solid var(--gold);
+      }
+      .pull p {
+        margin: 0;
+        font: italic 400 19px/1.35 var(--serif);
+        color: #3b3a35;
+      }
+      .pull cite {
+        display: block;
+        margin-top: 8px;
+        font: normal 400 12px var(--sans);
+        color: var(--muted);
+      }
+      .prose p {
+        margin: 0 0 1em;
+        font: 400 var(--reading, 17px) / 1.62 var(--serif);
+        color: #2b2a26;
+      }
+      .prose p:first-child::first-letter {
+        float: left;
+        font: 500 calc(var(--reading, 17px) * 3.3) / 0.8 var(--serif);
+        color: var(--gold);
+        padding: 7px 9px 0 0;
+      }
+      .fleuron {
+        text-align: center;
+        color: var(--gold);
+        font: 400 18px var(--serif);
+        letter-spacing: 10px;
+        margin: 26px 0;
+      }
+      .turn {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .turn button {
+        min-height: 64px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--ivory);
+        text-align: left;
+        padding: 10px 12px;
+        font: inherit;
+        color: inherit;
+        cursor: pointer;
+      }
+      .turn button:disabled {
+        opacity: 0.45;
+        cursor: default;
+      }
+      .turn small {
+        display: block;
+        font-size: 11px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .turn strong {
+        font: 500 15px/1.2 var(--serif);
+      }
+      .turn .next {
+        text-align: right;
+      }
+      .reader .caption {
+        text-align: center;
+        margin-top: 18px;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .reader {
+          transition: opacity 0.2s;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <svg aria-hidden="true" class="sr-only" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <symbol id="i-arrow" viewbox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6"></path></symbol>
+        <symbol id="i-back" viewbox="0 0 24 24"><path d="m15 5-7 7 7 7"></path></symbol>
+        <symbol id="i-read" viewbox="0 0 24 24">
+          <path d="M12 5C8 2 5 3 3 4v16c3-2 6-1 9 1 3-2 6-3 9-1V4c-2-1-5-2-9 1Zm0 0v16"></path>
+        </symbol>
+        <symbol id="i-sun" viewbox="0 0 24 24">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path
+            d="M12 2v2M12 20v2M2 12h2M20 12h2m-3-9-1.5 1.5M6.5 17.5 5 19m14 0-1.5-1.5M6.5 6.5 5 5"
+          ></path>
+        </symbol>
+        <symbol id="i-mind" viewbox="0 0 24 24">
+          <path d="M12 3a7 7 0 0 0-7 7c0 3 2 4 2 7v3h7v-3h2a3 3 0 0 0 3-3v-2l2-1-2-4a7 7 0 0 0-7-4Z"></path>
+        </symbol>
+        <symbol id="i-log" viewbox="0 0 24 24">
+          <path d="M8 5h12M8 12h12M8 19h12M4 5h.01M4 12h.01M4 19h.01"></path>
+        </symbol>
+        <symbol id="i-tools" viewbox="0 0 24 24">
+          <path d="M12 20s-5-3-5-8C7 6 15 3 21 3c0 8-2 16-9 17Zm-7 2L18 7"></path>
+        </symbol>
+        <symbol id="i-user" viewbox="0 0 24 24">
+          <circle cx="12" cy="8" r="4"></circle>
+          <path d="M4 21c0-5 3-7 8-7s8 2 8 7Z"></path>
+        </symbol>
+        <symbol id="i-signal" viewbox="0 0 24 24">
+          <path d="M4 20v-4M9 20v-8M14 20V8M19 20V4"></path>
+        </symbol>
+        <symbol id="i-wifi" viewbox="0 0 24 24">
+          <path d="M3 8a15 15 0 0 1 18 0M6 12a10 10 0 0 1 12 0M9 16a5 5 0 0 1 6 0M12 20h.01"></path>
+        </symbol>
+        <symbol id="i-battery" viewbox="0 0 24 24">
+          <rect height="12" rx="3" width="17" x="2" y="6"></rect>
+          <path d="M22 10v4"></path>
+          <rect fill="currentColor" height="6" rx="1" stroke="none" width="11" x="5" y="9"></rect>
+        </symbol>
+      </defs>
+    </svg>
+    <header class="review-top">
+      <div>
+        <h1>49 / Mindset</h1>
+        <p>
+          A redesign of the app's Journey tab as a reading page only: today's line on the
+          painting, today's piece, and the ideas so far. No chapters, no progress. Tap any card to
+          open the reader; try Aa and the voices. Nothing is saved.
+        </p>
+      </div>
+      <nav class="review-links" aria-label="Design review navigation">
+        <a href="../index.html">All screens</a>
+      </nav>
+    </header>
+    <main class="preview-layout">
+      <div class="phone">
+        <section class="app-screen" aria-label="Mindset">
+          <div class="status" aria-hidden="true">
+            <span>9:41</span
+            ><span class="status-icons"
+              ><svg class="icon"><use href="#i-signal" /></svg
+              ><svg class="icon"><use href="#i-wifi" /></svg
+              ><svg class="icon battery"><use href="#i-battery" /></svg
+            ></span>
+          </div>
+          <div class="screen-content" id="scroller">
+            <section class="hero" aria-labelledby="today-line">
+              <p class="kicker">Mindset · Day 5</p>
+              <blockquote id="today-line">
+                <p id="hero-quote"></p>
+                <cite id="hero-cite"></cite>
+              </blockquote>
+            </section>
+
+            <button type="button" class="opening" data-day="5" id="opening">
+              <p class="eyebrow">Today's piece</p>
+              <h3 id="opening-title"></h3>
+              <p class="first" id="opening-first"></p>
+              <div class="more">
+                <span>About 2 minutes</span
+                ><span>Keep reading <svg class="icon" aria-hidden="true"><use href="#i-arrow" /></svg></span>
+              </div>
+            </button>
+
+            <section aria-labelledby="ideas-title">
+              <div class="section-head">
+                <h2 class="section" id="ideas-title">Ideas so far</h2>
+                <span id="ideas-count"></span>
+              </div>
+              <p class="section-lead">One a day, newest first. Day VI opens tomorrow.</p>
+              <div class="voices" role="group" aria-label="Show ideas by" id="voices"></div>
+              <div class="shelf" id="shelf"></div>
+            </section>
+
+            <p class="caption quiet">
+              Reading is never a task. Nothing here is marked, counted or missed.
+            </p>
+          </div>
+          <nav class="bottom-tabs" aria-label="App preview navigation">
+            <a class="tab" href="47-routine-deck.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-sun" /></svg>Today</a
+            ><a class="tab active" href="49-mindset.html" aria-current="page"
+              ><svg class="icon" aria-hidden="true"><use href="#i-read" /></svg>Mindset</a
+            ><a class="tab" href="43-log-calendar.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-log" /></svg>Log</a
+            ><a class="tab" href="35-inventory.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-tools" /></svg>Tools</a
+            ><a class="tab" href="46-profile-settings.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-user" /></svg>Me</a
+            >
+          </nav>
+          <div class="home-indicator" aria-hidden="true"></div>
+
+          <article class="reader" id="reader" inert aria-labelledby="reader-title">
+            <div class="reader-bar">
+              <div class="row">
+                <button type="button" class="chip-button" data-act="close">
+                  <svg class="icon" aria-hidden="true"><use href="#i-back" /></svg>Mindset
+                </button>
+                <button type="button" class="chip-button round" data-act="size" aria-label="Text size">
+                  Aa
+                </button>
+              </div>
+            </div>
+            <div class="reader-art" id="reader-art"></div>
+            <div class="page">
+              <p class="eyebrow" id="reader-eyebrow"></p>
+              <h1 id="reader-title"></h1>
+              <figure class="pull">
+                <p id="reader-quote"></p>
+                <cite id="reader-cite"></cite>
+              </figure>
+              <div class="prose" id="reader-prose"></div>
+              <div class="fleuron" aria-hidden="true">· · ·</div>
+              <div class="turn">
+                <button type="button" data-act="prev" id="prev"></button
+                ><button type="button" class="next" data-act="next" id="next"></button>
+              </div>
+              <p class="caption">Every quote is checked against the text named under it.</p>
+            </div>
+          </article>
+        </section>
+      </div>
+      <aside class="reference-panel">
+        <h2>Why it changes</h2>
+        <p>
+          Today's Journey tab mixes three things: a progress strip, the day's reading, and a list of
+          chapters. That makes it read like a planner. This page keeps only the reading, and gives
+          it the room a reading deserves: the line on the painting, the piece set like a book, and
+          the ideas so far as framed cards you can come back to.
+        </p>
+        <details open>
+          <summary>What's on the screen</summary>
+          <ul>
+            <li>
+              <b>Today's line</b> on the painting, large, with who said it and where. 
+            </li>
+            <li>
+              <b>Today's piece</b> opens like the first page of a book: the title, a gold drop cap
+              and the first lines, then "Keep reading".
+            </li>
+            <li>
+              <b>Ideas so far.</b> Every day reached, as a framed card: the day in Roman numerals,
+              the idea as its title, and the line. Filter by voice (Epictetus, Seneca, Marcus
+              Aurelius). Tomorrow is a line, not a lock.
+            </li>
+            <li>
+              <b>The reader.</b> Full screen, serif, a drop cap, the quote as a pull-quote, a text
+              size switch, and the previous and next day at the bottom, so reading on is one tap.
+            </li>
+          </ul>
+        </details>
+        <details open>
+          <summary>Taken out</summary>
+          <ul>
+            <li>
+              The chapter list, the chapter card, the day counter and the progress bars. Chapters
+              and rank stay where they matter: the quest and Me.
+            </li>
+            <li>
+              No ticks, no "read" marks and no counts of what was read. "5 ideas" is the days
+              reached, not a score.
+            </li>
+          </ul>
+        </details>
+        <details open>
+          <summary>In the iOS app</summary>
+          <ul>
+            <li>
+              Same data as now: the Journey response already carries today's piece and every day's
+              line; earlier bodies load when opened. No backend change.
+            </li>
+            <li>
+              The tab is renamed <b>Mindset</b> (book icon kept). VoiceOver reads each card as "Day
+              4, The Trade Was Never the Beginning, Epictetus".
+            </li>
+          </ul>
+        </details>
+      </aside>
+    </main>
+    <p class="preview-notice">
+      Design preview only. Nothing is saved or sent. Artwork is concept-only pending production
+      rights clearance.
+    </p>
+
+    <script>
+      (() => {
+        const stories = [{"day": 1, "title": "The Door You Lock Tonight", "quote": "In every act observe the things which come first, and those which follow it; and so proceed to the act.", "author": "Epictetus", "source": "Enchiridion 29", "body": ["Almost nobody loses money in a calm hour. It happens in the ninety seconds when something moves and you are already holding your phone.", "You cannot win that moment by being strong in it. The person who arrives there is tired, and a little bored, and has already decided without noticing. Strength is the wrong tool. What works is making the moment harder to reach.", "This is why the dull work comes first. Two-step verification. A withdrawal whitelist. The app moved off your home screen, so opening it takes a search instead of a thumb. None of it feels like progress. All of it is the decision you are making now, on your behalf, for a version of you who will not be thinking clearly.", "Locks are not a judgement about your character. A sailor ties things down in good weather, not because the sea is cruel, but because hands are unreliable in a storm and everyone knows it.", "There is a second thing happening here. Each lock is a small statement that the next few weeks belong to you rather than to whatever is moving. You are not giving anything up. You are deciding when you get a say — and the answer is now, while you are calm, instead of then, when you are not.", "Tonight's work is unglamorous and takes ten minutes. It will protect you more than any chart you read this year."]}, {"day": 2, "title": "What You Actually Did", "quote": "…every man loves himself more than all the rest of men, but yet sets less value on his own opinion of himself than on the opinion of others.", "author": "Marcus Aurelius", "source": "Meditations, Book 12", "body": ["Ask anyone how they trade and you get a philosophy. Ask to see the last ten and you get something else entirely.", "Memory is not built for this. It keeps what was vivid: the one that worked, the one that hurt. It quietly drops the eleven ordinary ones in between — the late-night entries, the ones opened because the screen was already unlocked. Those leave no story behind, which is exactly why they repeat.", "So today you count rather than remember. When. Why. How it felt. Not to score yourself, and not to work out what you should have done. Only to see the pattern that has been running without your consent.", "Most people find something duller than they feared and more ordinary than they hoped. A time of day. A mood. A particular hour of a particular evening that keeps showing up. The behaviour was never mysterious. It was simply never written down, and a thing that is not written down cannot be argued with.", "You may feel something uncomfortable while you count. That is normal and it is not the point. Nobody is asking you to feel bad about ten trades. The ten are not a verdict on you; they are the evidence you have been working without.", "By the end you will have one sentence describing your typical trade. It will probably not flatter you. It is still the most useful sentence you have written about your trading so far."]}, {"day": 3, "title": "Nobody Loses in an Interesting Way", "quote": "While we are postponing, life speeds by.", "author": "Seneca", "source": "Moral Letters to Lucilius 1", "body": ["People imagine their losses came from something rare. A crash nobody saw. A position that turned. A piece of bad luck with a story attached.", "The accounts say otherwise. Most of what is lost goes in small, repeated, unremarkable ways: no plan before entering, size too large for comfort, no stop, trading too often, trading to win it back, and fees quietly collecting underneath all of it. Six ordinary leaks. Not one of them is dramatic. Together they do nearly all the damage.", "This is good news, though it rarely feels like it. A rare catastrophe cannot be trained against. A habit can. If what is hurting you is ordinary and repeated, then it is also visible, countable and patchable — and you only need to patch the one that is costing most.", "Today you will go looking for yours in your own history, which is the only place the answer actually is. Not the leaks that sound most like you. The ones with evidence behind them.", "Then you will write one rule. One. Not a code of conduct, not a new system — a single patch on the single worst leak, in your own words, in the shape: when this happens, I do that.", "A rule you wrote and remember beats a rule you borrowed and admire. You will have ten of them before this is over. Today you need one."]}, {"day": 4, "title": "The Trade Was Never the Beginning", "quote": "Men are disturbed not by the things which happen, but by the opinions about the things.", "author": "Epictetus", "source": "Enchiridion 5", "body": ["A trade looks like it starts when you press the button. It does not. It starts earlier, somewhere smaller: a message, a chart glanced at in a queue, a number in red, the particular flavour of boredom that arrives at eleven at night.", "Between that moment and the button, almost nothing is examined. The trigger does not announce itself. It just raises the temperature a little, and the rest follows as though it were reasoning.", "This is why the log matters more than the resolution. Writing down the trigger — what happened, what you did, what it cost, how often — turns an invisible chain into a visible one. And a visible chain can be broken at the first link, which is far easier than breaking it at the last.", "You will notice some triggers travel together. Tired and alone. Lost yesterday and quiet today. These clusters are worth more than any single entry, because they tell you which evenings to be careful of before they arrive.", "Then you design one counter-move, for your biggest trigger only. Not willpower. A specific action: what you do instead, decided now.", "None of this makes the trigger stop happening. It will keep happening. What changes is that it stops being the start of a trade and becomes the start of something you chose."]}, {"day": 5, "title": "What the Urge Is Actually Asking For", "quote": "…let the thing wait for you, and allow yourself a certain delay on your own part.", "author": "Epictetus", "source": "Enchiridion 34", "body": ["Take an urge apart and the trade is almost never at the centre of it. Underneath is something plainer: to stop feeling behind. To be right about something. To make the restlessness end. To repair a loss and feel whole again.", "None of these are stupid things to want. They are ordinary human wants, and they have been attached to a button that cannot deliver them. Winning does not make you less behind for long. Being right once does not settle anything.", "That is why \"just don't\" fails. You are not arguing with a trade. You are arguing with a need that has found a fast, reliable way to be answered badly.", "So today you look at one real urge closely. The trigger, the thought, the feeling, where it sat in your body, and the honest answer to what you actually wanted. Most people find the same story underneath most of their urges. It is worth knowing its name.", "Then you write your own plan — two to four steps, yours, for when it comes. Name it out loud. Check whether it breaks a rule you have already made. Write it down before deciding. Wait, for a length of time you choose.", "The plan will not make the urge disappear. It puts something between the feeling and the button, and that gap is where everything you are training actually happens."]}, {"day": 6, "title": "Money That Cannot Be Lost", "quote": "It is not the man who has too little, but the man who craves more, that is poor.", "author": "Seneca", "source": "Moral Letters to Lucilius 2", "body": ["There is money whose loss would be annoying, and money whose loss would change your life. Most harm in trading comes from the second kind quietly being used as though it were the first.", "Nobody decides to do this. It happens by drift. A little more each month because last month was fine. A sum set aside for something else and borrowed from with every intention of returning it. The line moves slowly enough that no single step looks reckless.", "This app will never ask you how much you have, what you have lost, or where it came from. Not once, not anonymously, not for your own good. Those questions belong to you and they stay with you.", "What is worth doing today is writing it down privately, for yourself, in your own notebook: where this money comes from, what must never be touched, and what you could lose entirely without it changing how you live. Then one rule about the boundary between them.", "Not a target. A boundary — the sentence that tells you which side of the line you are on before you act, so the question gets settled in daylight rather than at midnight.", "People who do this report something unexpected. It is not restrictive. It is quieter. Risk you have chosen on purpose is far easier to carry than risk you have drifted into."]}];
+        const today = 5;
+        const art = [
+          ["thumb1.jpg", "50% 30%"],
+          ["thumb2.jpg", "50% 30%"],
+          ["thumb3.jpg", "50% 40%"],
+          ["thumb4.jpg", "50% 35%"],
+          ["today.jpg", "50% 30%"],
+          ["task.jpg", "50% 40%"],
+        ];
+        const busts = { Epictetus: "thumb2.jpg", Seneca: "thumb3.jpg", "Marcus Aurelius": "thumb1.jpg" };
+        const roman = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV"];
+        const artFor = (day) => art[(day - 1) % art.length];
+        const reached = stories.filter((s) => s.day <= today);
+        let voice = null;
+        let large = false;
+
+        const $ = (id) => document.getElementById(id);
+        const t = stories.find((s) => s.day === today);
+        $("hero-quote").textContent = t.quote;
+        $("hero-cite").innerHTML = `${t.author}<small>${t.source}</small>`;
+        $("opening-title").textContent = t.title;
+        $("opening-first").textContent = t.body[0];
+
+        const names = [...new Set(reached.map((s) => s.author))];
+        function renderVoices() {
+          $("voices").innerHTML =
+            `<button type="button" class="voice all" aria-pressed="${voice === null}" data-voice="">All</button>` +
+            names
+              .map(
+                (n) =>
+                  `<button type="button" class="voice" aria-pressed="${voice === n}" data-voice="${n}"><span class="bust" style="background-image:url('../assets/art/${busts[n]}')" aria-hidden="true"></span>${n}</button>`,
+              )
+              .join("");
+        }
+        function renderShelf() {
+          const shown = reached.filter((s) => !voice || s.author === voice).reverse();
+          $("ideas-count").textContent = `${shown.length} of ${reached.length}`;
+          const cards = shown.map((s) => {
+            const [img, pos] = artFor(s.day);
+            return `<button type="button" class="idea" data-day="${s.day}" aria-label="Day ${s.day}, ${s.title}, ${s.author}">
+              <span class="frame" style="background-image:url('../assets/art/${img}');background-position:${pos}">
+                <span class="numeral">${roman[s.day]}</span><strong>${s.title}</strong></span>
+              <span class="by">${s.author}${s.day === today ? " · Today" : ""}</span>
+              <p class="line">${s.quote}</p></button>`;
+          });
+          $("shelf").innerHTML = cards.join("");
+        }
+
+        const reader = $("reader");
+        let lastFocus = null;
+        function openReader(day) {
+          const s = stories.find((x) => x.day === day);
+          const [img, pos] = artFor(day);
+          $("reader-art").style.background = `url('../assets/art/${img}') ${pos} / cover`;
+          $("reader-eyebrow").textContent = `Day ${day}${day === today ? " · Today" : ""} · 2 min`;
+          $("reader-title").textContent = s.title;
+          $("reader-quote").textContent = s.quote;
+          $("reader-cite").textContent = `${s.author} · ${s.source}`;
+          $("reader-prose").innerHTML = s.body.map((p) => `<p>${p}</p>`).join("");
+          const prev = stories.find((x) => x.day === day - 1);
+          const next = day < today ? stories.find((x) => x.day === day + 1) : null;
+          $("prev").disabled = !prev;
+          $("prev").dataset.day = prev?.day ?? "";
+          $("prev").innerHTML = prev ? `<small>← Day ${prev.day}</small><strong>${prev.title}</strong>` : "<small>The first day</small>";
+          $("next").disabled = !next;
+          $("next").dataset.day = next?.day ?? "";
+          $("next").innerHTML = next
+            ? `<small>Day ${next.day} →</small><strong>${next.title}</strong>`
+            : "<small>Tomorrow</small><strong>Day " + (today + 1) + "</strong>";
+          if (!reader.classList.contains("open")) lastFocus = document.activeElement;
+          reader.inert = false;
+          reader.classList.add("open");
+          reader.scrollTop = 0;
+          reader.querySelector("[data-act=close]").focus({ preventScroll: true });
+        }
+        function closeReader() {
+          reader.classList.remove("open");
+          reader.inert = true;
+          lastFocus?.focus?.({ preventScroll: true });
+        }
+
+        document.querySelector(".app-screen").addEventListener("click", (e) => {
+          const v = e.target.closest("[data-voice]");
+          if (v) {
+            voice = v.dataset.voice || null;
+            renderVoices();
+            renderShelf();
+            return;
+          }
+          const act = e.target.closest("[data-act]");
+          if (act) {
+            if (act.dataset.act === "close") closeReader();
+            if (act.dataset.act === "size") {
+              large = !large;
+              reader.style.setProperty("--reading", large ? "20px" : "17px");
+            }
+            if ((act.dataset.act === "prev" || act.dataset.act === "next") && act.dataset.day)
+              openReader(Number(act.dataset.day));
+            return;
+          }
+          const d = e.target.closest("[data-day]");
+          if (d) openReader(Number(d.dataset.day));
+        });
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && reader.classList.contains("open")) closeReader();
+        });
+        const scroller = $("scroller");
+        const status = document.querySelector(".app-screen > .status");
+        scroller.addEventListener(
+          "scroll",
+          () => status.classList.toggle("solid", scroller.scrollTop > 300),
+          { passive: true },
+        );
+        renderVoices();
+        renderShelf();
+      })();
+    </script>
+  </body>
+</html>

@@ -99,6 +99,28 @@
     ]
   },
   {
+    "id": "48-quest-path",
+    "title": "Quest · path",
+    "group": "daily",
+    "summary": "The quest overview as a painted hero and a path of steps",
+    "primary_label": "Continue",
+    "notes": [
+      "Concept alternative to 09. Same quest payload: painted hero with the title on the art, the coach line as an epigraph, objectives as steps on a gold trail with the first open one expanded, outputs as framed rewards that unlock on finish.",
+      "Opening a step never completes it; steps can be done in any order. XP is shown as 'up to' and participation only; the receipt shows what the server paid."
+    ]
+  },
+  {
+    "id": "49-mindset",
+    "title": "Mindset",
+    "group": "review",
+    "summary": "The Journey tab as a reading page: today's line, today's piece, the ideas so far",
+    "primary_label": "Read today's piece",
+    "notes": [
+      "Concept replacement for the Journey tab, renamed Mindset. Reading only: today's quote on the painting, today's piece as a book opening, every day reached as a framed idea card filterable by author, and a full-screen reader with text size and previous/next day.",
+      "No chapters, progress bars, day counter, ticks or read counts. Same Journey payload; earlier bodies load on open. No backend change."
+    ]
+  },
+  {
     "id": "10-secure-base",
     "title": "Secure your base",
     "group": "foundations",
