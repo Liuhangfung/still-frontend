@@ -267,18 +267,21 @@ Line icons live in [`images/icons/`](../images/icons/) (106 icons, 24×24, 2px s
 
 ## 12. Day Log grades
 
-The Log tab grades each day **A to E** for how the user traded (rules kept or broken), never for money. Product rules: [still-day-log.md](https://github.com/Liuhangfung/still-backend/blob/main/docs/product-concept/still-day-log.md). Design: [`ui-design-page/screens/43-log-calendar.html`](../ui-design-page/screens/43-log-calendar.html) and [`44-day-grade.html`](../ui-design-page/screens/44-day-grade.html).
+The Log tab grades each day **A to E** for how the user traded (rules kept or broken), never for money. Product rules: [still-day-log.md](https://github.com/Liuhangfung/still-backend/blob/main/docs/product-concept/still-day-log.md). Design: [`ui-design-page/screens/50-day-log.html`](../ui-design-page/screens/50-day-log.html) (replaces 43 and 44).
 
-| Grade | Name |
-|---|---|
-| **A** | Clean |
-| **B** | Solid |
-| **C** | Mixed |
-| **D** | Slipped |
-| **E** | Tilt |
+Each grade has its own light, warm to cool, "from sun to sea". Kept days look warm, and the light cools as rules slip:
 
-- v2 grades have **no per-grade colours**. Each grade is a serif letter plus its name on an ink tile; the selected or suggested grade is filled **Sky** with Ink text. The meaning is in the letter and name, never in colour.
-- The suggestion is labelled in Gold text ("Suggested: C").
+| Grade | Name | Colour | Hex |
+|---|---|---|---|
+| **A** | Clean | Sun gold | `#F5C451` |
+| **B** | Solid | Champagne | `#F6E1A6` |
+| **C** | Mixed | Moon silver | `#D3DDE6` |
+| **D** | Slipped | Lilac | `#B9A5F0` |
+| **E** | Tilt | Aegean | `#74B3E8` |
+
+- The Log tab is dark, on frosted glass over the artwork, so these colours are light. They are for that dark surface: never use them as text on Ivory.
+- A grade is always its **serif letter in its colour** (a tinted chip with a hairline in the same colour), never a coloured ball and never colour alone.
+- The month is a fresco behind frosted panes. Each judged day clears its pane, whatever the grade. An unjudged day stays frosted and is never coloured as bad.
 - No green or red: the scale is about behaviour, not profit and loss.
 - **E · Tilt** leads to the calm screen (section 6): ivory and sky, no artwork drama.
 

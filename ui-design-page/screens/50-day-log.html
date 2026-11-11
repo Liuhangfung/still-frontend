@@ -1,0 +1,1060 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" href="data:," />
+    <title>Still — Day Log</title>
+    <script src="../shared/preview.js" defer></script>
+    <link rel="stylesheet" href="../shared/screens.css" />
+    <style>
+      /* From sun to sea: kept days burn warm, and as rules slip the light
+         cools toward the Aegean. No red, no green; the letter always shows. */
+      :root {
+        --A: #f5c451;
+        --B: #f6e1a6;
+        --C: #d3dde6;
+        --D: #b9a5f0;
+        --E: #74b3e8;
+        --glass: #ffffff14;
+        --glass-2: #ffffff1f;
+        --edge: #ffffff2e;
+        --text-2: #f5f2ebb8;
+        --text-3: #f5f2eb80;
+      }
+      .app-screen {
+        position: relative;
+        isolation: isolate;
+        color: var(--ivory);
+        background: #15161a;
+      }
+      .app-screen::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 500px;
+        z-index: -1;
+        -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
+        mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
+        background:
+          linear-gradient(180deg, #14151a59 0%, #14151aa6 34%, #14151ae6 70%, #14151a 100%),
+          url("../assets/art/today.jpg") 50% 0% / 150% auto no-repeat;
+      }
+      .app-screen > .status {
+        position: absolute;
+        inset: 0 0 auto;
+        z-index: 4;
+        color: var(--ivory);
+        transition: background 0.25s;
+      }
+      .app-screen > .status.solid {
+        background: #15161ab3;
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+      }
+      .screen-content {
+        padding-top: 64px;
+        padding-bottom: 104px;
+      }
+      .glass {
+        background: var(--glass);
+        border: 1px solid var(--edge);
+        border-radius: 22px;
+        backdrop-filter: blur(22px) saturate(140%);
+        -webkit-backdrop-filter: blur(22px) saturate(140%);
+        box-shadow: 0 20px 40px -24px #0009;
+      }
+
+      .head .kicker {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 10px;
+        letter-spacing: 1.8px;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: #e9d9b0;
+        margin: 64px 0 8px;
+      }
+      .head .kicker::after {
+        content: "";
+        width: 34px;
+        height: 1px;
+        background: #e9d9b080;
+      }
+      .head h1 {
+        font: 500 33px/1.05 var(--serif);
+        margin: 0 0 22px;
+        letter-spacing: -0.5px;
+      }
+      .head h1 em {
+        color: #ead9b4;
+      }
+
+      /* the month card */
+      .month {
+        padding: 14px 14px 16px;
+      }
+      .month-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 0 6px;
+      }
+      .month-bar h2 {
+        margin: 0;
+        text-align: center;
+        font: 500 22px/1 var(--serif);
+      }
+      .month-bar h2 small {
+        display: block;
+        margin-top: 5px;
+        font: 500 10.5px/1 var(--sans);
+        letter-spacing: 0.3px;
+        color: var(--text-2);
+      }
+      .month-bar button {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 1px solid var(--edge);
+        background: var(--glass);
+        display: grid;
+        place-items: center;
+        color: var(--ivory);
+        cursor: pointer;
+      }
+      .month-bar button:disabled {
+        opacity: 0.3;
+        cursor: default;
+      }
+      .month-bar .icon {
+        width: 16px;
+        height: 16px;
+      }
+      .weekdays {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        margin: 12px 0 6px;
+      }
+      .weekdays span {
+        text-align: center;
+        font-size: 9px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--text-3);
+      }
+
+      /* the fresco — the painting behind frosted glass; a judged day clears its pane */
+      .fresco {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        border-radius: 14px;
+        overflow: hidden;
+        background: url("../assets/art/welcome.jpg") 50% 0% / cover;
+        box-shadow: 0 0 0 1px var(--edge);
+      }
+      .pane {
+        position: relative;
+        aspect-ratio: 1;
+        border: 0;
+        padding: 0;
+        font: inherit;
+        color: var(--ivory);
+        background: transparent;
+        box-shadow: inset 0 0 0 0.5px #ffffff38;
+        cursor: pointer;
+      }
+      .pane:disabled {
+        opacity: 1;
+      }
+      .pane.veil {
+        background: #e9e3d64d;
+        backdrop-filter: blur(9px) saturate(70%) brightness(0.92);
+        -webkit-backdrop-filter: blur(9px) saturate(70%) brightness(0.92);
+      }
+      .pane.future {
+        background: #25262cad;
+        cursor: default;
+      }
+      .pane.blank {
+        cursor: default;
+      }
+      .pane .n {
+        position: absolute;
+        top: 5px;
+        left: 6px;
+        font: 700 9px/1 var(--sans);
+        color: #fff;
+        text-shadow: 0 1px 3px #000c;
+      }
+      .pane.future .n {
+        color: var(--text-3);
+        text-shadow: none;
+      }
+      .pane .g {
+        position: absolute;
+        right: 4px;
+        bottom: 5px;
+        min-width: 17px;
+        height: 17px;
+        padding: 0 3px;
+        border-radius: 5px;
+        display: grid;
+        place-items: center;
+        font: 600 11px/1 var(--serif);
+        color: var(--c);
+        background: #15161acc;
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 55%, transparent);
+      }
+      .pane.graded::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 3px;
+        background: var(--c);
+        box-shadow: 0 0 10px var(--c);
+      }
+      .pane.today {
+        box-shadow:
+          inset 0 0 0 1.5px #f5c451,
+          inset 0 0 16px #f5c45166;
+      }
+      .pane.today.veil::before {
+        content: "+";
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        font: 300 22px/1 var(--sans);
+        color: #fff6dc;
+      }
+      .pane:focus-visible {
+        outline: 2px solid #9fc3df;
+        outline-offset: -2px;
+      }
+      .reveal {
+        animation: reveal 0.9s ease-out;
+      }
+      @keyframes reveal {
+        from {
+          backdrop-filter: blur(9px);
+          background: #e9e3d64d;
+        }
+      }
+
+      .cap {
+        margin: 12px 4px 0;
+        font-size: 11.5px;
+        line-height: 1.5;
+        color: var(--text-2);
+        text-align: center;
+      }
+      .cap b {
+        color: var(--ivory);
+        font-weight: 600;
+      }
+
+      /* the grade mark: a serif letter in its own light, never a ball */
+      .mark {
+        --c: var(--A);
+        display: inline-grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        font: 500 22px/1 var(--serif);
+        color: var(--c);
+        background: color-mix(in srgb, var(--c) 13%, transparent);
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 45%, transparent);
+        text-shadow: 0 0 14px color-mix(in srgb, var(--c) 70%, transparent);
+      }
+      .legend {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        margin: 14px 0 0;
+        padding-top: 12px;
+        border-top: 1px solid #ffffff1f;
+      }
+      .legend > span {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        font-size: 9.5px;
+        color: var(--text-2);
+      }
+      .legend .mark {
+        width: 26px;
+        height: 26px;
+        border-radius: 8px;
+        font-size: 14px;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        margin: 26px 2px 10px;
+      }
+      .section-head h2 {
+        font: 500 22px/1.1 var(--serif);
+        margin: 0;
+      }
+      .section-head span {
+        font-size: 11.5px;
+        color: var(--text-2);
+      }
+
+      .week {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        padding: 14px 4px 12px;
+      }
+      .week div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+      }
+      .week svg {
+        width: 30px;
+        height: 30px;
+        overflow: visible;
+      }
+      .week b {
+        font: 500 15px/1 var(--serif);
+        color: var(--c, var(--text-3));
+      }
+      .week small {
+        font-size: 9.5px;
+        color: var(--text-3);
+      }
+      .week .now small {
+        color: var(--ivory);
+        font-weight: 700;
+      }
+
+      .glance {
+        padding: 16px;
+      }
+      .band {
+        display: flex;
+        gap: 3px;
+        height: 6px;
+        margin: 2px 0 16px;
+      }
+      .band span {
+        border-radius: 99px;
+        box-shadow: 0 0 10px -1px currentColor;
+      }
+      .figures {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .figures div + div {
+        border-left: 1px solid #ffffff1f;
+        padding-left: 10px;
+      }
+      .figures strong {
+        display: block;
+        font: 500 26px/1.05 var(--serif);
+      }
+      .figures div > span {
+        display: block;
+        margin-top: 3px;
+        font-size: 10.5px;
+        line-height: 1.35;
+        color: var(--text-2);
+      }
+
+      .last {
+        display: grid;
+        grid-template-columns: 52px 1fr;
+        gap: 14px;
+        padding: 16px;
+      }
+      .last .mark {
+        width: 52px;
+        height: 52px;
+        border-radius: 15px;
+        font-size: 28px;
+      }
+      .last h3 {
+        font: 500 19px/1.15 var(--serif);
+        margin: 2px 0 4px;
+      }
+      .last p {
+        margin: 0;
+        font-size: 12px;
+        color: var(--text-2);
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+      }
+      .chips span {
+        font-size: 11px;
+        padding: 5px 10px;
+        border-radius: 99px;
+        border: 1px solid var(--edge);
+        color: var(--text-2);
+      }
+      .caption.dark {
+        color: var(--text-3);
+        margin-top: 16px;
+      }
+
+      .dock {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 64px;
+        padding: 30px 21px 10px;
+        background: linear-gradient(180deg, #14151a00, #14151af0 45%);
+        z-index: 3;
+      }
+      .light-button {
+        width: 100%;
+        min-height: 52px;
+        border: 0;
+        border-radius: 99px;
+        background: var(--ivory);
+        color: var(--ink);
+        font: 600 15px/1 var(--sans);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        cursor: pointer;
+      }
+      .light-button:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+      .app-screen .bottom-tabs,
+      .app-screen .home-indicator {
+        background: #14151a;
+        border-top-color: #ffffff17;
+      }
+      .app-screen .tab {
+        color: #f5f2eb8c;
+      }
+      .app-screen .tab.active {
+        color: #f0d58f;
+      }
+      .app-screen .home-indicator::after {
+        background: var(--ivory);
+      }
+
+      /* grading sheet */
+      .scrim {
+        position: absolute;
+        inset: 0;
+        background: #0008;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s;
+        z-index: 6;
+      }
+      .sheet {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        max-height: 92%;
+        overflow-y: auto;
+        background: #1c1d22d9;
+        backdrop-filter: blur(30px) saturate(150%);
+        -webkit-backdrop-filter: blur(30px) saturate(150%);
+        border-top: 1px solid var(--edge);
+        border-radius: 26px 26px 0 0;
+        padding: 10px 21px 28px;
+        transform: translateY(102%);
+        transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+        z-index: 7;
+      }
+      .app-screen.judging .scrim {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .app-screen.judging .sheet {
+        transform: none;
+      }
+      .handle {
+        width: 40px;
+        height: 4px;
+        border-radius: 4px;
+        background: #ffffff40;
+        margin: 0 auto 14px;
+      }
+      .sheet .eyebrow {
+        color: #e9d9b0;
+      }
+      .sheet h2 {
+        font: 500 30px/1.05 var(--serif);
+        margin: 0 0 6px;
+      }
+      .sheet .lead {
+        color: var(--text-2);
+        margin-bottom: 14px;
+      }
+      .suggest {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--text-2);
+        border: 1px solid var(--edge);
+        background: var(--glass);
+        border-radius: 99px;
+        padding: 5px 12px 5px 5px;
+        margin: 0 0 14px;
+      }
+      .suggest .mark {
+        width: 24px;
+        height: 24px;
+        border-radius: 99px;
+        font-size: 13px;
+      }
+      .grades {
+        display: grid;
+        gap: 8px;
+      }
+      .grade {
+        --c: var(--A);
+        display: grid;
+        grid-template-columns: 46px 1fr auto;
+        gap: 12px;
+        align-items: center;
+        text-align: left;
+        border: 1px solid #ffffff1f;
+        background: #ffffff0d;
+        border-radius: 16px;
+        padding: 8px 14px 8px 8px;
+        cursor: pointer;
+        color: var(--ivory);
+        font: inherit;
+        transition:
+          border-color 0.2s,
+          background 0.2s;
+      }
+      .grade .mark {
+        width: 46px;
+        height: 46px;
+        font-size: 25px;
+      }
+      .grade strong {
+        display: block;
+        font: 500 18px/1.1 var(--serif);
+      }
+      .grade .means {
+        font-size: 11.5px;
+        color: var(--text-2);
+      }
+      .grade em {
+        font-style: normal;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        color: var(--text-3);
+      }
+      .grade[aria-pressed="true"] {
+        border-color: var(--c);
+        background: color-mix(in srgb, var(--c) 12%, transparent);
+        box-shadow: 0 0 22px -8px var(--c);
+      }
+      .grade[aria-pressed="true"] em {
+        color: var(--c);
+      }
+      .sheet h4 {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-2);
+        margin: 20px 0 8px;
+      }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+      .tags button {
+        font: 500 12px/1 var(--sans);
+        padding: 9px 13px;
+        border-radius: 99px;
+        border: 1px solid var(--edge);
+        background: transparent;
+        color: var(--ivory);
+        cursor: pointer;
+      }
+      .tags button[aria-pressed="true"] {
+        background: var(--ivory);
+        color: var(--ink);
+        border-color: var(--ivory);
+      }
+      .note-field {
+        width: 100%;
+        min-height: 70px;
+        border: 1px solid var(--edge);
+        background: #ffffff0d;
+        border-radius: 14px;
+        padding: 12px;
+        font: 13px/1.5 var(--sans);
+        color: var(--ivory);
+        resize: none;
+        box-sizing: border-box;
+      }
+      .note-field::placeholder {
+        color: var(--text-3);
+      }
+      .calm {
+        display: none;
+        margin: 14px 0 0;
+        padding: 12px 14px;
+        border-radius: 14px;
+        background: #74b3e81f;
+        border: 1px solid #74b3e84d;
+        font-size: 12.5px;
+        line-height: 1.5;
+        color: #dbeaf6;
+      }
+      .calm.show {
+        display: block;
+      }
+      .locked {
+        margin: 0 0 12px;
+        font-size: 12px;
+        color: var(--text-2);
+      }
+      .sheet .light-button {
+        margin-top: 18px;
+      }
+
+    </style>
+  </head>
+  <body>
+    <svg aria-hidden="true" class="sr-only" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="glow" x="-1" y="-1" width="3" height="3"><feGaussianBlur stdDeviation="5" /></filter>
+        <symbol id="i-left" viewbox="0 0 24 24"><path d="m15 5-7 7 7 7"></path></symbol>
+        <symbol id="i-right" viewbox="0 0 24 24"><path d="m9 5 7 7-7 7"></path></symbol>
+        <symbol id="i-lock" viewbox="0 0 24 24">
+          <rect height="10" rx="2" width="14" x="5" y="11"></rect>
+          <path d="M8 11V8a4 4 0 0 1 8 0v3"></path>
+        </symbol>
+        <symbol id="i-read" viewbox="0 0 24 24">
+          <path d="M3 5h7a3 3 0 0 1 3 3v12a3 3 0 0 0-3-3H3ZM21 5h-7a3 3 0 0 0-3 3v12a3 3 0 0 1 3-3h7Z"></path>
+        </symbol>
+        <symbol id="i-sun" viewbox="0 0 24 24">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"></path>
+        </symbol>
+        <symbol id="i-log" viewbox="0 0 24 24">
+          <path d="M8 5h12M8 12h12M8 19h12M4 5h.01M4 12h.01M4 19h.01"></path>
+        </symbol>
+        <symbol id="i-tools" viewbox="0 0 24 24">
+          <path d="M12 20s-5-3-5-8C7 6 15 3 21 3c0 8-2 16-9 17Zm-7 2L18 7"></path>
+        </symbol>
+        <symbol id="i-user" viewbox="0 0 24 24">
+          <circle cx="12" cy="8" r="4"></circle>
+          <path d="M4 21c0-5 3-7 8-7s8 2 8 7Z"></path>
+        </symbol>
+        <symbol id="i-signal" viewbox="0 0 24 24">
+          <path d="M4 20v-4M9 20v-8M14 20V8M19 20V4"></path>
+        </symbol>
+        <symbol id="i-wifi" viewbox="0 0 24 24">
+          <path d="M3 8a15 15 0 0 1 18 0M6 12a10 10 0 0 1 12 0M9 16a5 5 0 0 1 6 0M12 20h.01"></path>
+        </symbol>
+        <symbol id="i-battery" viewbox="0 0 24 24">
+          <rect height="12" rx="3" width="17" x="2" y="6"></rect>
+          <path d="M22 10v4"></path>
+          <rect fill="currentColor" height="6" rx="1" stroke="none" width="11" x="5" y="9"></rect>
+        </symbol>
+      </defs>
+    </svg>
+    <header class="review-top">
+      <div>
+        <h1>50 / Day Log</h1>
+        <p>
+          The Log tab on glass over the painting. The month is a fresco behind frosted glass, and
+          each day you judge clears one pane. Tap today or yesterday to grade it. Nothing is
+          saved.
+        </p>
+      </div>
+      <nav class="review-links" aria-label="Design review navigation">
+        <a href="../index.html">All screens</a>
+      </nav>
+    </header>
+    <main class="preview-layout">
+      <div class="phone">
+        <section class="app-screen" id="screen" aria-label="Day Log">
+          <div class="status" aria-hidden="true">
+            <span>9:41</span
+            ><span class="status-icons"
+              ><svg class="icon"><use href="#i-signal" /></svg
+              ><svg class="icon"><use href="#i-wifi" /></svg
+              ><svg class="icon battery"><use href="#i-battery" /></svg
+            ></span>
+          </div>
+          <div class="screen-content" id="scroller">
+            <header class="head">
+              <p class="kicker">Day Log</p>
+              <h1>Your decisions,<br /><em>not your returns.</em></h1>
+            </header>
+
+            <section class="glass month" aria-labelledby="month-title">
+              <div class="month-bar">
+                <button type="button" id="prev-month" aria-label="Previous month">
+                  <svg class="icon"><use href="#i-left" /></svg>
+                </button>
+                <h2 id="month-title"></h2>
+                <button type="button" id="next-month" aria-label="Next month">
+                  <svg class="icon"><use href="#i-right" /></svg>
+                </button>
+              </div>
+              <div class="weekdays" aria-hidden="true">
+                <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span
+                ><span>Fri</span><span>Sat</span>
+              </div>
+              <div id="view"></div>
+              <p class="cap" id="cap"></p>
+              <div class="legend" id="legend" aria-hidden="true"></div>
+            </section>
+
+            <div class="section-head">
+              <h2>This week</h2>
+              <span id="week-range"></span>
+            </div>
+            <div class="glass week" id="week"></div>
+
+            <div class="section-head">
+              <h2>The month at a glance</h2>
+            </div>
+            <div class="glass glance">
+              <div class="band" id="band" aria-hidden="true"></div>
+              <div class="figures">
+                <div><strong id="f-judged"></strong><span>days judged</span></div>
+                <div><strong id="f-common"></strong><span id="f-common-name"></span></div>
+                <div><strong id="f-rules"></strong><span>days your rules held</span></div>
+              </div>
+            </div>
+
+            <div class="section-head">
+              <h2>Last judged</h2>
+            </div>
+            <article class="glass last" id="last"></article>
+
+            <p class="caption dark">
+              A grade is how you kept your own rules, not profit, loss or skill. Every grade earns
+              the same XP, and none of them changes your rank.
+            </p>
+          </div>
+
+          <div class="dock">
+            <button type="button" class="light-button" id="judge-today">Judge today</button>
+          </div>
+
+          <nav class="bottom-tabs" aria-label="App preview navigation">
+            <a class="tab" href="47-routine-deck.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-sun" /></svg>Today</a
+            ><a class="tab" href="49-mindset.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-read" /></svg>Mindset</a
+            ><a class="tab active" href="50-day-log.html" aria-current="page"
+              ><svg class="icon" aria-hidden="true"><use href="#i-log" /></svg>Log</a
+            ><a class="tab" href="35-inventory.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-tools" /></svg>Tools</a
+            ><a class="tab" href="46-profile-settings.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-user" /></svg>Me</a
+            >
+          </nav>
+          <div class="home-indicator" aria-hidden="true"></div>
+
+          <div class="scrim" id="scrim"></div>
+          <article class="sheet" id="sheet" inert aria-labelledby="sheet-title">
+            <div class="handle" aria-hidden="true"></div>
+            <p class="eyebrow" id="sheet-day"></p>
+            <h2 id="sheet-title">How did you trade?</h2>
+            <p class="lead">Your rules, not your results.</p>
+            <p class="locked" id="locked" hidden>
+              <svg class="icon" aria-hidden="true" style="width: 13px; height: 13px; vertical-align: -2px"
+                ><use href="#i-lock" /></svg>
+              A grade can be changed until the end of the next day, so this one stays as it is.
+            </p>
+            <div class="suggest" id="suggest"></div>
+            <div class="grades" id="grades" role="group" aria-label="Grade"></div>
+            <div class="calm" id="calm">
+              A hard day is still a logged day. Nothing here is lost. Tomorrow starts with a short
+              recovery quest, and the breathing page is one tap away.
+            </div>
+            <div id="extras">
+              <h4>What was around it · up to 3, private</h4>
+              <div class="tags" id="tags"></div>
+              <h4>Anything you want to remember</h4>
+              <textarea
+                class="note-field"
+                aria-label="Note"
+                placeholder="Encrypted on this phone. Still can't read it."
+              ></textarea>
+            </div>
+            <button type="button" class="light-button" id="save">Save</button>
+          </article>
+        </section>
+      </div>
+      <aside class="reference-panel">
+        <h2>Why it changes</h2>
+        <p>
+          A grid of boxes is a record, not a reason to come back. Here the month is a fresco
+          behind frosted glass, and each day you judge clears one pane, whatever the grade. A
+          fully judged month shows the whole painting. The page sits on glass over the painting, like the rest of the app's
+          art pages.
+        </p>
+        <details open>
+          <summary>The colours: from sun to sea</summary>
+          <ul>
+            <li><b>A · Clean</b>: Sun gold <code>#F5C451</code>. Every rule kept, or no trade.</li>
+            <li><b>B · Solid</b>: Champagne <code>#F6E1A6</code>. Kept, with a wobble.</li>
+            <li><b>C · Mixed</b>: Moon silver <code>#D3DDE6</code>. One rule slipped.</li>
+            <li><b>D · Slipped</b>: Lilac <code>#B9A5F0</code>. Two or more slipped.</li>
+            <li><b>E · Tilt</b>: Aegean <code>#74B3E8</code>. The calm blue of the calm screen.</li>
+            <li>
+              Warm light for kept days, cooling toward the sea as rules slip. No red, no green:
+              this is not a P&amp;L. Each colour is light, so it reads on dark glass.
+            </li>
+            <li>
+              The grade is always its letter, set in its own light: a lettered chip on the fresco,
+              a four-point star in the week. Colour is never the only signal.
+            </li>
+            <li>An unjudged day stays frosted, never coloured as bad.</li>
+          </ul>
+        </details>
+        <details open>
+          <summary>In the iOS app</summary>
+          <ul>
+            <li>
+              Same data as now (<code>GET /v1/day-logs</code>, <code>PUT /v1/day-logs/{day}</code>).
+              No backend change.
+            </li>
+            <li>
+              Glass is SwiftUI <code>.ultraThinMaterial</code> over the artwork; the five colours
+              replace the gold shades in <code>StillColor</code>.
+            </li>
+            <li>
+              Changes the rule "grades have no per-grade colours" in brand-colors.md §12 and the
+              Day Log doc. "No green or red" stays.
+            </li>
+          </ul>
+        </details>
+      </aside>
+    </main>
+    <p class="preview-notice">
+      Design preview only. Nothing is saved or sent. Artwork is concept-only pending production
+      rights clearance.
+    </p>
+
+    <script>
+      (() => {
+        const G = {
+          A: { name: "Clean", means: "Every rule kept, or no trade at all." },
+          B: { name: "Solid", means: "Kept, with a wobble." },
+          C: { name: "Mixed", means: "One rule slipped." },
+          D: { name: "Slipped", means: "Two or more rules slipped." },
+          E: { name: "Tilt", means: "The day got away from you. Only you choose this." },
+        };
+        const col = (g) => `var(--${g})`;
+        const TAGS = ["Late night", "FOMO", "Bored", "After a loss", "Social media", "Tired", "Stressed", "Rushed"];
+        const MONTHS = {
+          "2026-10": {
+            title: "October 2026",
+            first: 4,
+            days: 31,
+            today: null,
+            logs: {
+              2: { g: "B" }, 3: { g: "A" }, 5: { g: "C" }, 6: { g: "B" }, 7: { g: "B" }, 8: { g: "A" },
+              9: { g: "A" }, 10: { g: "A" }, 12: { g: "D" }, 13: { g: "C" }, 14: { g: "B" }, 15: { g: "A" },
+              16: { g: "B" }, 17: { g: "A" }, 18: { g: "A" }, 19: { g: "E" }, 20: { g: "C" }, 21: { g: "B" },
+              22: { g: "B" }, 23: { g: "A" }, 24: { g: "A" }, 26: { g: "B" }, 27: { g: "D" }, 28: { g: "C" },
+              29: { g: "B" }, 30: { g: "A" }, 31: { g: "B" },
+            },
+          },
+          "2026-11": {
+            title: "November 2026",
+            first: 0,
+            days: 30,
+            today: 11,
+            logs: {
+              1: { g: "A", rule: "kept" }, 2: { g: "B", rule: "partly" }, 3: { g: "A", rule: "kept" },
+              4: { g: "C", rule: "partly", tags: ["Late night"] }, 6: { g: "B", rule: "partly" },
+              7: { g: "A", rule: "didn't trade" }, 8: { g: "D", rule: "not kept", tags: ["After a loss", "Tired"] },
+              9: { g: "E", tags: ["After a loss", "Late night"] }, 10: { g: "B", rule: "partly", tags: ["Rushed"] },
+            },
+            suggested: { 11: "A" },
+          },
+        };
+        let key = "2026-11";
+        let justSaved = null;
+        const $ = (id) => document.getElementById(id);
+        const screen = $("screen");
+        const wd = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const monthName = (m) => m.title.split(" ")[0];
+        const dayName = (m, d) => wd[(m.first + d - 1) % 7];
+        const isFuture = (m, d) => m.today !== null && d > m.today;
+        const label = (m, d) => {
+          const l = m.logs[d];
+          return `${d} ${monthName(m)}, ${l ? `${l.g}, ${G[l.g].name}` : "not graded"}${d === m.today ? ", today" : ""}`;
+        };
+        const mark = (g, extra = "") => `<span class="mark" style="--c:${col(g)}" ${extra}>${g}</span>`;
+        const SPARK = "M0,-10 C1.3,-2.6 2.6,-1.3 10,0 C2.6,1.3 1.3,2.6 0,10 C-1.3,2.6 -2.6,1.3 -10,0 C-2.6,-1.3 -1.3,-2.6 0,-10Z";
+
+        function fresco(m) {
+          let html = "";
+          for (let i = 0; i < m.first; i++) html += `<span class="pane future blank" aria-hidden="true"></span>`;
+          for (let d = 1; d <= m.days; d++) {
+            const l = m.logs[d];
+            const future = isFuture(m, d);
+            const cls = ["pane", future ? "future" : l ? "graded" : "veil", d === m.today ? "today" : "", justSaved === d ? "reveal" : ""].join(" ");
+            html += `<button type="button" class="${cls}" ${l ? `style="--c:${col(l.g)}"` : ""} ${future ? "disabled" : `data-day="${d}"`} aria-label="${label(m, d)}"><span class="n">${d}</span>${l ? `<span class="g">${l.g}</span>` : ""}</button>`;
+          }
+          const cells = m.first + m.days;
+          for (let i = cells; i < Math.ceil(cells / 7) * 7; i++) html += `<span class="pane future blank" aria-hidden="true"></span>`;
+          return `<div class="fresco">${html}</div>`;
+        }
+
+        function render() {
+          const m = MONTHS[key];
+          const graded = Object.values(m.logs);
+          $("month-title").innerHTML = `${m.title}<small>${graded.length} of ${m.days} panes cleared</small>`;
+          $("prev-month").disabled = key === "2026-10";
+          $("next-month").disabled = key === "2026-11";
+          $("view").innerHTML = fresco(m);
+          $("cap").innerHTML = `Each day you judge clears a pane of the painting, <b>whatever the grade</b>. Judge the whole month to see all of it.`;
+          $("legend").innerHTML = Object.entries(G).map(([g, v]) => `<span>${mark(g)}${v.name}</span>`).join("");
+
+          const counts = Object.keys(G).map((g) => [g, graded.filter((l) => l.g === g).length]);
+          $("band").innerHTML = counts
+            .filter(([, n]) => n)
+            .map(([g, n]) => `<span style="flex:${n};background:${col(g)};color:${col(g)}"></span>`)
+            .join("");
+          $("f-judged").textContent = graded.length;
+          const top = counts.slice().sort((a, b) => b[1] - a[1])[0];
+          $("f-common").innerHTML = graded.length ? `<span style="color:${col(top[0])}">${top[0]}</span>` : "–";
+          $("f-common-name").textContent = graded.length ? `most often · ${G[top[0]].name}` : "most often";
+          const withRule = graded.filter((l) => l.rule);
+          const held = withRule.filter((l) => l.rule === "kept" || l.rule === "didn't trade").length;
+          $("f-rules").textContent = withRule.length ? `${held}/${withRule.length}` : "–";
+
+          const end = m.today ?? m.days;
+          const start = Math.max(1, end - 6);
+          let w = "";
+          for (let d = start; d <= end; d++) {
+            const l = m.logs[d];
+            const icon = l
+              ? `<svg viewBox="-15 -15 30 30"><circle r="12" fill="${col(l.g)}" opacity=".2" filter="url(#glow)"/><path d="${SPARK}" fill="${col(l.g)}" transform="scale(1.1)"/></svg>`
+              : `<svg viewBox="-15 -15 30 30"><circle r="5" fill="none" stroke="#f5f2eb59" stroke-dasharray="1.5 2"/></svg>`;
+            w += `<div class="${d === m.today ? "now" : ""}">${icon}<b style="${l ? `--c:${col(l.g)}` : ""}">${l ? l.g : "·"}</b><small>${d === m.today ? "Today" : dayName(m, d)}</small></div>`;
+          }
+          $("week").innerHTML = w;
+          $("week-range").textContent = `${start}–${end} ${monthName(m).slice(0, 3)}`;
+
+          const lastDay = Object.keys(m.logs).map(Number).sort((a, b) => b - a)[0];
+          if (lastDay) {
+            const l = m.logs[lastDay];
+            $("last").innerHTML = `${mark(l.g)}<div><p>${dayName(m, lastDay)} ${lastDay} ${monthName(m)}</p><h3>${G[l.g].name}</h3><p>${
+              l.rule ? `Rule Check: ${l.rule}` : "Judged without a Rule Check"
+            }</p>${l.tags ? `<div class="chips">${l.tags.map((t) => `<span>${t}</span>`).join("")}</div>` : ""}</div>`;
+          }
+          const todayLog = m.today ? m.logs[m.today] : null;
+          $("judge-today").disabled = !m.today;
+          $("judge-today").textContent = todayLog ? "Judge today again" : "Judge today";
+        }
+
+        let day = null;
+        let choice = null;
+        let tags = [];
+        const sheet = $("sheet");
+        function renderSheet() {
+          const m = MONTHS[key];
+          const editable = m.today !== null && day >= m.today - 1;
+          $("locked").hidden = editable;
+          $("extras").hidden = !editable;
+          $("save").hidden = !editable;
+          $("sheet-day").textContent = `${dayName(m, day)} ${day} ${monthName(m)}${day === m.today ? " · Today" : ""}`;
+          $("sheet-title").textContent = editable ? "How did you trade?" : G[choice]?.name ?? "Not graded";
+          const s = m.suggested?.[day];
+          $("suggest").hidden = !(editable && s);
+          if (s) $("suggest").innerHTML = `${mark(s)}Your Rule Check suggests ${s} · ${G[s].name}. It is not a verdict.`;
+          $("grades").innerHTML = Object.entries(G)
+            .filter(([g]) => editable || g === choice)
+            .map(
+              ([g, v]) =>
+                `<button type="button" class="grade" style="--c:${col(g)}" aria-pressed="${g === choice}" data-grade="${g}" ${editable ? "" : "disabled"}>${mark(g)}<span><strong>${v.name}</strong><span class="means">${v.means}</span></span><em>${g === choice ? "Chosen" : g === s ? "Suggested" : ""}</em></button>`,
+            )
+            .join("");
+          $("tags").innerHTML = TAGS.map((t) => `<button type="button" aria-pressed="${tags.includes(t)}" data-tag="${t}">${t}</button>`).join("");
+          $("calm").classList.toggle("show", choice === "E" && editable);
+          $("save").disabled = !choice;
+          $("save").textContent = choice ? `Save · ${choice} ${G[choice].name}` : "Choose a grade";
+        }
+        function open(d) {
+          const m = MONTHS[key];
+          day = d;
+          choice = m.logs[d]?.g ?? null;
+          tags = [...(m.logs[d]?.tags ?? [])];
+          renderSheet();
+          sheet.inert = false;
+          screen.classList.add("judging");
+          sheet.scrollTop = 0;
+        }
+        function close() {
+          screen.classList.remove("judging");
+          sheet.inert = true;
+        }
+
+        screen.addEventListener("click", (e) => {
+          const t = e.target.closest("[data-day]");
+          if (t) return open(Number(t.dataset.day));
+          const g = e.target.closest("[data-grade]");
+          if (g) {
+            choice = g.dataset.grade;
+            return renderSheet();
+          }
+          const tag = e.target.closest("[data-tag]");
+          if (tag) {
+            const v = tag.dataset.tag;
+            tags = tags.includes(v) ? tags.filter((x) => x !== v) : tags.length < 3 ? [...tags, v] : tags;
+            renderSheet();
+          }
+        });
+        $("scrim").addEventListener("click", close);
+        $("judge-today").addEventListener("click", () => open(MONTHS[key].today));
+        $("save").addEventListener("click", () => {
+          const m = MONTHS[key];
+          m.logs[day] = { ...m.logs[day], g: choice, tags: tags.length ? tags : undefined };
+          justSaved = day;
+          close();
+          render();
+          justSaved = null;
+        });
+        $("prev-month").addEventListener("click", () => ((key = "2026-10"), render()));
+        $("next-month").addEventListener("click", () => ((key = "2026-11"), render()));
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") close();
+        });
+        const scroller = $("scroller");
+        const status = document.querySelector(".app-screen > .status");
+        scroller.addEventListener("scroll", () => status.classList.toggle("solid", scroller.scrollTop > 120), { passive: true });
+
+        const params = new URLSearchParams(location.search);
+        render();
+        if (params.has("focus")) requestAnimationFrame(() => (scroller.scrollTop = 150));
+      })();
+    </script>
+  </body>
+</html>

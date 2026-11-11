@@ -121,6 +121,17 @@
     ]
   },
   {
+    "id": "50-day-log",
+    "title": "Day Log",
+    "group": "daily",
+    "summary": "The month as a fresco behind frosted glass: each judged day clears one pane",
+    "primary_label": "Judge today",
+    "notes": [
+      "Concept replacement for the Log tab, dark and on glass over the painting. The month's fresco sits behind frosted panes; each judged day clears its pane, whatever the grade, with a lettered chip and a line in the grade's colour. Unjudged days stay frosted, never coloured as bad.",
+      "Grade colours, sun to sea: A Sun gold #F5C451, B Champagne #F6E1A6, C Moon silver #D3DDE6, D Lilac #B9A5F0, E Aegean #74B3E8. No red or green; the letter always shows. Also: this week as four-point stars, the month at a glance, last judged, and a dark glass grading sheet with the calm note after E. Same Day Log API; no backend change."
+    ]
+  },
+  {
     "id": "10-secure-base",
     "title": "Secure your base",
     "group": "foundations",
