@@ -418,8 +418,59 @@
         right: 0;
         bottom: 64px;
         padding: 30px 21px 10px;
-        background: linear-gradient(180deg, #14151a00, #14151af0 45%);
+        background: linear-gradient(180deg, #14151a00, #14151af0 55%);
         z-index: 3;
+        display: flex;
+        justify-content: center;
+      }
+      .dock .pill-button {
+        background: #2e2f35db;
+        border: 1px solid #8a7b5a;
+        color: #ede9e0;
+        box-shadow: 0 14px 30px -14px #000;
+      }
+      .dock .pill-button:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+      /* the one action: a centred glass pill floating on the fade (option A) */
+      .pill-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        height: 50px;
+        padding: 0 22px 0 18px;
+        border-radius: 99px;
+        font: 600 15px/1 var(--sans);
+        cursor: pointer;
+        backdrop-filter: blur(22px) saturate(150%);
+        -webkit-backdrop-filter: blur(22px) saturate(150%);
+      }
+      .pill-button .icon {
+        width: 17px;
+        height: 17px;
+      }
+      .pill-button .quiet {
+        font-weight: 400;
+        opacity: 0.65;
+      }
+      .lights {
+        display: inline-flex;
+        gap: 3px;
+      }
+      .lights b {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+      }
+      .pill-letter {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font: 700 14px/1 var(--serif);
+        color: #20201d;
       }
       .light-button {
         width: 100%;
@@ -759,7 +810,7 @@
           </div>
 
           <div class="dock">
-            <button type="button" class="light-button" id="judge-today">Judge today</button>
+            <button type="button" class="pill-button" id="judge-today">Judge today</button>
           </div>
 
           <nav class="bottom-tabs" aria-label="App preview navigation">
@@ -972,7 +1023,10 @@
           }
           const todayLog = m.today ? m.logs[m.today] : null;
           $("judge-today").disabled = !m.today;
-          $("judge-today").textContent = todayLog ? "Judge today again" : "Judge today";
+          const colours = { A: "#F5C451", B: "#F6E1A6", C: "#D3DDE6", D: "#B9A5F0", E: "#74B3E8" };
+          $("judge-today").innerHTML = todayLog
+            ? `<span class="pill-letter" style="background:${colours[todayLog.g]};box-shadow:0 0 14px ${colours[todayLog.g]}99">${todayLog.g}</span>Today, ${G[todayLog.g].name}<span class="quiet">· Change</span>`
+            : `<span class="lights">${Object.values(colours).map((c) => `<b style="background:${c}"></b>`).join("")}</span>Judge today`;
         }
 
         let day = null;

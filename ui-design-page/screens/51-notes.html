@@ -563,13 +563,58 @@
         right: 0;
         bottom: 64px;
         padding: 26px 21px 10px;
-        background: linear-gradient(180deg, #f5f2eb00, #f5f2ebf2 45%);
+        background: linear-gradient(180deg, #f5f2eb00, #f5f2ebf2 55%);
         z-index: 3;
+        display: flex;
+        justify-content: center;
       }
-      .dock .ink-button {
-        width: 100%;
-        min-height: 52px;
-        font-size: 15px;
+      .dock .pill-button {
+        background: #fffdf8db;
+        border: 1px solid #d8c8ab;
+        color: var(--ink);
+        box-shadow: 0 14px 30px -16px #3a2d1a80;
+      }
+      .dock .pill-button .icon {
+        color: #76654b;
+      }
+      /* the one action: a centred glass pill floating on the fade (option A) */
+      .pill-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        height: 50px;
+        padding: 0 22px 0 18px;
+        border-radius: 99px;
+        font: 600 15px/1 var(--sans);
+        cursor: pointer;
+        backdrop-filter: blur(22px) saturate(150%);
+        -webkit-backdrop-filter: blur(22px) saturate(150%);
+      }
+      .pill-button .icon {
+        width: 17px;
+        height: 17px;
+      }
+      .pill-button .quiet {
+        font-weight: 400;
+        opacity: 0.65;
+      }
+      .lights {
+        display: inline-flex;
+        gap: 3px;
+      }
+      .lights b {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+      }
+      .pill-letter {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font: 700 14px/1 var(--serif);
+        color: #20201d;
       }
 
       /* the sheet: opening, following or writing a note */
@@ -816,6 +861,7 @@
           <path d="m20 20-4.2-4.2"></path>
         </symbol>
         <symbol id="i-plus" viewbox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></symbol>
+        <symbol id="i-pen" viewbox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16Z"></path><path d="m13 7 4 4"></path></symbol>
         <symbol id="i-gate" viewbox="0 0 24 24">
           <path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6Z"></path>
           <path d="m9 12 2 2 4-4"></path>
@@ -966,8 +1012,8 @@
           </div>
 
           <div class="dock">
-            <button type="button" class="ink-button" id="write">
-              <svg class="icon" aria-hidden="true"><use href="#i-plus" /></svg>Write a note
+            <button type="button" class="pill-button" id="write">
+              <svg class="icon" aria-hidden="true"><use href="#i-pen" /></svg>Write a note
             </button>
           </div>
 
