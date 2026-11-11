@@ -1,0 +1,1127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" href="data:," />
+    <title>Still — Today · routine deck</title>
+    <script src="../shared/preview.js" defer></script>
+    <link rel="stylesheet" href="../shared/screens.css" />
+    <style>
+      .app-screen {
+        position: relative;
+      }
+      .segmented.compact-set {
+        margin: 0;
+        width: 128px;
+        flex: none;
+        flex-wrap: nowrap;
+      }
+      .segmented.compact-set label {
+        min-width: 0;
+      }
+      .segmented.compact-set span {
+        min-height: 30px;
+        padding: 5px 6px;
+      }
+      .segments {
+        display: grid;
+        gap: 4px;
+        margin: 10px 0 4px;
+      }
+      .segments span {
+        height: 5px;
+        border-radius: 3px;
+        background: #ded7ca;
+      }
+      .segments span.done {
+        background: var(--gold);
+      }
+      .deck-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        color: var(--muted);
+        margin-bottom: 14px;
+      }
+
+      /* the deck */
+      .deck {
+        position: relative;
+        height: 196px;
+        margin: 12px 0 22px;
+        touch-action: pan-y;
+      }
+      .card {
+        position: absolute;
+        inset: 0;
+        border-radius: 18px;
+        overflow: hidden;
+        background: #faf8f2;
+        border: 1px solid var(--line);
+        display: flex;
+        flex-direction: column;
+        transform-origin: 50% 110%;
+        transition:
+          transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+          opacity 0.32s;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      .card.top {
+        cursor: grab;
+      }
+      .card.dragging {
+        transition: none;
+        cursor: grabbing;
+      }
+      .card[data-depth="1"] {
+        transform: translateY(7px) scale(0.96);
+      }
+      .card[data-depth="2"] {
+        transform: translateY(14px) scale(0.92);
+        opacity: 0.7;
+      }
+      .card-art {
+        position: relative;
+        height: 104px;
+        flex: none;
+        background-size: cover;
+        border-bottom: 1px solid var(--line);
+      }
+      .card-when {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        background: #f5f2ebe6;
+        border-radius: 999px;
+        padding: 3px 8px;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: #76654b;
+      }
+      .card-body {
+        padding: 9px 14px 11px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        flex: 1;
+      }
+      .card-body h2 {
+        font: 500 22px/1.05 var(--serif);
+        margin: 0;
+      }
+      .card-body p {
+        margin: 0;
+        font-size: 12px;
+        line-height: 1.4;
+        color: #59554f;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .card-facts {
+        margin-top: auto;
+        display: flex;
+        gap: 12px;
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .card-facts b {
+        color: var(--ink);
+        font-weight: 600;
+      }
+
+      /* colour wash while dragging: green from the right edge, red from the left */
+      .tint {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s;
+      }
+      .card.dragging .tint {
+        transition: none;
+      }
+      .tint.accept {
+        background: linear-gradient(270deg, #3f8f5cee, #3f8f5c88 55%, #3f8f5c33);
+        box-shadow: inset 0 0 0 3px #3f8f5c;
+      }
+      .tint.skip {
+        background: linear-gradient(90deg, #c4524cee, #c4524c88 55%, #c4524c33);
+        box-shadow: inset 0 0 0 3px #c4524c;
+      }
+      .hint {
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        color: var(--muted);
+        margin: 0 8px;
+      }
+      .hint .skip-dot,
+      .hint .accept-dot {
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        margin: 0 5px 1px;
+      }
+      .hint .skip-dot {
+        background: #c4524c;
+      }
+      .hint .accept-dot {
+        background: #3f8f5c;
+      }
+
+      /* finished set */
+      .complete {
+        position: absolute;
+        inset: 0;
+        border-radius: 18px;
+        background: #eee8db;
+        border: 1px solid #d8c8ab;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 18px 20px;
+        gap: 6px;
+      }
+      .complete h2 {
+        font: 500 25px/1.05 var(--serif);
+        margin: 0;
+      }
+      .complete p {
+        margin: 0;
+        font-size: 13px;
+        color: #59554f;
+      }
+
+      .complete.picked {
+        background: #faf8f2;
+        border: 1px dashed #b8ae9d;
+        align-items: center;
+        text-align: center;
+      }
+
+      /* accepted tasks wait here until their check-in is saved */
+      .in-progress {
+        margin: 18px 0 14px;
+      }
+      .in-progress .eyebrow {
+        margin: 0 0 8px;
+      }
+      .task-rows {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 8px;
+      }
+      .task-row {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        min-height: 68px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px 12px 16px;
+        border: 0;
+        border-radius: 14px;
+        background: #20201d;
+        color: #f5f2eb;
+        text-align: left;
+        cursor: pointer;
+      }
+      /* the painting fills the row; a dark wash on the text side keeps ivory text readable */
+      .row-art {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+      }
+      .row-art::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, #20201dcc 0%, #20201d70 50%, #20201d14 100%);
+      }
+      .task-row > :not(.row-art) {
+        position: relative;
+      }
+      .task-row.new {
+        animation: row-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      @keyframes row-in {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+      }
+      .row-text {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .row-text strong {
+        font: 500 19px/1.1 var(--serif);
+      }
+      .row-text small {
+        font-size: 11px;
+        color: #ede9e0;
+      }
+      .row-status {
+        flex: none;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #20201d;
+        background: #f5f2ebe6;
+        border-radius: 999px;
+        padding: 4px 8px;
+      }
+      .task-row .icon {
+        width: 16px;
+        height: 16px;
+        flex: none;
+        color: #f5f2eb;
+        filter: drop-shadow(0 1px 2px #20201dcc);
+      }
+
+      /* resume bar: the quest's painting, name and progress in one tap target */
+      .resume-dock {
+        border-top: 0;
+        padding-top: 8px;
+        padding-bottom: 8px;
+      }
+      .resume {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 10px 17px 16px;
+        border: 0;
+        border-radius: 16px;
+        background: #20201d;
+        color: #f5f2eb;
+        text-align: left;
+        cursor: pointer;
+        box-shadow: 0 8px 20px -10px #20201d99;
+      }
+      .resume-art {
+        position: absolute;
+        inset: 0;
+        background: url("../assets/art/today.jpg") 50% 32% / cover;
+      }
+      .resume-art::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, #20201dee 0%, #20201db3 55%, #20201d66 100%);
+      }
+      .resume-text,
+      .resume-go {
+        position: relative;
+      }
+      .resume-text {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+      }
+      .resume-text small {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 1.3px;
+        text-transform: uppercase;
+        color: #cdb27f;
+      }
+      .resume-text strong {
+        font: 500 20px/1.1 var(--serif);
+      }
+      .resume-go {
+        flex: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: #f5f2eb;
+        color: #20201d;
+        transition: transform 0.2s;
+      }
+      .resume-go .icon {
+        width: 18px;
+        height: 18px;
+      }
+      .resume:hover .resume-go {
+        transform: translateX(2px);
+      }
+      .resume-bar {
+        position: absolute;
+        left: 16px;
+        right: 64px;
+        bottom: 8px;
+        height: 3px;
+        border-radius: 2px;
+        background: #f5f2eb33;
+      }
+      .resume-bar span {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: var(--gold);
+      }
+
+      /* sheets */
+      .scrim {
+        position: absolute;
+        inset: 0;
+        background: #20201d55;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s;
+        z-index: 5;
+      }
+      .scrim.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .sheet {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        max-height: 88%;
+        overflow-y: auto;
+        background: var(--ivory);
+        border-radius: 24px 24px 0 0;
+        padding: 10px 22px 26px;
+        transform: translateY(105%);
+        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        z-index: 6;
+      }
+      .sheet.open {
+        transform: none;
+      }
+      .grabber {
+        width: 38px;
+        height: 5px;
+        border-radius: 3px;
+        background: #cbc5ba;
+        margin: 0 auto 12px;
+      }
+      .sheet-art {
+        height: 120px;
+        border-radius: 14px;
+        background-size: cover;
+        margin-bottom: 14px;
+      }
+      .sheet h2 {
+        font: 500 30px/1.05 var(--serif);
+        margin: 2px 0 8px;
+      }
+      .sheet .lead {
+        margin-bottom: 14px;
+      }
+      .why {
+        border-left: 2px solid var(--gold);
+        padding-left: 12px;
+        margin: 12px 0 18px;
+        font-size: 13px;
+        color: #59554f;
+      }
+      .question {
+        margin: 0 0 16px;
+        border: 0;
+        padding: 0;
+      }
+      .question legend {
+        font-weight: 600;
+        font-size: 13px;
+        margin-bottom: 8px;
+      }
+      .scale {
+        display: flex;
+        justify-content: space-between;
+      }
+      .scale label {
+        position: relative;
+      }
+      .scale input {
+        position: absolute;
+        opacity: 0;
+      }
+      .scale span {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 1px solid #b8ae9d;
+        display: grid;
+        place-items: center;
+        font-weight: 600;
+      }
+      .scale input:checked + span {
+        background: #ebe4d5;
+        border-color: #af9568;
+      }
+      .options {
+        display: grid;
+        gap: 6px;
+      }
+      .options label {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        min-height: 44px;
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #faf8f3;
+      }
+      .options input {
+        flex: none;
+        width: 18px;
+        min-width: 0;
+        height: 18px;
+        min-height: 0;
+        margin: 0;
+        padding: 0;
+        accent-color: #76654b;
+      }
+      .options label:has(input:checked) {
+        background: #ebe4d5;
+        border-color: #af9568;
+      }
+      .sheet-actions {
+        display: grid;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .sheet-actions .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .card,
+        .sheet,
+        .scrim {
+          transition: opacity 0.2s;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <svg aria-hidden="true" class="sr-only" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <symbol id="i-arrow" viewbox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6"></path></symbol>
+        <symbol id="i-chevron" viewbox="0 0 24 24"><path d="m9 6 6 6-6 6"></path></symbol>
+        <symbol id="i-back" viewbox="0 0 24 24"><path d="m15 5-7 7 7 7"></path></symbol>
+        <symbol id="i-left" viewbox="0 0 24 24"><path d="M20 12H4m6-6-6 6 6 6"></path></symbol>
+        <symbol id="i-right" viewbox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"></path></symbol>
+        <symbol id="i-sun" viewbox="0 0 24 24">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path
+            d="M12 2v2M12 20v2M2 12h2M20 12h2m-3-9-1.5 1.5M6.5 17.5 5 19m14 0-1.5-1.5M6.5 6.5 5 5"
+          ></path>
+        </symbol>
+        <symbol id="i-book" viewbox="0 0 24 24">
+          <path d="M12 5C8 2 5 3 3 4v16c3-2 6-1 9 1 3-2 6-3 9-1V4c-2-1-5-2-9 1Zm0 0v16"></path>
+        </symbol>
+        <symbol id="i-log" viewbox="0 0 24 24">
+          <path d="M8 5h12M8 12h12M8 19h12M4 5h.01M4 12h.01M4 19h.01"></path>
+        </symbol>
+        <symbol id="i-tools" viewbox="0 0 24 24">
+          <path d="M12 20s-5-3-5-8C7 6 15 3 21 3c0 8-2 16-9 17Zm-7 2L18 7"></path>
+        </symbol>
+        <symbol id="i-user" viewbox="0 0 24 24">
+          <circle cx="12" cy="8" r="4"></circle>
+          <path d="M4 21c0-5 3-7 8-7s8 2 8 7Z"></path>
+        </symbol>
+        <symbol id="i-signal" viewbox="0 0 24 24">
+          <path d="M4 20v-4M9 20v-8M14 20V8M19 20V4"></path>
+        </symbol>
+        <symbol id="i-wifi" viewbox="0 0 24 24">
+          <path d="M3 8a15 15 0 0 1 18 0M6 12a10 10 0 0 1 12 0M9 16a5 5 0 0 1 6 0M12 20h.01"></path>
+        </symbol>
+        <symbol id="i-battery" viewbox="0 0 24 24">
+          <rect height="12" rx="3" width="17" x="2" y="6"></rect>
+          <path d="M22 10v4"></path>
+          <rect fill="currentColor" height="6" rx="1" stroke="none" width="11" x="5" y="9"></rect>
+        </symbol>
+      </defs>
+    </svg>
+    <header class="review-top">
+      <div>
+        <h1>47 / Today · routine deck</h1>
+        <p>
+          Screen 08 with the routine list replaced by a swipe deck. Drag the top card right or left,
+          or tap it. Nothing is saved.
+        </p>
+      </div>
+      <nav class="review-links" aria-label="Design review navigation">
+        <a href="../index.html">All screens</a
+        ><a href="08-today.html">Current Today (list)</a>
+      </nav>
+    </header>
+    <main class="preview-layout">
+      <div class="phone">
+        <section class="app-screen" aria-label="Today">
+          <div class="status" aria-hidden="true">
+            <span>9:41</span
+            ><span class="status-icons"
+              ><svg class="icon"><use href="#i-signal" /></svg
+              ><svg class="icon"><use href="#i-wifi" /></svg
+              ><svg class="icon battery"><use href="#i-battery" /></svg
+            ></span>
+          </div>
+          <header class="app-header">
+            <div></div>
+            <a class="brand" href="08-today.html" aria-label="Still"
+              ><span class="initial">s</span>till</a
+            ><span class="header-detail">Chapter 1</span>
+          </header>
+          <div class="screen-content">
+            <section class="intro">
+              <div class="summary-line">
+                <h1>Today</h1>
+                <p class="muted"><time datetime="2026-11-06">Fri, 6 Nov</time></p>
+              </div>
+              <p class="lead">One small practice. No trade required.</p>
+              <p class="eyebrow">Chapter 1 · Day 5 of 14</p>
+              <div class="summary-line">
+                <span class="badge">Rank E · 420 XP</span>
+                <span class="caption">Participation credit</span>
+              </div>
+            </section>
+
+            <img class="art-banner" src="../assets/art/today.jpg" alt="" />
+
+            <section class="section panel" aria-labelledby="today-quest-title">
+              <p class="eyebrow">Main quest</p>
+              <h2 class="section-title" id="today-quest-title">Inside the Urge</h2>
+              <p class="lead">Notice the thought, feeling and need behind an urge.</p>
+              <p class="muted">Full version · 15 min</p>
+              <progress
+                class="progress"
+                value="2"
+                max="5"
+                aria-label="2 of 5 quest objectives complete"
+              ></progress>
+              <p class="note">2 of 5 objectives · Draft saved</p>
+            </section>
+            <blockquote class="note">An urge is not an order.</blockquote>
+
+            <section class="section" aria-labelledby="today-routine-title">
+              <div class="summary-line">
+                <h2 class="section-title" id="today-routine-title">Daily routine</h2>
+                <fieldset class="segmented compact-set">
+                  <legend class="sr-only">Daily routine version</legend>
+                  <label
+                    ><input type="radio" name="set" value="full" checked /><span>Full</span></label
+                  >
+                  <label><input type="radio" name="set" value="lite" /><span>Lite</span></label>
+                </fieldset>
+              </div>
+              <div class="segments" id="segments" aria-hidden="true"></div>
+              <div class="deck-meta">
+                <span id="count">0 of 7 done</span><span>+5 DIS for the whole set</span>
+              </div>
+
+              <div
+                class="deck"
+                id="deck"
+                role="group"
+                aria-roledescription="card deck"
+                aria-label="Today's sub-tasks"
+                tabindex="0"
+              ></div>
+
+              <p class="hint" id="hint" aria-hidden="true">
+                <span><span class="skip-dot"></span>Later</span><span>Tap for details</span
+                ><span>Start<span class="accept-dot"></span></span>
+              </p>
+              <div class="in-progress" id="in-progress" hidden></div>
+              <p class="caption">New day at 04:00 local. Checklists are not permission to trade.</p>
+            </section>
+          </div>
+          <footer class="action-dock resume-dock">
+            <button
+              type="button"
+              class="resume"
+              aria-label="Resume quest: Inside the Urge, 2 of 5 objectives done"
+              data-demo="Design preview only. Resume navigation is not connected; the saved full-version draft remains unchanged."
+            >
+              <span class="resume-art" aria-hidden="true"></span>
+              <span class="resume-text">
+                <small>Resume quest · 2 of 5</small>
+                <strong>Inside the Urge</strong>
+              </span>
+              <span class="resume-go" aria-hidden="true"
+                ><svg class="icon"><use href="#i-arrow" /></svg
+              ></span>
+              <span class="resume-bar" aria-hidden="true"><span style="width: 40%"></span></span>
+            </button>
+          </footer>
+          <nav class="bottom-tabs" aria-label="App preview navigation">
+            <a class="tab active" href="08-today.html" aria-current="page"
+              ><svg class="icon" aria-hidden="true"><use href="#i-sun" /></svg>Today</a
+            ><a class="tab" href="34-stats.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-book" /></svg>Journey</a
+            ><a class="tab" href="43-log-calendar.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-log" /></svg>Log</a
+            ><a class="tab" href="35-inventory.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-tools" /></svg>Tools</a
+            ><a class="tab" href="46-profile-settings.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-user" /></svg>Me</a
+            >
+          </nav>
+          <div class="home-indicator" aria-hidden="true"></div>
+
+          <div class="scrim" id="scrim"></div>
+          <div class="sheet" id="sheet" inert role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+            <div class="grabber" aria-hidden="true"></div>
+            <div id="sheet-body"></div>
+          </div>
+        </section>
+      </div>
+      <aside class="reference-panel">
+        <h2>How the deck works</h2>
+        <p>
+          Same Today page as screen 08. The three Morning / Market review / Evening lists are
+          replaced by one small stack of cards, one painting each, in the order of the day. The
+          full list (screen 37) stays one tap away for anyone who prefers it.
+        </p>
+        <details open>
+          <summary>Gestures</summary>
+          <ul>
+            <li>
+              <b>Swipe right · Start.</b> The card leaves the deck and drops into an "In progress"
+              row underneath. Tap the row to open its check-in (the same taps as screens 38–42).
+              Saving marks it done and removes the row; closing without saving keeps it in
+              progress.
+            </li>
+            <li>
+              <b>Swipe left · Later.</b> The card goes to the back of the deck. It is not skipped:
+              the programme says the seven are done every day, so "later" never removes one, never
+              costs XP and never says "skipped". It comes round again.
+            </li>
+            <li>
+              <b>Tap · Details.</b> What to do, why it matters, time and XP, with Start and Later
+              buttons. Reading is never counted as doing.
+            </li>
+            <li>
+              Swipe only, no buttons. While dragging, the card washes green from the right or red
+              from the left, stronger the further it goes. It only commits past a third of the
+              card's width; let go earlier and it springs back.
+            </li>
+          </ul>
+        </details>
+        <details open>
+          <summary>Calm rules kept</summary>
+          <ul>
+            <li>
+              Red and green appear only during the drag, as a direction signal. Nothing red stays on
+              screen afterwards, and the words stay "Later" and "Start", never "skip" or "reject".
+            </li>
+            <li>
+              Saved check-ins leave the "In progress" rows and fill the gold segments at the top.
+              Once every card is picked, the deck says so; the last save turns it into the "whole
+              set" card (+5 DIS once).
+            </li>
+            <li>Lite shows only Mind Check, News Scan, Fit-to-Trade Gate and Rule Check.</li>
+          </ul>
+        </details>
+        <details open>
+          <summary>In the iOS app</summary>
+          <ul>
+            <li>
+              No buttons on screen, but VoiceOver gets "Start", "Later" and "Details" actions on the
+              card, so nobody has to drag. Colour is never the only signal: the card also flies in
+              that direction. Reduce Motion fades cards instead of flinging them.
+            </li>
+            <li>
+              Haptics: a light tick when a drag crosses the line, a firm tap when a check-in saves,
+              nothing for Later.
+            </li>
+            <li>
+              Each sub-task needs its own painting (artwork rights are still pending); this preview
+              reuses existing crops.
+            </li>
+            <li>
+              No backend change: "In progress" and Later are kept on this phone (until the 04:00
+              reset), and the row opens the existing check-in. Saved state still comes from
+              <code>GET /v1/subtasks/today</code>.
+            </li>
+          </ul>
+        </details>
+      </aside>
+    </main>
+    <p class="preview-notice">
+      Design preview only. Nothing is saved or sent and no XP is awarded. Artwork is concept-only
+      pending production rights clearance.
+    </p>
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+    <script>
+      (() => {
+        "use strict";
+        const art = (file, x) => ({ file: `../assets/art/${file}`, x });
+        const tasks = [
+          {
+            key: "mind_check", title: "Mind Check", when: "Morning", time: "30 sec", stat: "EMO",
+            lite: true, art: art("task.jpg", "42%"),
+            what: "Tap your mood, your urge to trade and how long you slept last night.",
+            why: "Mood, urge and sleep are the three things most likely to push a trade you didn't plan. Noticing them is the whole skill.",
+            fields: [
+              { type: "scale", label: "Mood (1 low, 5 high)" },
+              { type: "scale", label: "Urge to trade (1 none, 5 strong)" },
+              { type: "choice", label: "Sleep last night", options: ["Under 5 hours", "5 to 6 hours", "6 to 7 hours", "7 to 8 hours", "8 hours or more"] },
+            ],
+          },
+          {
+            key: "news_scan", title: "News Scan", when: "Market review", time: "3 min", stat: "RES",
+            lite: true, art: art("journey.jpg", "8%"),
+            what: "Read today's headlines from 1 or 2 sources. Is there anything today that matters?",
+            why: "Knowing what the day holds before you look at a chart keeps a headline from surprising you mid-decision.",
+            fields: [{ type: "choice", label: "Anything today that matters?", options: ["Yes", "No", "Not sure"] }],
+          },
+          {
+            key: "event_calendar", title: "Event Calendar", when: "Market review", time: "1 min", stat: "RES",
+            lite: false, art: art("journey.jpg", "78%"),
+            what: "Today's scheduled events in plain words. Is there a big event today?",
+            why: "Prices can move fast around big events. Seeing them in advance is how you choose to stay out, calmly.",
+            fields: [{ type: "choice", label: "Big event today?", options: ["Yes", "No"] }],
+          },
+          {
+            key: "market_map", title: "Market Map", when: "Market review", time: "2 min", stat: "CHT",
+            lite: false, art: art("today.jpg", "30%"),
+            what: "Over the last week, did price go up, down or sideways?",
+            why: "Describing the past without predicting the future is the first chart skill. It says nothing about what comes next.",
+            fields: [{ type: "choice", label: "Over the last week, price went…", options: ["Up", "Down", "Sideways"] }],
+          },
+          {
+            key: "fit_gate", title: "Fit-to-Trade Gate", when: "Right before", time: "1 min", stat: "DIS",
+            lite: true, art: art("welcome.jpg", "50%"),
+            what: "Tap each one that is true right now. Not all four? The answer is \u201cNot today\u201d.",
+            why: "\u201cNot today\u201d earns the same XP as \u201cfit\u201d. The point is the honest check, never the answer.",
+            fields: [{ type: "multi", label: "What is true right now?", options: ["I slept enough", "My urge to trade is 3 or less", "I am not drunk, angry or exhausted", "I remember my current rule"] }],
+          },
+          {
+            key: "session_close", title: "Session Close", when: "After trading", time: "1 min", stat: "DIS",
+            lite: false, art: art("today.jpg", "85%"),
+            what: "Did you trade today? If you did, was it planned or impulsive?",
+            why: "\u201cNo trade\u201d is a good answer. Naming impulsive trades plainly is how the pattern becomes visible.",
+            fields: [{ type: "choice", label: "Today", options: ["No trade", "I traded, and it was planned", "I traded, and it was impulsive"] }],
+          },
+          {
+            key: "rule_check", title: "Rule Check", when: "Evening", time: "30 sec", stat: "DIS",
+            lite: true, art: art("task.jpg", "92%"),
+            what: "Did you keep the No-Trade Week today? Then grade the day in your Day Log.",
+            why: "Honest answers earn the same XP. A logged day counts toward the streak, whatever happened in it.",
+            fields: [{ type: "choice", label: "Did you keep the No-Trade Week today?", options: ["Yes", "No"] }],
+          },
+        ];
+
+        const deck = document.getElementById("deck");
+        const sheet = document.getElementById("sheet");
+        const sheetBody = document.getElementById("sheet-body");
+        const scrim = document.getElementById("scrim");
+        const toastEl = document.getElementById("toast");
+        const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        let lite = false;
+        const done = new Set();
+        let active = [];
+        let queue = tasks.map((t) => t.key);
+
+        const byKey = (key) => tasks.find((t) => t.key === key);
+        const inSet = (t) => !lite || t.lite;
+        const waiting = () =>
+          queue.filter((k) => !done.has(k) && !active.includes(k) && inSet(byKey(k)));
+        const inProgress = () => active.filter((k) => inSet(byKey(k)));
+        const rows = document.getElementById("in-progress");
+
+        let toastTimer;
+        function toast(text) {
+          toastEl.textContent = text;
+          toastEl.hidden = false;
+          clearTimeout(toastTimer);
+          toastTimer = setTimeout(() => (toastEl.hidden = true), 2600);
+        }
+
+        function renderProgress() {
+          const set = tasks.filter(inSet);
+          const seg = document.getElementById("segments");
+          seg.style.gridTemplateColumns = `repeat(${set.length}, 1fr)`;
+          seg.innerHTML = set.map((t) => `<span class="${done.has(t.key) ? "done" : ""}"></span>`).join("");
+          document.getElementById("count").textContent =
+            `${set.filter((t) => done.has(t.key)).length} of ${set.length} done`;
+        }
+
+        function cardHTML(t, depth) {
+          return `<article class="card${depth === 0 ? " top" : ""}" data-depth="${depth}" data-key="${t.key}"
+              ${depth === 0 ? `aria-label="${t.title}, ${t.when}, ${t.time}, plus 5 ${t.stat}"` : 'aria-hidden="true"'}>
+            <div class="card-art" style="background-image:url('${t.art.file}');background-position:${t.art.x} 50%">
+              <span class="card-when">${t.when}</span>
+            </div>
+            <div class="card-body">
+              <h2>${t.title}</h2>
+              <p>${t.what}</p>
+              <div class="card-facts"><span><b>${t.time}</b></span><span><b>+5</b> ${t.stat}</span></div>
+            </div>
+            <span class="tint accept"></span>
+            <span class="tint skip"></span>
+          </article>`;
+        }
+
+        function render() {
+          renderProgress();
+          renderRows();
+          const keys = waiting();
+          const hint = document.getElementById("hint");
+          if (keys.length === 0 && inProgress().length > 0) {
+            deck.innerHTML = `<div class="complete picked">
+                <h2>Every card picked.</h2>
+                <p>Finish the ones in progress below.</p>
+              </div>`;
+            hint.hidden = true;
+            return;
+          }
+          if (keys.length === 0) {
+            deck.innerHTML = `<div class="complete">
+                <p class="eyebrow" style="margin:0">Whole set</p>
+                <h2>All ${tasks.filter(inSet).length} done.</h2>
+                <p>+5 DIS for the set, once today. Your Rule Check is logged, so the streak counts this day.</p>
+                <p class="note">Grade the day in your Day Log when you're ready.</p>
+              </div>`;
+            hint.hidden = true;
+            return;
+          }
+          hint.hidden = false;
+          // Back cards first, so the top card is last in the DOM and on top.
+          deck.innerHTML = keys.slice(0, 3).map((k, i) => cardHTML(byKey(k), i)).reverse().join("");
+          attachDrag(deck.querySelector(".card.top"));
+        }
+
+        let justAdded = null;
+        function renderRows() {
+          const keys = inProgress();
+          rows.hidden = keys.length === 0;
+          rows.innerHTML = `<p class="eyebrow">In progress · ${keys.length}</p>
+            <ul class="task-rows">${keys
+              .map((k) => {
+                const t = byKey(k);
+                return `<li><button type="button" class="task-row${k === justAdded ? " new" : ""}" data-key="${k}"
+                    aria-label="${t.title}, in progress. Open check-in">
+                  <span class="row-art" style="background-image:url('${t.art.file}');background-position:${t.art.x} 45%"></span>
+                  <span class="row-text"><strong>${t.title}</strong><small>${t.time} · +5 ${t.stat}</small></span>
+                  <span class="row-status">In progress</span>
+                  <svg class="icon" aria-hidden="true"><use href="#i-chevron" /></svg>
+                </button></li>`;
+              })
+              .join("")}</ul>`;
+          justAdded = null;
+        }
+        rows.addEventListener("click", (e) => {
+          const key = e.target.closest(".task-row")?.dataset.key;
+          if (key) openTask(byKey(key));
+        });
+
+        function topTask() {
+          return byKey(waiting()[0]);
+        }
+
+        function fling(direction, then) {
+          const card = deck.querySelector(".card.top");
+          if (!card) return then();
+          card.classList.remove("dragging");
+          if (reduceMotion) {
+            card.style.opacity = "0";
+          } else {
+            const x = direction === "right" ? 520 : -520;
+            card.style.transform = `translateX(${x}px) rotate(${x / 26}deg)`;
+            card.style.opacity = "0";
+          }
+          setTimeout(then, reduceMotion ? 180 : 260);
+        }
+
+        function later() {
+          const t = topTask();
+          if (!t) return;
+          closeSheet();
+          fling("left", () => {
+            queue = queue.filter((k) => k !== t.key).concat(t.key);
+            render();
+            toast(`${t.title} is for later. Still part of today.`);
+          });
+        }
+
+        function start() {
+          const t = topTask();
+          if (!t) return;
+          closeSheet();
+          fling("right", () => {
+            active.push(t.key);
+            justAdded = t.key;
+            render();
+            toast(`${t.title} is in progress. Tap it below when you're ready.`);
+          });
+        }
+
+        // ---- drag
+        function attachDrag(card) {
+          if (!card) return;
+          let x0 = 0, y0 = 0, dx = 0, dragging = false, moved = false, pointer = null;
+          const threshold = () => card.offsetWidth / 3;
+          const acceptTint = card.querySelector(".tint.accept");
+          const skipTint = card.querySelector(".tint.skip");
+
+          card.addEventListener("pointerdown", (e) => {
+            pointer = e.pointerId;
+            x0 = e.clientX; y0 = e.clientY; dx = 0; moved = false; dragging = true;
+            card.setPointerCapture(pointer);
+            card.classList.add("dragging");
+          });
+          card.addEventListener("pointermove", (e) => {
+            if (!dragging || e.pointerId !== pointer) return;
+            dx = e.clientX - x0;
+            const dy = e.clientY - y0;
+            if (Math.abs(dx) > 6 || Math.abs(dy) > 6) moved = true;
+            card.style.transform = `translateX(${dx}px) translateY(${dy * 0.15}px) rotate(${dx / 22}deg)`;
+            const p = Math.min(Math.abs(dx) / threshold(), 1);
+            acceptTint.style.opacity = dx > 0 ? p : 0;
+            skipTint.style.opacity = dx < 0 ? p : 0;
+          });
+          const end = (e) => {
+            if (!dragging || e.pointerId !== pointer) return;
+            dragging = false;
+            dx = e.clientX - x0;
+            if (Math.abs(dx) > 6) moved = true;
+            if (!moved) {
+              card.classList.remove("dragging");
+              card.style.transform = "";
+              return openDetails(topTask());
+            }
+            if (dx > threshold()) return start();
+            if (dx < -threshold()) return later();
+            card.classList.remove("dragging");
+            card.style.transform = "";
+            acceptTint.style.opacity = 0;
+            skipTint.style.opacity = 0;
+          };
+          card.addEventListener("pointerup", end);
+          card.addEventListener("pointercancel", end);
+        }
+
+        // ---- sheets
+        function openSheet(html) {
+          sheetBody.innerHTML = html;
+          sheet.inert = false;
+          sheet.classList.add("open");
+          scrim.classList.add("open");
+          sheet.querySelector("button, input")?.focus({ preventScroll: true });
+        }
+        function closeSheet() {
+          sheet.classList.remove("open");
+          scrim.classList.remove("open");
+          sheet.inert = true;
+          deck.focus({ preventScroll: true });
+        }
+
+        function openDetails(t) {
+          if (!t) return;
+          openSheet(`
+            <div class="sheet-art" style="background-image:url('${t.art.file}');background-position:${t.art.x} 40%"></div>
+            <p class="eyebrow">${t.when} · ${t.time} · +5 ${t.stat}</p>
+            <h2 id="sheet-title">${t.title}</h2>
+            <p class="lead">${t.what}</p>
+            <p class="why">${t.why}</p>
+            <p class="note">No trade needed. Reading this doesn't count as doing it.</p>
+            <div class="sheet-actions">
+              <button type="button" class="primary" data-act="start">Start ${t.title}</button>
+              <button type="button" class="secondary" data-act="later">Later</button>
+            </div>`);
+        }
+
+        function fieldHTML(f, i) {
+          if (f.type === "scale") {
+            return `<fieldset class="question"><legend>${f.label}</legend><div class="scale">
+              ${[1, 2, 3, 4, 5].map((n) => `<label><input type="radio" name="f${i}" value="${n}"><span>${n}</span></label>`).join("")}
+            </div></fieldset>`;
+          }
+          const kind = f.type === "multi" ? "checkbox" : "radio";
+          return `<fieldset class="question"><legend>${f.label}</legend><div class="options">
+            ${f.options.map((o) => `<label><input type="${kind}" name="f${i}" value="${o}">${o}</label>`).join("")}
+          </div></fieldset>`;
+        }
+
+        let openTaskKey = null;
+        function openTask(t) {
+          openTaskKey = t.key;
+          openSheet(`
+            <p class="eyebrow">${t.when} · ${t.time} · +5 ${t.stat}</p>
+            <h2 id="sheet-title">${t.title}.</h2>
+            <p class="lead">${t.what}</p>
+            ${t.fields.map(fieldHTML).join("")}
+            <div class="sheet-actions">
+              <button type="button" class="primary" data-act="save">Save check-in</button>
+              <button type="button" class="text-link" data-act="close" style="justify-self:center">Not ready? Close without saving.</button>
+            </div>`);
+        }
+
+        sheet.addEventListener("click", (e) => {
+          const act = e.target.closest("[data-act]")?.dataset.act;
+          if (!act) return;
+          if (act === "start") start();
+          if (act === "later") later();
+          if (act === "save") {
+            const t = byKey(openTaskKey);
+            done.add(t.key);
+            active = active.filter((k) => k !== t.key);
+            openTaskKey = null;
+            closeSheet();
+            render();
+            toast(`${t.title} saved. +5 ${t.stat}`);
+          }
+          if (act === "close") {
+            openTaskKey = null;
+            closeSheet();
+          }
+        });
+        const dismiss = () => {
+          if (openTaskKey) sheet.querySelector('[data-act="close"]').click();
+          else closeSheet();
+        };
+        scrim.addEventListener("click", dismiss);
+        sheet.addEventListener("keydown", (e) => e.key === "Escape" && dismiss());
+
+        deck.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowLeft") later();
+          if (e.key === "ArrowRight") start();
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openDetails(topTask()); }
+        });
+        document.querySelectorAll('input[name="set"]').forEach((input) =>
+          input.addEventListener("change", () => { lite = input.value === "lite"; render(); })
+        );
+
+        // Sample state: Mind Check already saved this morning.
+        done.add("mind_check");
+        render();
+      })();
+    </script>
+  </body>
+</html>

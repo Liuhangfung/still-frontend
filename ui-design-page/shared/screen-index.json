@@ -407,6 +407,17 @@
     ]
   },
   {
+    "id": "47-routine-deck",
+    "title": "Today · routine deck",
+    "group": "daily",
+    "summary": "Today with a small swipe deck in place of the routine list",
+    "primary_label": "Start",
+    "notes": [
+      "Concept alternative to the routine list on 08 Today. Right opens the existing check-in as a sheet; left moves the card to the back of the deck and never skips it, because the seven are done every day.",
+      "Later is phone-only ordering; saved state still comes from GET /v1/subtasks/today. Every swipe has a button and a VoiceOver action."
+    ]
+  },
+  {
     "id": "38-mind-check",
     "title": "Mind Check",
     "group": "daily",
