@@ -143,6 +143,17 @@
     ]
   },
   {
+    "id": "52-me",
+    "title": "Me",
+    "group": "tools",
+    "summary": "Me as your practice: rank, the road to S and your five; every setting behind the gear",
+    "primary_label": "Settings",
+    "notes": [
+      "Concept replacement for Me (34, 45, 46). Under the ceiling painting: the rank crest, the day and chapter, and XP from what you did. The road to S shows every rank and the next rank-up; rank comes from bosses and gates, never XP. Your five as a pentagon read against the largest stat, then four plain counts (days done, days judged and rules held, notes, plans followed this week) and the questionnaire read back.",
+      "Every setting moves to a pushed Settings page behind the gear: a quieter pace (calm coach, pause), coach (System or Sergeant, via PATCH /v1/me; the Sergeant needs the adult confirmation), appearance, export my notes, time zone, start date, sign out and version. A quieter-pace row stays on Me, as design 45 requires."
+    ]
+  },
+  {
     "id": "10-secure-base",
     "title": "Secure your base",
     "group": "foundations",

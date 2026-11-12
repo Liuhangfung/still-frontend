@@ -1,0 +1,1068 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" href="data:," />
+    <title>Still — Me</title>
+    <script src="../shared/preview.js" defer></script>
+    <link rel="stylesheet" href="../shared/screens.css" />
+    <style>
+      /* Me: what the practice has made of you, on glass under the ceiling
+         painting. Everything you set lives one tap away, behind the gear. */
+      :root {
+        --glass: #fffdf8b8;
+        --edge: #ffffffd9;
+        --shade: 0 18px 40px -24px #3a2d1a73;
+        --gold-text: #76654b;
+        --gold-soft: #e9d9b0;
+        --gold-wash: #eee8db;
+        --gold-border: #d8c8ab;
+        --text-2: #59554f;
+        --text-3: #7a756b;
+        --sky-wash: #e7ecec;
+        --sky-border: #d3dddf;
+      }
+      .app-screen {
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
+      }
+      .app-screen {
+        font-feature-settings: "lnum";
+      }
+      .app-screen > .status {
+        position: absolute;
+        inset: 0 0 auto;
+        z-index: 4;
+        color: var(--ink);
+        transition: background 0.25s;
+      }
+      /* once the ceiling has gone, a quiet bar holds the title and the gear */
+      .topbar {
+        position: absolute;
+        inset: 0 0 auto;
+        height: 98px;
+        z-index: 3;
+        display: grid;
+        place-items: end center;
+        padding-bottom: 17px;
+        background: #f5f2ebe6;
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border-bottom: 1px solid #dedbd3;
+        font: 600 18px/1 var(--serif);
+        color: var(--ink);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+      }
+      .topbar.shown {
+        opacity: 1;
+      }
+      .screen-content {
+        position: relative;
+        isolation: isolate;
+        padding: 0 21px 28px;
+        background:
+          radial-gradient(260px 220px at 100% 620px, #e8cf9a8c, transparent 70%),
+          radial-gradient(260px 220px at 0% 1000px, #aabac473, transparent 70%),
+          radial-gradient(260px 220px at 100% 1420px, #e8cf9a66, transparent 70%);
+        background-repeat: no-repeat;
+        background-attachment: local;
+      }
+      /* the ceiling, fading into ivory as it scrolls away */
+      .screen-content::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 360px;
+        z-index: -1;
+        -webkit-mask-image: linear-gradient(180deg, #000 45%, transparent 100%);
+        mask-image: linear-gradient(180deg, #000 45%, transparent 100%);
+        background: url("../assets/art/welcome.jpg") 50% 0 / cover no-repeat;
+      }
+
+      /* the gear: the only way to settings, always top right */
+      .gear {
+        position: absolute;
+        top: 44px;
+        right: 16px;
+        z-index: 5;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 1px solid var(--edge);
+        background: #fffdf8b3;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        color: var(--ink);
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        box-shadow: 0 8px 20px -12px #3a2d1a99;
+      }
+      .gear .icon {
+        width: 21px;
+        height: 21px;
+      }
+
+      /* the crest under the ceiling */
+      .hero {
+        padding-top: 118px;
+        text-align: center;
+      }
+      .crest {
+        width: 112px;
+        height: 112px;
+        margin: 0 auto;
+        border-radius: 50%;
+        padding: 4px;
+        background: conic-gradient(from 210deg, #8a7246, #f1dfae, #b69a64, #f6e6bd, #8a7246);
+        box-shadow: 0 18px 34px -16px #3a2d1aa6;
+      }
+      .crest span {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: radial-gradient(circle at 35% 30%, #fffdf8, #efe7d6);
+        font: 600 54px/1 var(--serif);
+        color: var(--ink);
+      }
+      .kicker {
+        margin: 16px 0 2px;
+        font: 700 10px/1 var(--sans);
+        letter-spacing: 1.6px;
+        text-transform: uppercase;
+        color: var(--gold-text);
+      }
+      .hero h1 {
+        margin: 6px 0 4px;
+        font: 500 31px/1.1 var(--serif);
+        color: var(--ink);
+      }
+      .hero h1 em {
+        color: var(--gold-text);
+      }
+      .hero .where {
+        margin: 0;
+        font-size: 13px;
+        color: var(--text-2);
+      }
+      .xp {
+        display: inline-flex;
+        gap: 6px;
+        align-items: baseline;
+        margin-top: 12px;
+        padding: 6px 14px;
+        border-radius: 99px;
+        background: var(--glass);
+        border: 1px solid var(--edge);
+        font-size: 12px;
+        color: var(--text-2);
+      }
+      .xp b {
+        font: 600 17px/1 var(--serif);
+        color: var(--ink);
+      }
+
+      .glass {
+        background: var(--glass);
+        border: 1px solid var(--edge);
+        border-radius: 22px;
+        box-shadow: var(--shade);
+        backdrop-filter: blur(22px) saturate(140%);
+        -webkit-backdrop-filter: blur(22px) saturate(140%);
+        padding: 18px;
+      }
+      .part {
+        margin-top: 26px;
+      }
+      .part-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 10px;
+      }
+      .part-head h2 {
+        margin: 0;
+        font: 600 22px/1.15 var(--serif);
+        color: var(--ink);
+      }
+      .part-head span {
+        font-size: 12px;
+        color: var(--text-3);
+      }
+      .caption {
+        margin: 12px 0 0;
+        font-size: 12px;
+        line-height: 1.45;
+        color: var(--text-3);
+      }
+
+      /* the road to S */
+      .road {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        position: relative;
+        margin: 4px 0 2px;
+      }
+      .road::before {
+        content: "";
+        position: absolute;
+        left: 8%;
+        right: 8%;
+        top: 17px;
+        height: 2px;
+        background: linear-gradient(90deg, #b69a64 0 var(--reached), #ded7ca var(--reached) 100%);
+      }
+      .rung {
+        position: relative;
+        display: grid;
+        justify-items: center;
+        gap: 6px;
+        font-size: 10px;
+        color: var(--text-3);
+      }
+      .rung b {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font: 600 17px/1 var(--serif);
+        background: #f5f2eb;
+        border: 1.5px solid #ded7ca;
+        color: var(--text-3);
+      }
+      .rung.past b {
+        background: var(--gold-wash);
+        border-color: #b69a64;
+        color: var(--gold-text);
+      }
+      .rung.now b {
+        width: 42px;
+        height: 42px;
+        margin-top: -3px;
+        background: var(--ink);
+        border-color: var(--ink);
+        color: var(--ivory);
+        box-shadow: 0 0 0 4px #b69a6440;
+      }
+      .rung.now {
+        color: var(--ink);
+        font-weight: 700;
+      }
+      .next {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-top: 16px;
+        padding-top: 14px;
+        border-top: 1px solid #dedbd3;
+      }
+      .next .boss {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: var(--gold-wash);
+        border: 1px solid var(--gold-border);
+        display: grid;
+        place-items: center;
+        color: var(--gold-text);
+        flex: none;
+      }
+      .next p {
+        margin: 0;
+        font-size: 13px;
+        color: var(--text-2);
+        line-height: 1.4;
+      }
+      .next p strong {
+        display: block;
+        font: 600 16px/1.2 var(--serif);
+        color: var(--ink);
+      }
+
+      /* your five, as a shape */
+      .five {
+        display: grid;
+        justify-items: center;
+      }
+      .five svg.shape {
+        width: 100%;
+        max-width: 300px;
+        height: auto;
+        overflow: visible;
+      }
+      .shape text {
+        font: 600 10px var(--sans);
+        fill: var(--text-2);
+      }
+      .shape text.code {
+        font: 700 9px var(--sans);
+        letter-spacing: 1px;
+        fill: var(--gold-text);
+      }
+      .stats {
+        width: 100%;
+        margin: 10px 0 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 2px;
+      }
+      .stats button {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 44px 1fr auto;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 4px;
+        border: 0;
+        border-top: 1px solid #dedbd3;
+        background: none;
+        font: inherit;
+        text-align: left;
+        color: var(--ink);
+        cursor: pointer;
+      }
+      .stats li:first-child button {
+        border-top: 0;
+      }
+      .stats .code {
+        font: 700 10px/1 var(--sans);
+        letter-spacing: 1.2px;
+        color: var(--gold-text);
+      }
+      .stats .name {
+        font-size: 14px;
+      }
+      .stats .amount {
+        font: 600 16px/1 var(--serif);
+      }
+      .stats .amount small {
+        font: 400 11px var(--sans);
+        color: var(--text-3);
+        margin-left: 3px;
+      }
+      .stats .grown {
+        grid-column: 2 / 4;
+        font-size: 12px;
+        color: var(--text-3);
+        display: none;
+      }
+      .stats button[aria-expanded="true"] .grown {
+        display: block;
+      }
+
+      /* your practice in four counts */
+      .tiles {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .tile {
+        padding: 14px 15px 15px;
+        border-radius: 18px;
+      }
+      .tile b {
+        display: block;
+        font: 500 32px/1 var(--serif);
+        color: var(--ink);
+      }
+      .tile span {
+        display: block;
+        margin-top: 6px;
+        font-size: 12px;
+        line-height: 1.35;
+        color: var(--text-2);
+      }
+      .tile em {
+        font-style: normal;
+        color: var(--gold-text);
+        font-weight: 600;
+      }
+
+      /* where you started from: the questionnaire, read back */
+      .profile dl {
+        margin: 0;
+        display: grid;
+        gap: 0;
+      }
+      .profile div {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 0;
+        border-top: 1px solid #dedbd3;
+      }
+      .profile div:first-child {
+        border-top: 0;
+        padding-top: 0;
+      }
+      .profile dt {
+        font-size: 13px;
+        color: var(--text-2);
+      }
+      .profile dd {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--ink);
+        text-align: right;
+      }
+      .profile .chips {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+      .profile .chips span {
+        padding: 4px 10px;
+        border-radius: 99px;
+        background: var(--gold-wash);
+        border: 1px solid var(--gold-border);
+        font-size: 12px;
+        color: var(--gold-text);
+      }
+
+      /* a quieter pace stays one tap from Me, though it lives in settings */
+      .quiet {
+        margin-top: 22px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        border-radius: 18px;
+        background: var(--sky-wash);
+        border: 1px solid var(--sky-border);
+        font: inherit;
+        text-align: left;
+        color: var(--ink);
+        cursor: pointer;
+      }
+      .quiet .icon {
+        color: #627784;
+      }
+      .quiet span {
+        flex: 1;
+        font-size: 14px;
+      }
+      .quiet small {
+        display: block;
+        font-size: 12px;
+        color: var(--text-3);
+        margin-top: 2px;
+      }
+
+      /* settings: its own page, pushed from the gear */
+      .settings {
+        position: absolute;
+        inset: 0;
+        z-index: 6;
+        display: flex;
+        flex-direction: column;
+        background: var(--ivory);
+        transform: translateX(102%);
+        transition: transform 0.34s cubic-bezier(0.2, 0.8, 0.2, 1);
+        box-shadow: -18px 0 40px -30px #00000066;
+      }
+      .settings.open {
+        transform: none;
+      }
+      .settings .status {
+        flex: none;
+      }
+      .navbar {
+        flex: none;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        padding: 6px 12px 10px;
+      }
+      .navbar button {
+        justify-self: start;
+        display: inline-flex;
+        align-items: center;
+        gap: 2px;
+        border: 0;
+        background: none;
+        font: 500 15px var(--sans);
+        color: var(--gold-text);
+        cursor: pointer;
+        padding: 8px 4px;
+      }
+      .navbar h2 {
+        margin: 0;
+        font: 600 18px/1 var(--serif);
+      }
+      .settings .screen-content {
+        background: none;
+        padding: 4px 18px 30px;
+      }
+      .settings .screen-content::before {
+        display: none;
+      }
+      .group-title {
+        margin: 22px 6px 8px;
+        font: 700 10px/1 var(--sans);
+        letter-spacing: 1.6px;
+        text-transform: uppercase;
+        color: var(--gold-text);
+      }
+      .group {
+        background: #faf8f2;
+        border: 1px solid #dedbd3;
+        border-radius: 18px;
+        padding: 0 16px;
+      }
+      .group.sky {
+        background: var(--sky-wash);
+        border-color: var(--sky-border);
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px 0;
+        border-top: 1px solid #dedbd3;
+        min-height: 50px;
+        width: 100%;
+        background: none;
+        border-left: 0;
+        border-right: 0;
+        border-bottom: 0;
+        font: inherit;
+        text-align: left;
+        color: var(--ink);
+      }
+      .sky .row {
+        border-top-color: var(--sky-border);
+      }
+      .group > .row:first-child {
+        border-top: 0;
+      }
+      button.row {
+        cursor: pointer;
+      }
+      .row .text {
+        flex: 1;
+        min-width: 0;
+      }
+      .row .text b {
+        display: block;
+        font-weight: 500;
+        font-size: 15px;
+      }
+      .row .text small {
+        display: block;
+        margin-top: 2px;
+        font-size: 12px;
+        line-height: 1.4;
+        color: var(--text-3);
+      }
+      .row .value {
+        font-size: 14px;
+        color: var(--text-2);
+      }
+      .row .chev {
+        width: 16px;
+        height: 16px;
+        color: var(--text-3);
+      }
+      .row.out .text b {
+        color: var(--text-2);
+      }
+      .switch {
+        position: relative;
+        width: 50px;
+        height: 30px;
+        flex: none;
+        border-radius: 99px;
+        border: 0;
+        background: #ded7ca;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .switch::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: 0 1px 4px #0003;
+        transition: transform 0.2s;
+      }
+      .switch[aria-checked="true"] {
+        background: #af9568;
+      }
+      .switch[aria-checked="true"]::after {
+        transform: translateX(20px);
+      }
+      .segmented {
+        display: grid;
+        grid-template-columns: repeat(var(--n), 1fr);
+        gap: 4px;
+        padding: 4px;
+        border-radius: 12px;
+        background: #ebe6db;
+        width: 100%;
+      }
+      .segmented button {
+        border: 0;
+        border-radius: 9px;
+        background: none;
+        padding: 9px 0;
+        font: 500 13px var(--sans);
+        color: var(--text-2);
+        cursor: pointer;
+      }
+      .segmented button[aria-pressed="true"] {
+        background: #fffdf8;
+        color: var(--ink);
+        font-weight: 700;
+        box-shadow: 0 1px 4px #3a2d1a26;
+      }
+      .row.stack {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+      .foot-note {
+        margin: 8px 6px 0;
+        font-size: 12px;
+        line-height: 1.45;
+        color: var(--text-3);
+      }
+      .flash {
+        position: absolute;
+        left: 50%;
+        bottom: 96px;
+        transform: translate(-50%, 20px);
+        opacity: 0;
+        padding: 10px 16px;
+        border-radius: 99px;
+        background: var(--ink);
+        color: var(--ivory);
+        font-size: 13px;
+        transition: all 0.25s;
+        z-index: 9;
+        pointer-events: none;
+        white-space: nowrap;
+      }
+      .flash.show {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+    </style>
+  </head>
+  <body>
+    <svg aria-hidden="true" class="sr-only" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <symbol id="i-gear" viewbox="0 0 24 24">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path
+            d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"
+          ></path>
+        </symbol>
+        <symbol id="i-back" viewbox="0 0 24 24"><path d="m15 5-7 7 7 7"></path></symbol>
+        <symbol id="i-chev" viewbox="0 0 24 24"><path d="m9 5 7 7-7 7"></path></symbol>
+        <symbol id="i-boss" viewbox="0 0 24 24">
+          <path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6Z"></path>
+        </symbol>
+        <symbol id="i-cloud" viewbox="0 0 24 24">
+          <path d="M7 18h10a4 4 0 0 0 .5-8A6 6 0 0 0 6 9.5 4.3 4.3 0 0 0 7 18Z"></path>
+        </symbol>
+        <symbol id="i-sun" viewbox="0 0 24 24">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"></path>
+        </symbol>
+        <symbol id="i-read" viewbox="0 0 24 24">
+          <path d="M3 5h7a3 3 0 0 1 3 3v12a3 3 0 0 0-3-3H3ZM21 5h-7a3 3 0 0 0-3 3v12a3 3 0 0 1 3-3h7Z"></path>
+        </symbol>
+        <symbol id="i-log" viewbox="0 0 24 24">
+          <path d="M8 5h12M8 12h12M8 19h12M4 5h.01M4 12h.01M4 19h.01"></path>
+        </symbol>
+        <symbol id="i-notes" viewbox="0 0 24 24">
+          <path d="M6 3h9l4 4v14H6Z"></path>
+          <path d="M15 3v4h4M9 11h7M9 15h7M9 19h4"></path>
+        </symbol>
+        <symbol id="i-user" viewbox="0 0 24 24">
+          <circle cx="12" cy="8" r="4"></circle>
+          <path d="M4 21c0-5 3-7 8-7s8 2 8 7Z"></path>
+        </symbol>
+        <symbol id="i-signal" viewbox="0 0 24 24"><path d="M4 20v-4M9 20v-8M14 20V8M19 20V4"></path></symbol>
+        <symbol id="i-wifi" viewbox="0 0 24 24">
+          <path d="M3 8a15 15 0 0 1 18 0M6 12a10 10 0 0 1 12 0M9 16a5 5 0 0 1 6 0M12 20h.01"></path>
+        </symbol>
+        <symbol id="i-battery" viewbox="0 0 24 24">
+          <rect height="12" rx="3" width="17" x="2" y="6"></rect>
+          <path d="M22 10v4"></path>
+          <rect fill="currentColor" height="6" rx="1" stroke="none" width="11" x="5" y="9"></rect>
+        </symbol>
+      </defs>
+    </svg>
+    <header class="review-top">
+      <div>
+        <h1>52 / Me</h1>
+        <p>
+          The Me tab as your practice: your rank and the road to S, your five as a shape, four
+          plain counts and the trader you said you were. Every setting moves behind the gear, top
+          right. Tap the gear, a stat, the switches or the quieter-pace row. Nothing is saved.
+        </p>
+      </div>
+      <nav class="review-links" aria-label="Design review navigation">
+        <a href="../index.html">All screens</a>
+      </nav>
+    </header>
+    <main class="preview-layout">
+      <div class="phone">
+        <section class="app-screen" id="screen" aria-label="Me">
+          <div class="status" id="status" aria-hidden="true">
+            <span>9:41</span
+            ><span class="status-icons"
+              ><svg class="icon"><use href="#i-signal" /></svg
+              ><svg class="icon"><use href="#i-wifi" /></svg
+              ><svg class="icon battery"><use href="#i-battery" /></svg
+            ></span>
+          </div>
+          <div class="topbar" id="topbar" aria-hidden="true">Me</div>
+          <button type="button" class="gear" id="open-settings" aria-label="Settings">
+            <svg class="icon" aria-hidden="true"><use href="#i-gear" /></svg>
+          </button>
+
+          <div class="screen-content" id="scroller">
+            <header class="hero">
+              <div class="crest" aria-hidden="true"><span>D</span></div>
+              <p class="kicker">Me · Rank D</p>
+              <h1>What you've <em>practised.</em></h1>
+              <p class="where">Day 18 of 56 · Chapter 2, Build a Method</p>
+              <span class="xp"><b>420</b>XP from what you did</span>
+            </header>
+
+            <section class="part" aria-labelledby="road-title">
+              <div class="part-head">
+                <h2 id="road-title">The road to S</h2>
+                <span>Rank D</span>
+              </div>
+              <div class="glass">
+                <div class="road" style="--reached: 20%" role="list" aria-label="Ranks E to S">
+                  <div class="rung past" role="listitem"><b>E</b>Start</div>
+                  <div class="rung now" role="listitem" aria-current="step"><b>D</b>Now</div>
+                  <div class="rung" role="listitem"><b>C</b>Day 28</div>
+                  <div class="rung" role="listitem"><b>B</b>Day 42</div>
+                  <div class="rung" role="listitem"><b>A</b>Day 49</div>
+                  <div class="rung" role="listitem"><b>S</b>Day 56</div>
+                </div>
+                <div class="next">
+                  <span class="boss"><svg class="icon" aria-hidden="true"><use href="#i-boss" /></svg></span>
+                  <p>
+                    <strong>Rank C at the Day 28 boss</strong>
+                    Build a Method: turn your plan into a Pre-Trade Checklist. 10 days to go.
+                  </p>
+                </div>
+              </div>
+              <p class="caption">A rank comes from finishing a chapter's boss, never from XP, trades or profit.</p>
+            </section>
+
+            <section class="part" aria-labelledby="five-title">
+              <div class="part-head">
+                <h2 id="five-title">Your five</h2>
+                <span>tap one</span>
+              </div>
+              <div class="glass five">
+                <svg class="shape" id="shape" viewBox="-150 -132 300 270" role="img"></svg>
+                <ul class="stats" id="stats"></ul>
+              </div>
+              <p class="caption">The shape of what you've practised so far. Participation, never skill.</p>
+            </section>
+
+            <section class="part" aria-labelledby="practice-title">
+              <div class="part-head"><h2 id="practice-title">Your practice</h2></div>
+              <div class="tiles">
+                <div class="glass tile"><b>17</b><span>days done of 56</span></div>
+                <div class="glass tile"><b>12</b><span>days judged · <em>rules held on 9</em></span></div>
+                <div class="glass tile"><b>14</b><span>notes kept in Notes</span></div>
+                <div class="glass tile"><b>3</b><span>times you followed your Urge Plan this week</span></div>
+              </div>
+            </section>
+
+            <section class="part" aria-labelledby="trader-title">
+              <div class="part-head">
+                <h2 id="trader-title">The trader you said you were</h2>
+              </div>
+              <div class="glass profile">
+                <dl>
+                  <div><dt>Experience</dt><dd>Developing</dd></div>
+                  <div>
+                    <dt>Working on first</dt>
+                    <dd class="chips"><span>FOMO</span><span>Revenge trading</span></dd>
+                  </div>
+                  <div><dt>Time a day</dt><dd>15 minutes</dd></div>
+                  <div><dt>Research</dt><dd>With an AI, checked</dd></div>
+                </dl>
+              </div>
+              <p class="caption">From your answers on Day 0. Day 14 and Day 56 compare against them.</p>
+            </section>
+
+            <button type="button" class="quiet" id="quiet">
+              <svg class="icon" aria-hidden="true"><use href="#i-cloud" /></svg>
+              <span>A quieter pace<small>Calm coach and pause, any time.</small></span>
+              <svg class="icon" aria-hidden="true" style="width: 16px; height: 16px"><use href="#i-chev" /></svg>
+            </button>
+          </div>
+
+          <nav class="bottom-tabs" aria-label="App preview navigation">
+            <a class="tab" href="47-routine-deck.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-sun" /></svg>Today</a
+            ><a class="tab" href="49-mindset.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-read" /></svg>Mindset</a
+            ><a class="tab" href="50-day-log.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-log" /></svg>Log</a
+            ><a class="tab" href="51-notes.html"
+              ><svg class="icon" aria-hidden="true"><use href="#i-notes" /></svg>Notes</a
+            ><a class="tab active" href="52-me.html" aria-current="page"
+              ><svg class="icon" aria-hidden="true"><use href="#i-user" /></svg>Me</a
+            >
+          </nav>
+          <div class="home-indicator" aria-hidden="true"></div>
+
+          <section class="settings" id="settings" aria-label="Settings" inert>
+            <div class="status" aria-hidden="true">
+              <span>9:41</span
+              ><span class="status-icons"
+                ><svg class="icon"><use href="#i-signal" /></svg
+                ><svg class="icon"><use href="#i-wifi" /></svg
+                ><svg class="icon battery"><use href="#i-battery" /></svg
+              ></span>
+            </div>
+            <div class="navbar">
+              <button type="button" id="close-settings">
+                <svg class="icon" aria-hidden="true"><use href="#i-back" /></svg>Me
+              </button>
+              <h2>Settings</h2>
+            </div>
+            <div class="screen-content" id="settings-scroller">
+              <p class="group-title" id="pace-title">A quieter pace</p>
+              <div class="group sky" id="pace">
+                <div class="row">
+                  <span class="text"
+                    ><b>Calm coach</b><small>The gentle System voice. Your coach choice stays as it was.</small></span
+                  >
+                  <button type="button" class="switch" role="switch" aria-checked="false" aria-label="Calm coach"></button>
+                </div>
+                <div class="row">
+                  <span class="text"
+                    ><b>Pause the programme</b
+                    ><small>No new quests while paused. Nothing is lost, and you start where you left off.</small></span
+                  >
+                  <button type="button" class="switch" role="switch" aria-checked="false" aria-label="Pause the programme"></button>
+                </div>
+              </div>
+              <p class="foot-note">You do not need to trade to take part.</p>
+
+              <p class="group-title">Coach</p>
+              <div class="group">
+                <div class="row stack">
+                  <span class="text"><b>Who talks to you</b></span>
+                  <div class="segmented" style="--n: 2" data-choice>
+                    <button type="button" aria-pressed="true">System</button>
+                    <button type="button" aria-pressed="false">Sergeant</button>
+                  </div>
+                </div>
+              </div>
+
+              <p class="group-title">Appearance</p>
+              <div class="group">
+                <div class="row stack">
+                  <div class="segmented" style="--n: 3" data-choice>
+                    <button type="button" aria-pressed="true">System</button>
+                    <button type="button" aria-pressed="false">Light</button>
+                    <button type="button" aria-pressed="false">Dark</button>
+                  </div>
+                </div>
+              </div>
+
+              <p class="group-title">Your writing</p>
+              <div class="group">
+                <button type="button" class="row" id="export">
+                  <span class="text"
+                    ><b>Export my notes</b
+                    ><small>Encrypted on this phone with a key only you have. Still keeps a copy it can't read.</small></span
+                  >
+                  <svg class="icon chev" aria-hidden="true"><use href="#i-chev" /></svg>
+                </button>
+              </div>
+
+              <p class="group-title">Account</p>
+              <div class="group">
+                <div class="row">
+                  <span class="text"><b>Time zone</b></span><span class="value">Asia/Hong_Kong</span>
+                </div>
+                <div class="row">
+                  <span class="text"><b>Started</b></span><span class="value">25 October 2026</span>
+                </div>
+                <button type="button" class="row out" id="sign-out">
+                  <span class="text"><b>Sign out</b></span>
+                </button>
+              </div>
+
+              <p class="group-title">About</p>
+              <div class="group">
+                <div class="row"><span class="text"><b>Version</b></span><span class="value">1.0 (52)</span></div>
+              </div>
+              <p class="foot-note">Test builds also show the environment and the API here.</p>
+            </div>
+          </section>
+          <p class="flash" id="flash"></p>
+        </section>
+      </div>
+      <aside class="reference-panel">
+        <h2>Why it changes</h2>
+        <p>
+          Me mixed two jobs: what the practice has made of you, and the switches for the app. The
+          switches won, and the rank was a crest above a settings list. Now Me is only about you,
+          and every setting is one tap away behind the gear.
+        </p>
+        <details open>
+          <summary>On Me</summary>
+          <ul>
+            <li><b>The crest</b> under the ceiling painting, with the day, the chapter and the XP.</li>
+            <li><b>The road to S</b>: every rank, where you are, and the next boss that earns the next one. Rank never comes from XP.</li>
+            <li><b>Your five</b> as a pentagon: the shape of what you've practised, read against the largest of the five. Tap a stat for what grows it.</li>
+            <li><b>Your practice</b>: four plain counts from Journey, Log and Notes. No streaks.</li>
+            <li><b>The trader you said you were</b>: the questionnaire read back, so later reviews have something to compare with.</li>
+            <li><b>A quieter pace</b> stays one tap from Me (design 45 says it must always be easy to reach); it opens Settings at those two switches.</li>
+          </ul>
+        </details>
+        <details open>
+          <summary>In Settings</summary>
+          <ul>
+            <li>A quieter pace (calm coach, pause), coach, appearance, export my notes, time zone, sign out, version.</li>
+            <li>A pushed page with a back button, not a sheet, so a switch can't be swiped away half-changed.</li>
+            <li>Same data as now: <code>GET /v1/me/stats</code>, the profile, Journey, Day Log and inventory. Changing the coach needs a profile update the API may not have yet.</li>
+          </ul>
+        </details>
+      </aside>
+    </main>
+    <p class="preview-notice">
+      Design preview only. Nothing is saved or sent. Artwork is concept-only pending production
+      rights clearance.
+    </p>
+
+    <script>
+      (() => {
+        const $ = (id) => document.getElementById(id);
+        const STATS = [
+          { code: "DIS", name: "Discipline", xp: 180, grown: "Plans, rules, honest rule checks, choosing not to trade" },
+          { code: "EMO", name: "Emotional Control", xp: 110, grown: "Trigger work, pause practice, drills" },
+          { code: "RES", name: "Research", xp: 60, grown: "Fact-checking, research notes, rating sources" },
+          { code: "LIF", name: "Life Rhythm", xp: 50, grown: "Life habits and routines" },
+          { code: "CHT", name: "Chart Reading", xp: 20, grown: "Historical chart practice" },
+        ];
+        const ORDER = ["DIS", "RES", "CHT", "EMO", "LIF"];
+
+        // the pentagon: rings for scale, the user's shape in gold
+        const R = 92;
+        const largest = Math.max(...STATS.map((s) => s.xp), 1);
+        const point = (i, r) => {
+          const a = -Math.PI / 2 + (i * 2 * Math.PI) / 5;
+          return [Math.cos(a) * r, Math.sin(a) * r];
+        };
+        const poly = (r) =>
+          ORDER.map((_, i) => point(i, typeof r === "function" ? r(i) : r).join(",")).join(" ");
+        const byCode = Object.fromEntries(STATS.map((s) => [s.code, s]));
+        let svg = "";
+        [0.25, 0.5, 0.75, 1].forEach((f) => {
+          svg += `<polygon points="${poly(R * f)}" fill="${f === 1 ? "#fffdf880" : "none"}" stroke="#d8cfbf" stroke-width="1"/>`;
+        });
+        ORDER.forEach((_, i) => {
+          const [x, y] = point(i, R);
+          svg += `<line x1="0" y1="0" x2="${x}" y2="${y}" stroke="#e3dccf" stroke-width="1"/>`;
+        });
+        const shape = poly((i) => R * Math.max(byCode[ORDER[i]].xp / largest, 0.06));
+        svg += `<polygon points="${shape}" fill="#b69a6440" stroke="#b69a64" stroke-width="2" stroke-linejoin="round"/>`;
+        ORDER.forEach((code, i) => {
+          const [x, y] = point(i, R * Math.max(byCode[code].xp / largest, 0.06));
+          svg += `<circle cx="${x}" cy="${y}" r="3.5" fill="#fffdf8" stroke="#8f743e" stroke-width="1.5"/>`;
+          const [lx, ly] = point(i, R + 22);
+          const anchor = Math.abs(lx) < 8 ? "middle" : lx > 0 ? "start" : "end";
+          svg += `<text class="code" x="${lx}" y="${ly - 4}" text-anchor="${anchor}">${code}</text>`;
+          svg += `<text x="${lx}" y="${ly + 9}" text-anchor="${anchor}">${byCode[code].xp} XP</text>`;
+        });
+        $("shape").innerHTML = svg;
+        $("shape").setAttribute(
+          "aria-label",
+          "Your five: " + STATS.map((s) => `${s.name} ${s.xp} XP`).join(", "),
+        );
+
+        $("stats").innerHTML = STATS.map(
+          (s) => `<li><button type="button" aria-expanded="false">
+            <span class="code">${s.code}</span><span class="name">${s.name}</span>
+            <span class="amount">${s.xp}<small>XP</small></span>
+            <span class="grown">Grows from: ${s.grown}</span></button></li>`,
+        ).join("");
+        $("stats").addEventListener("click", (e) => {
+          const b = e.target.closest("button");
+          if (b) b.setAttribute("aria-expanded", b.getAttribute("aria-expanded") === "true" ? "false" : "true");
+        });
+
+        // the top bar fades in once the ceiling has gone
+        $("scroller").addEventListener("scroll", () => {
+          $("topbar").classList.toggle("shown", $("scroller").scrollTop > 150);
+        });
+
+        const settings = $("settings");
+        const open = (focus) => {
+          settings.inert = false;
+          settings.classList.add("open");
+          $("settings-scroller").scrollTop = 0;
+          if (focus) {
+            const g = $("pace");
+            g.animate(
+              [{ boxShadow: "0 0 0 0 #627784" }, { boxShadow: "0 0 0 4px #62778466" }, { boxShadow: "0 0 0 0 #627784" }],
+              { duration: 1100, delay: 300 },
+            );
+          }
+        };
+        $("open-settings").addEventListener("click", () => open(false));
+        $("quiet").addEventListener("click", () => open(true));
+        $("close-settings").addEventListener("click", () => {
+          settings.classList.remove("open");
+          settings.inert = true;
+        });
+
+        settings.addEventListener("click", (e) => {
+          const sw = e.target.closest(".switch");
+          if (sw) sw.setAttribute("aria-checked", sw.getAttribute("aria-checked") === "true" ? "false" : "true");
+          const seg = e.target.closest("[data-choice] button");
+          if (seg) {
+            seg.parentElement.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", "false"));
+            seg.setAttribute("aria-pressed", "true");
+          }
+        });
+
+        const flash = (text) => {
+          $("flash").textContent = text;
+          $("flash").classList.add("show");
+          setTimeout(() => $("flash").classList.remove("show"), 1600);
+        };
+        $("export").addEventListener("click", () => flash("Your notes are ready to save or share"));
+        $("sign-out").addEventListener("click", () => flash("Asks first: Sign out of Still?"));
+
+        const params = new URLSearchParams(location.search);
+        if (params.get("settings")) open(params.get("settings") === "pace");
+        const at = Number(params.get("scroll"));
+        if (at) $("scroller").scrollTop = at;
+      })();
+    </script>
+  </body>
+</html>
